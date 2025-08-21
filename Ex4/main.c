@@ -1,28 +1,14 @@
 #include <stdio.h>
 
 int read_integer(void);
+void handle_program(int this_count, float this_sum);
 
 int main()
 {
     int count = 0;
     float sum = 0;
 
-    while(1)
-    {
-        int num = read_integer();
-        if(num >= 0)
-        {
-            sum += (float)num;
-            count++;
-        }
-        else
-        {
-            break;
-        }
-    }
-
-    float average = sum / count;
-    printf("You entered %d positive numbers. The average is: %.3f\n", count, average);
+    handle_program(count, sum);
 
     return 0;
 }
@@ -38,4 +24,23 @@ int read_integer(void)
         return 0;
     }
     return value;
+}
+
+void handle_program(int this_count, float this_sum) {
+    while(1)
+    {
+        const int num = read_integer();
+        if(num >= 0)
+        {
+            this_sum += (float)num;
+            this_count++;
+        }
+        else
+        {
+            break;
+        }
+    }
+
+    float average = this_sum / this_count;
+    printf("You entered %d positive numbers. The average is: %.3f\n", this_count, average);
 }
