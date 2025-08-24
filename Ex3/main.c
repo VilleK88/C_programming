@@ -68,12 +68,10 @@ void handle_students(int *this_array, int this_size) {
             if (grade == -1)
                 continue;
             else {
-                if (grade < 0 || grade > this_size)
+                if (grade < 0 || grade > 5)
                     printf("Invalid grade!\n");
-                else {
+                else
                     this_array[num-1] = grade;
-                    printf("Grade given to student: %d.\n", grade);
-                }
             }
         }
     }
