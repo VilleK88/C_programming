@@ -6,11 +6,9 @@ float handle_payment(float current_cash, float price, const char *vehicle);
 
 int main() 
 {
-    float cash, bus_ticket, taxi_price;
-
-    bus_ticket = initialize_value("Enter price of bus ticket: ");
-    taxi_price = initialize_value("Enter price of taxi: ");
-    cash = initialize_value("How much money you have: ");
+    float bus_ticket = initialize_value("Enter price of bus ticket: ");
+    float taxi_price = initialize_value("Enter price of taxi: ");
+    float cash = initialize_value("How much money you have: ");
 
     handle_menu(cash, bus_ticket, taxi_price);
 
@@ -44,6 +42,9 @@ void handle_menu(float this_cash, float this_bus_ticket, float this_taxi_price)
                 break;
             case 2:
                 this_cash = handle_payment(this_cash, this_taxi_price, "taxi");
+                break;
+            default:
+                printf("Invalid input.\n");
                 break;
         }
     }

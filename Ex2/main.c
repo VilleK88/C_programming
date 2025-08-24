@@ -9,11 +9,10 @@ void print_incomes(float *tax, float *salary);
 
 int main() {
     float tax[SIZE], salary[SIZE];
-    float tax_rate, income_limit, tax_rate_overl;
 
-    tax_rate = initialize_value("Enter tax rate:");
-    income_limit = initialize_value("Enter income limit:");
-    tax_rate_overl = initialize_value("Enter tax rate for income over the limit:");
+    float tax_rate = initialize_value("Enter tax rate:");
+    float income_limit = initialize_value("Enter income limit:");
+    float tax_rate_overl = initialize_value("Enter tax rate for income over the limit:");
 
     handle_income(tax, salary, income_limit, tax_rate, tax_rate_overl);
     print_incomes(tax, salary);
