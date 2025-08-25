@@ -1,22 +1,33 @@
-#include <stdio.h> // printf, scanf, fgets
-#include <stdlib.h> // malloc, realloc, free, atoi
-#include <string.h> // strcmp, strcspn, strlen
+#include <stdio.h>
+#include <stdlib.h>
 #include <time.h>
 
-void initialize_array(int *this_array, int count);
-void print_numbers(const int *this_array, int count);
+int *initialize_array(int this_count);
+void print_numbers(const int *this_array, int this_count);
 
 int main() {
-    int *numbers, count;
-    srand(time(NULL));
+    int count = 15;
+    srand((unsigned)time(NULL));
 
+    int *numbers = initialize_array(count);
+    print_numbers(numbers, count);
 
+    free(numbers);
+    return 0;
 }
 
-void initialize_array(int *this_array, int count) {
+int *initialize_array(int this_count) {
+    int *this_array = malloc(this_count * sizeof(int));
+    if (!this_array) {
+        printf("Memory allocation failed.\n");
+        return 0;
+    }
 
+    for (int i = 0; i < this_count; i++) (this_array)[i] = rand() % this_count + 1;
+
+    return this_array;
 }
 
-void print_numbers(const int *this_array, int count) {
-
+void print_numbers(const int *this_array, int this_count) {
+    for (int i = 0; i < this_count; i++) printf("%d\n", this_array[i]);
 }
