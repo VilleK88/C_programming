@@ -3,25 +3,13 @@
 
 int handle_input();
 bool read_positive(int *value);
+void handle_program(int this_count);
 
 int main()
 {
     int count = 0;
 
-    while(1)
-    {
-        int num = handle_input();
-        if(num != -1)
-        {
-            int sum = num * 2 + 20;
-            printf("You didn't get it right. I have %d euros.\n", sum);
-        }
-        else count++;
-
-        if(count >= 3) break;
-    }
-
-    printf("I give up! See you later!\n");
+    handle_program(count);
 
     return 0;
 }
@@ -58,4 +46,21 @@ bool read_positive(int *value)
         return false;
 
     return true;
+}
+
+void handle_program(int this_count) {
+    while(1)
+    {
+        int num = handle_input();
+        if(num != -1)
+        {
+            int sum = num * 2 + 20;
+            printf("You didn't get it right. I have %d euros.\n", sum);
+        }
+        else this_count++;
+
+        if(this_count >= 3) break;
+    }
+
+    printf("I give up! See you later!\n");
 }
