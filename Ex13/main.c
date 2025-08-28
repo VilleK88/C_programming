@@ -1,53 +1,31 @@
-#include <stdio.h> // printf, fgets, scanf
-#include <stdlib.h> // malloc, realloc, free, atoi
-#include <string.h> // strcmp, strcspn, strlen, strstr
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char *handle_input();
+FILE *open_file(char *this_filename);
+int *read_file(FILE *this_file, int *count_out);
+void handle_print(int *numbers, int count);
 
 int main() {
-    FILE *file;
-    int *numbers = NULL;
-    int count = 0, capacity = 0;
+    int count = 0;
 
-    printf("Enter a filename: ");
     char *filename = handle_input();
-    if (filename == NULL) {
-        free(filename);
-        return 0;
-    }
-
-    if ((file = fopen(filename, "r")) == NULL) {
-        printf("File not found!\n");
-        free(filename);
-        return 0;
-    }
-
-    int temp;
-    while (fscanf(file, "%d", &temp) == 1) {
-        // Increase capacity if needed
-        if (count <= capacity) {
-            capacity = (capacity == 0) ? 4 : capacity * 2;
-            numbers = realloc(numbers, capacity * sizeof(int));
-            if (numbers == NULL) {
-                printf("Memory allocation failed.\n");
-                fclose(file);
-                return 0;
-            }
-        }
-        numbers[count++] = temp;
-    }
-    fclose(file);
-
-    printf("%d numbers found:\n", count);
-    for (int i = 0; i < count; i++) printf("%d ", numbers[i]);
+    FILE *file = open_file(filename);
+    int *numbers = read_file(file, &count);
+    handle_print(numbers, count);
 
     free(numbers);
     free(filename);
+
     return 0;
 }
 
 char *handle_input() {
     char *string = malloc(32);
+
+    printf("Enter a filename: ");
+
     if (!string) {
         printf("Memory allocation failed!\n");
         return NULL;
@@ -61,4 +39,44 @@ char *handle_input() {
     string[strcspn(string, "\n")] = '\0';
 
     return string;
+}
+
+FILE *open_file(char *this_filename) {
+    FILE *file;
+
+    if ((file = fopen(this_filename, "r")) == NULL) {
+        printf("File not found!\n");
+        free(this_filename);
+        exit(0);
+    }
+
+    return file;
+}
+
+int *read_file(FILE *this_file, int *count_out) {
+    int *numbers = NULL, temp, capacity = 0, count = 0;
+
+    while (fscanf(this_file, "%d", &temp) == 1) {
+        // Increase capacity if needed
+        if (count >= capacity) {
+            capacity = (capacity == 0) ? 4 : capacity * 2;
+            numbers = realloc(numbers, capacity * sizeof(int));
+            if (numbers == NULL) {
+                printf("Memory allocation failed!\n");
+                fclose(this_file);
+                return 0;
+            }
+        }
+        numbers[count++] = temp;
+    }
+
+    fclose(this_file);
+    *count_out = count;
+
+    return numbers;
+}
+
+void handle_print(int *numbers, int count) {
+    printf("%d numbers found:\n", count);
+    for (int i = 0; i < count; i++) printf("%d ", numbers[i]);
 }
