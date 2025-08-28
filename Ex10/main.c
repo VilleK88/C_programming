@@ -18,7 +18,7 @@ char *handle_input() {
         return NULL;
     }
 
-    if (!fgets(string, 32, stdin)) { // EOF
+    if (!fgets(string, 32, stdin)) {
         free(string);
         return NULL;
     }
