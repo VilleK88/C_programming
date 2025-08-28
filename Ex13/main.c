@@ -45,9 +45,10 @@ FILE *open_file(char *this_filename) {
     FILE *file;
 
     if ((file = fopen(this_filename, "r")) == NULL) {
-        printf("File not found!\n");
+        //printf("File not found!\n");
+        fprintf(stderr, "Error: could not open file '%s'\n", this_filename);
         free(this_filename);
-        exit(0);
+        exit(EXIT_FAILURE);
     }
 
     return file;
@@ -77,6 +78,13 @@ int *read_file(FILE *this_file, int *count_out) {
 }
 
 void handle_print(int *numbers, int count) {
+    int lowest = numbers[0], highest = numbers[0];
+
+    for (int i = 0; i < count; i++) {
+        if (numbers[i] < lowest) lowest = numbers[i];
+        if (numbers[i] > highest) highest = numbers[i];
+    }
+
     printf("%d numbers found:\n", count);
-    for (int i = 0; i < count; i++) printf("%d ", numbers[i]);
+    printf("Lowest number: %d, highest number: %d\n", lowest, highest);
 }
