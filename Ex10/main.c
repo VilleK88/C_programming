@@ -29,18 +29,14 @@ char *handle_input() {
 }
 
 void handle_program() {
-    while (1) {
+    char *string = NULL;
+
+    do {
         printf("Enter a string: ");
-        char *string = handle_input();
-        int length = strlen(string);
+        string = handle_input();
+        const size_t length = strlen(string);
+        printf("Length of the string: %zu.\n", length);
+    } while (strcmp(string, "stop") != 0);
 
-        if (strcmp(string, "stop") == 0) {
-            free(string);
-            break;
-        }
-        else
-            printf("Length of the string: %zu.\n", length);
-
-        free(string);
-    }
+    free(string);
 }
