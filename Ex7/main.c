@@ -49,8 +49,7 @@ bool read_positive(int *value)
 }
 
 void handle_program(int this_count) {
-    while(1)
-    {
+    do {
         int num = handle_input();
         if(num != -1)
         {
@@ -58,9 +57,7 @@ void handle_program(int this_count) {
             printf("You didn't get it right. I have %d euros.\n", sum);
         }
         else this_count++;
-
-        if(this_count >= 3) break;
-    }
+    } while (this_count < 3);
 
     printf("I give up! See you later!\n");
 }
