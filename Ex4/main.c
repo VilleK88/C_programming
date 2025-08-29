@@ -5,7 +5,7 @@ void handle_program(int this_count, float this_sum);
 
 int main()
 {
-    int count = 0;
+    int count = -1;
     float sum = 0;
 
     handle_program(count, sum);
@@ -27,18 +27,12 @@ int read_integer(void)
 }
 
 void handle_program(int this_count, float this_sum) {
-    while(1)
-    {
-        const int num = read_integer();
-        if(num >= 0)
-        {
-            this_sum += (float)num;
-            this_count++;
-        }
-        else
-        {
-            break;
-        }
+    int num = 0;
+
+    while (num >= 0) {
+        this_sum += (float)num;
+        this_count++;
+        num = read_integer();
     }
 
     float average = this_sum / this_count;

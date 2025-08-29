@@ -31,6 +31,7 @@ int handle_input(void)
 
 void handle_menu(void)
 {
+    int choice = handle_input();
     while(1)
     {
         printf("Roll D6\nRoll D10\nQuit\n");

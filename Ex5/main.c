@@ -49,17 +49,12 @@ int read_range(int this_low, int this_high)
 {
     int value;
 
-    while(1)
-    {
+    do {
         printf("Enter a number between %d and %d: ", this_low, this_high);
         value = handle_input();
-        printf("A number was successfully read.\n");
-        if(value >= this_low && value <= this_high)
-        {
-            printf("The number is in the specified range.\n");
-            break;
-        }
-    }
+        if (value < this_low || value > this_high)
+            printf("Number was outside the specified range. Try again.\n");
+    } while (value < this_low || value > this_high);
 
     return value;
 }

@@ -57,13 +57,9 @@ float handle_payment(float current_cash, float price, const char *vehicle)
     printf("You chose %s.\n", vehicle);
 
     if(current_cash >= price) 
-    {
         current_cash -= price;
-    }
     else 
-    {
         printf("You don't have enough money for %s.\n", vehicle);
-    }
 
     printf("You have %.2f euros left.\n", current_cash);
 
