@@ -23,14 +23,12 @@ int main() {
 
 char *handle_input() {
     char *string = malloc(32);
-
-    printf("Enter a filename: ");
-
     if (!string) {
         printf("Memory allocation failed!\n");
         return NULL;
     }
 
+    printf("Enter a filename: ");
     if (!fgets(string, 32, stdin)) {
         free(string);
         return NULL;
@@ -45,7 +43,6 @@ FILE *open_file(char *this_filename) {
     FILE *file;
 
     if ((file = fopen(this_filename, "r")) == NULL) {
-        //printf("File not found!\n");
         fprintf(stderr, "Error: could not open file '%s'\n", this_filename);
         free(this_filename);
         exit(EXIT_FAILURE);
