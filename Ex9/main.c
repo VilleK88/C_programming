@@ -54,14 +54,15 @@ int find_first(const unsigned int *array, unsigned int what) {
 }
 
 void handle_program(int *array) {
-    while (1) {
+    int num = 0;
+
+    do {
         printf("Enter a number to search for or zero to stop: ");
-        int num = handle_input();
-        if (num <= 0) break;
+        num = handle_input();
         int value = find_first(array, num);
         if (value == -1)
             printf("Not found.\n");
         else
             printf("Found at index: %d\n", value);
-    }
+    } while (num != 0);
 }
