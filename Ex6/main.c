@@ -8,8 +8,7 @@ void roll_dice(int max);
 
 int main()
 {
-    srand(time(NULL)); // use current time as seed for random generator
-
+    srand(time(NULL));
     handle_menu();
 
     return 0;
@@ -31,13 +30,12 @@ int handle_input(void)
 
 void handle_menu(void)
 {
-    int choice = handle_input();
-    while(1)
-    {
-        printf("Roll D6\nRoll D10\nQuit\n");
+    int choice = 0;
+    do {
+        printf("1) Roll D6\n2) Roll D10\n3) Quit\n");
+        printf("Input value: ");
         int choice = handle_input();
-        switch(choice)
-        {
+        switch(choice) {
             case 1:
                 roll_dice(6);
                 break;
@@ -50,7 +48,7 @@ void handle_menu(void)
                 printf("Invalid choice.\n");
                 break;
         }
-    }
+        } while (choice != 3);
 }
 
 void roll_dice(int max)
