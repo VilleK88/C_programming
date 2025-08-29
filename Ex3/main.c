@@ -60,10 +60,7 @@ void handle_students(int *this_array, int this_size) {
         if (num == 0)
             break;
         else if (num < 1 || num > this_size) {
-            {
-                printf("Invalid student number!\n");
-                continue;
-            }
+            printf("Invalid student number!\n");
         }
         else {
             printf("Enter grade (0 - 5) for student %d or -1 to cancel: ", num);
