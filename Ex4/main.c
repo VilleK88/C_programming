@@ -5,7 +5,7 @@ void handle_loop(int *this_count, float *this_sum);
 
 int main()
 {
-    int count = -1;
+    int count = 0;
     float sum = 0;
 
     handle_loop(&count, &sum);
@@ -32,8 +32,10 @@ void handle_loop(int *this_count, float *this_sum) {
     int num = 0;
 
     while (num >= 0) {
-        *this_sum += (float)num;
-        (*this_count)++;
         num = read_integer();
+        if (num > 0) {
+            *this_sum += (float)num;
+            (*this_count)++;
+        }
     }
 }
