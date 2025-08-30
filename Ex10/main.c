@@ -3,10 +3,18 @@
 #include <string.h>
 
 char *handle_input();
-void handle_program();
 
 int main() {
-    handle_program();
+    char *string = NULL;
+
+    do {
+        printf("Enter a string: ");
+        string = handle_input();
+        const size_t length = strlen(string);
+        printf("Length of the string: %zu.\n", length);
+    } while (strcmp(string, "stop") != 0);
+
+    free(string);
 
     return 0;
 }
@@ -26,17 +34,4 @@ char *handle_input() {
     string[strcspn(string, "\n")] = '\0';
 
     return string;
-}
-
-void handle_program() {
-    char *string = NULL;
-
-    do {
-        printf("Enter a string: ");
-        string = handle_input();
-        const size_t length = strlen(string);
-        printf("Length of the string: %zu.\n", length);
-    } while (strcmp(string, "stop") != 0);
-
-    free(string);
 }
