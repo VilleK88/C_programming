@@ -9,7 +9,7 @@ int main()
     float sum = 0;
 
     handle_loop(&count, &sum);
-    const float average = sum / count;
+    const float average = sum / (float)count;
     printf("You entered %d positive numbers. The average is: %.3f\n", count, average);
 
     return 0;
