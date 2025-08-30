@@ -6,7 +6,7 @@ int *initialize_array(int this_count);
 void print_numbers(const int *this_array, int this_count);
 
 int main() {
-    int count = 15;
+    const int count = 15;
     srand((unsigned)time(NULL));
 
     int *numbers = initialize_array(count);
@@ -29,5 +29,6 @@ int *initialize_array(int this_count) {
 }
 
 void print_numbers(const int *this_array, int this_count) {
-    for (int i = 0; i < this_count; i++) printf("%d\n", this_array[i]);
+    if (this_array != NULL)
+        for (int i = 0; i < this_count; i++) printf("%d\n", this_array[i]);
 }
