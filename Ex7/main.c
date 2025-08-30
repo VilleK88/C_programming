@@ -2,14 +2,23 @@
 #include <stdbool.h>
 
 int handle_input();
-bool read_positive(int *value);
-void handle_program(int this_count);
+bool read_positive(const int *value);
 
 int main()
 {
     int count = 0;
 
-    handle_program(count);
+    do {
+        const int num = handle_input();
+        if(num != -1)
+        {
+            const int sum = num * 2 + 20;
+            printf("You didn't get it right. I have %d euros.\n", sum);
+        }
+        else count++;
+    } while (count < 3);
+
+    printf("I give up! See you later!\n");
 
     return 0;
 }
@@ -40,24 +49,10 @@ int handle_input()
     return value;
 }
 
-bool read_positive(int *value)
+bool read_positive(const int *value)
 {
     if(*value < 0)
         return false;
 
     return true;
-}
-
-void handle_program(int this_count) {
-    do {
-        int num = handle_input();
-        if(num != -1)
-        {
-            int sum = num * 2 + 20;
-            printf("You didn't get it right. I have %d euros.\n", sum);
-        }
-        else this_count++;
-    } while (this_count < 3);
-
-    printf("I give up! See you later!\n");
 }
