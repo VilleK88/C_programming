@@ -3,12 +3,18 @@
 
 void handle_input(char *description, char *input, int size);
 int count_words(const char* str, const char *word);
-void handle_program(char *this_string, char *this_word);
 
 int main() {
     char string[80],  word[80];
 
-    handle_program(string, word);
+    do {
+        handle_input("Enter a string: ", string, 80);
+        handle_input("Enter a word: ", word, 80);
+        if (strcmp(word, "stop") != 0) {
+            const int sum = count_words(string, word);
+            printf("sum: %d\n", sum);
+        }
+    } while (strcmp(word, "stop") != 0);
 
     return 0;
 }
@@ -29,15 +35,4 @@ int count_words(const char* str, const char *word) {
     }
 
     return sum;
-}
-
-void handle_program(char *this_string, char *this_word) {
-    do {
-        handle_input("Enter a string: ", this_string, 80);
-        handle_input("Enter a word: ", this_word, 80);
-        if (strcmp(this_word, "stop") != 0) {
-            const int sum = count_words(this_string, this_word);
-            printf("sum: %d\n", sum);
-        }
-    } while (strcmp(this_word, "stop") != 0);
 }
