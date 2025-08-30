@@ -74,7 +74,7 @@ char *read_file(FILE *this_file, int *count_out) {
 void convert_to_uppercase(char (*this_lines)[81], int this_count) {
     for (int i = 0; i < this_count; i++) {
         for (int j = 0; j < strlen(this_lines[i]); j++) {
-            char c = this_lines[i][j];
+            const char c = this_lines[i][j];
             this_lines[i][j] = toupper(c);
         }
     }
