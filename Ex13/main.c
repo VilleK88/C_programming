@@ -82,6 +82,6 @@ void handle_print(int *numbers, int count) {
         if (numbers[i] > highest) highest = numbers[i];
     }
 
-    printf("%d numbers found:\n", count);
+    printf("%d numbers found.\n", count);
     printf("Lowest number: %d, highest number: %d\n", lowest, highest);
 }
