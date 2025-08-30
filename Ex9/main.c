@@ -5,7 +5,7 @@
 int handle_input();
 int *initialize_array();
 int find_first(const unsigned int *array, unsigned int what);
-void handle_program(int *array);
+void handle_program(const int *array);
 
 int main() {
     srand((unsigned)time(NULL));
@@ -46,20 +46,22 @@ int *initialize_array() {
 }
 
 int find_first(const unsigned int *array, unsigned int what) {
-    for (int i = 0; array[i] != 0; i++) {
-        if (array[i] == what)
-            return i;
+    if (array != NULL) {
+        for (int i = 0; array[i] != 0; i++) {
+            if (array[i] == what)
+                return i;
+        }
     }
     return -1;
 }
 
-void handle_program(int *array) {
+void handle_program(const int *array) {
     int num = 0;
 
     do {
         printf("Enter a number to search for or zero to stop: ");
         num = handle_input();
-        int value = find_first(array, num);
+        const int value = find_first(array, num);
         if (value == -1)
             printf("Not found.\n");
         else
