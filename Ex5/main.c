@@ -11,7 +11,7 @@ int main()
     printf("Let's play!\nRoll a die and enter your result.\n");
     handle_loop(&count, &low, &high);
     printf("Better luck next time. Bye!\n");
-    
+
     return 0;
 }
 

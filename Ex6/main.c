@@ -3,13 +3,31 @@
 #include <time.h>
 
 int handle_input(void);
-void handle_menu(void);
+void menu_info(void);
 void roll_dice(int max);
 
 int main()
 {
+    int choice = 0;
     srand(time(NULL));
-    handle_menu();
+
+    do {
+        menu_info();
+        choice = handle_input();
+        switch(choice) {
+            case 1:
+                roll_dice(6);
+                break;
+            case 2:
+                roll_dice(10);
+                break;
+            case 3:
+                break;
+            default:
+                printf("Invalid choice.\n");
+                break;
+        }
+    } while (choice != 3);
 
     return 0;
 }
@@ -28,27 +46,10 @@ int handle_input(void)
     return value;
 }
 
-void handle_menu(void)
+void menu_info(void)
 {
-    int choice = 0;
-    do {
-        printf("1) Roll D6\n2) Roll D10\n3) Quit\n");
-        printf("Input value: ");
-        int choice = handle_input();
-        switch(choice) {
-            case 1:
-                roll_dice(6);
-                break;
-            case 2:
-                roll_dice(10);
-                break;
-            case 3:
-                return;
-            default:
-                printf("Invalid choice.\n");
-                break;
-        }
-        } while (choice != 3);
+    printf("1) Roll D6\n2) Roll D10\n3) Quit\n");
+    printf("Input value: ");
 }
 
 void roll_dice(int max)
