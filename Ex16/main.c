@@ -8,6 +8,7 @@ typedef struct node {
 } nnode;
 
 char *handle_input();
+void add(nnode *node_array, struct node *head, struct node *tail, size_t count, int value);
 
 int main() {
     nnode **node_array = NULL;
@@ -27,8 +28,9 @@ int main() {
             }
             else {
                 int value = (int)val;
+                add(&node_array, &head, &tail, &count, &value);
 
-                nnode *newline = malloc(sizeof *newline);
+                /*nnode *newline = malloc(sizeof *newline);
 
                 newline->next = NULL;
                 newline->number = value;
@@ -42,7 +44,7 @@ int main() {
 
                 nnode **tmp = realloc(node_array, (count + 1) * sizeof *node_array);
                 node_array = tmp;
-                node_array[count++] = head;
+                node_array[count++] = head;*/
             }
         }
     } while (strcmp(input, "end") != 0);
@@ -73,4 +75,22 @@ char *handle_input() {
     string[strcspn(string, "\n")] = '\0';
 
     return string;
+}
+
+void add(nnode *node_array, struct node *head, struct node *tail, size_t count, int value) {
+    nnode *newline = malloc(sizeof *newline);
+
+    newline->next = NULL;
+    newline->number = value;
+
+    if (!head)
+        head = tail = newline;
+    else {
+        tail->next = newline;
+        tail = newline;
+    }
+
+    nnode **tmp = realloc(node_array, (count + 1) * sizeof *node_array);
+    node_array = tmp;
+    node_array[count++] = *head;
 }

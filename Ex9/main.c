@@ -5,13 +5,22 @@
 int handle_input();
 int *initialize_array();
 int find_first(const unsigned int *array, unsigned int what);
-void handle_program(const int *array);
 
 int main() {
+    int num = 0;
     srand((unsigned)time(NULL));
 
     int *array = initialize_array();
-    handle_program(array);
+
+    do {
+        printf("Enter a number to search for or zero to stop: ");
+        num = handle_input();
+        const int value = find_first(array, num);
+        if (value == -1)
+            printf("Not found.\n");
+        else
+            printf("Found at index: %d\n", value);
+    } while (num != 0);
 
     free(array);
     return 0;
@@ -53,18 +62,4 @@ int find_first(const unsigned int *array, unsigned int what) {
         }
     }
     return -1;
-}
-
-void handle_program(const int *array) {
-    int num = 0;
-
-    do {
-        printf("Enter a number to search for or zero to stop: ");
-        num = handle_input();
-        const int value = find_first(array, num);
-        if (value == -1)
-            printf("Not found.\n");
-        else
-            printf("Found at index: %d\n", value);
-    } while (num != 0);
 }
