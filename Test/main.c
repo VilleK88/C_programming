@@ -8,29 +8,31 @@ typedef struct node {
 } nnode;
 
 char *handle_input();
-struct node *add(struct node *head, int value);
+struct node *add_to_llist(struct node *head, int value);
+void print_numbers(struct node *head);
 
 int main() {
     nnode **node_array = NULL;
     size_t count = 0;
     char *input;
-    int value = 0;
     struct node *head = NULL;
 
     do {
         printf("Enter integer: ");
-        scanf_s("%d", &value);
-        nnode *tmp = realloc(node_array, (count + 1) * sizeof * node_array);
-        node_array = tmp;
-        head = add(head, value);
-        node_array[count++] = head;
+        input = handle_input();
+        char *endptr;
+        long val = strtol(input, &endptr, 10);
+        if (*endptr == '\0') {
+            int value = (int)val;
+            nnode *tmp = realloc(node_array, (count + 1) * sizeof * node_array);
+            node_array = tmp;
+            head = add_to_llist(head, value);
+            node_array[count++] = head;
+        }
 
-    } while (value > 0);
+    } while (strcmp(input, "end") != 0);
 
-    printf("Numbers:\n");
-    for (nnode *p = head; p; p = p->next) {
-        printf("%d ", p->number);
-    }
+    print_numbers(head);
 
     free(input);
     free(node_array);
@@ -55,9 +57,8 @@ char *handle_input() {
     return string;
 }
 
-struct node *add(struct node *head, int value) {
+struct node *add_to_llist(struct node *head, int value) {
     nnode *newline = malloc(sizeof(*newline));
-
     newline->next = NULL;
     newline->number = value;
 
@@ -66,8 +67,14 @@ struct node *add(struct node *head, int value) {
 
     struct node *tail = head;
     while (tail->next) tail = tail->next;
-
     tail->next = newline;
 
     return head;
+}
+
+void print_numbers(struct node *head) {
+    printf("Numbers:\n");
+    for (nnode *p = head; p; p = p->next) {
+        printf("%d ", p->number);
+    }
 }
