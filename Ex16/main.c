@@ -12,7 +12,7 @@ char *handle_input();
 void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val);
 struct node *add_to_llist(struct node *head, int value);
 void print_numbers(struct node *head);
-void input_warning_and_free_memory(char *description, char* string);
+char *input_warning_and_free_memory(char *description, char* string);
 
 int main() {
     nnode **node_array = NULL;
@@ -32,8 +32,10 @@ int main() {
             const long val = strtol(input, &parse_end, 10);
             if (*parse_end == '\0')
                 update_list_and_array(&node_array, &count, &head, val);
-            else if((strcmp(input, "end") == 0))
+            else if(strcmp(input, "end") == 0)
                 check = false;
+            else
+                printf("Invalid input.\n");
         }
 
     } while (check == true);
@@ -47,23 +49,17 @@ int main() {
 
 char *handle_input() {
     char *string = malloc(32);
-    if (!string) {
-        input_warning_and_free_memory("Memory allocation failed.\n", string);
-        return NULL;
-    }
+    if (!string)
+        return input_warning_and_free_memory("Memory allocation failed.\n", string);
 
     printf("Enter a integer or 'end' to stop: ");
-    if (!fgets(string, 32, stdin)) {
-        input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
-        return NULL;
-    }
+    if (!fgets(string, 32, stdin))
+        return input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
 
     string[strcspn(string, "\n")] = '\0';
 
-    if (string[0] == '\0') {
-        input_warning_and_free_memory("Empty input.\n", string);
-        return NULL;
-    }
+    if (string[0] == '\0')
+        return input_warning_and_free_memory("Empty input.\n", string);
 
     return string;
 }
@@ -98,7 +94,8 @@ void print_numbers(struct node *head) {
     }
 }
 
-void input_warning_and_free_memory(char *description, char* string) {
+char *input_warning_and_free_memory(char *description, char* string) {
     printf("%s", description);
     free(string);
+    return NULL;
 }
