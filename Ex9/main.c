@@ -32,7 +32,7 @@ int handle_input() {
     if (scanf("%d", &value) != 1) {
         while (getchar() != '\n');
         printf("Invalid input.\n");
-        return 0;
+        return -2;
     }
 
     return value;
