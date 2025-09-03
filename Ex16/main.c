@@ -10,7 +10,7 @@ typedef struct node {
 
 char *handle_input();
 void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val);
-struct node *add_to_llist(struct node *head, int value);
+struct node *append_node(struct node *head, int value);
 void print_numbers(struct node *head);
 char *input_warning_and_free_memory(char *description, char* string);
 
@@ -68,11 +68,11 @@ void update_list_and_array(struct node ***node_array, size_t *count, struct node
     int value = (int)val;
     nnode **tmp = realloc(*node_array, (*count + 1) * sizeof * node_array);
     *node_array = tmp;
-    *head = add_to_llist(*head, value);
+    *head = append_node(*head, value);
     (*node_array)[(*count)++] = *head;
 }
 
-struct node *add_to_llist(struct node *head, int value) {
+struct node *append_node(struct node *head, int value) {
     nnode *newline = malloc(sizeof(*newline));
     newline->next = NULL;
     newline->number = value;
