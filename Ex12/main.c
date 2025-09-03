@@ -10,7 +10,7 @@ int main() {
     do {
         handle_input("Enter a string: ", string, 80);
         handle_input("Enter a word: ", word, 80);
-        if (strcmp(word, "stop") != 0) {
+        if (strcmp(word, "stop") != 0 && string[0] != '\0' && word[0] != '\0') {
             const int sum = count_words(string, word);
             printf("sum: %d\n", sum);
         }
