@@ -7,7 +7,6 @@
 char *handle_input();
 char *input_warning_and_free_memory(char *error_msg, char *string);
 bool password_generator(char *word_out, int array_size, const char *word_in);
-void add_password(char *this_passwords, char *this_word, int *this_count);
 const char * const *get_table(void);
 
 int main() {
@@ -78,10 +77,6 @@ char *input_warning_and_free_memory(char *error_msg, char *string) {
 }
 
 bool password_generator(char *word_out, int const array_size, const char *word_in) {
-    //const char numbers[] = "0123456789", symbols[] = "!@#$^&*?";
-    //const char letter[] = "abcdefghijklmnoqprstuvwyzx";
-    //const char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
-    //const char *table[] = {numbers, symbols, letter, LETTER};
     const char * const *table = get_table();
     const size_t word_length = strlen(word_in);
     const size_t max_length = word_length * 2 + 1;
@@ -108,13 +103,6 @@ bool password_generator(char *word_out, int const array_size, const char *word_i
         return true;
     }
     return false;
-}
-
-void add_password(char *this_passwords, char *this_word, int *this_count) {
-    //printf("This word: %s\n", this_word);
-    //printf("This count: %d\n", *this_count);
-    //printf("This passwords: %s\n", this_passwords);
-
 }
 
 const char * const *get_table(void) {
