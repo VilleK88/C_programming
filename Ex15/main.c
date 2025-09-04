@@ -21,6 +21,7 @@ int main() {
     read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
     print_menu(menu_items, count);
 
+    free(filename);
     return 0;
 }
 
@@ -38,7 +39,6 @@ char *handle_input() {
     }
 
     string[strcspn(string, "\n")] = '\0';
-
     return string;
 }
 
@@ -54,7 +54,7 @@ FILE *open_file(char *this_filename) {
     return file;
 }
 
-void read_file(FILE *this_file, menu_item *items, int *count, int capacity) {
+void read_file(FILE *this_file, menu_item *items, int *count, const int capacity) {
     char line[200];
 
     while (fgets(line, sizeof(line), this_file) != NULL && *count < capacity) {
@@ -71,7 +71,7 @@ void read_file(FILE *this_file, menu_item *items, int *count, int capacity) {
     fclose(this_file);
 }
 
-void print_menu(menu_item *items, int count) {
+void print_menu(menu_item *items, const int count) {
     printf("Menu:\n");
     for (int i = 0; i < count; i++) {
         printf("%8.2f %s\n", items[i].price, items[i].name);
