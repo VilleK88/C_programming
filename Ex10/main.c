@@ -42,7 +42,7 @@ char *handle_input() {
 }
 
 char *input_warning_and_free_memory(char *description, char* string) {
-    printf("%s", description);
+    printf("%s\n", description);
     free(string);
     return NULL;
 }
