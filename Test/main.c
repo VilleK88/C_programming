@@ -4,8 +4,8 @@
 
 char *handle_input();
 FILE *open_file(char *this_filename);
-int *read_file(FILE *this_file, int *count_out);
-void handle_print(int *numbers, int count);
+int *read_file(FILE *this_file, int *count);
+void handle_print(const int *numbers, int count);
 
 int main() {
     int count = 0;
@@ -52,35 +52,32 @@ FILE *open_file(char *this_filename) {
     return file;
 }
 
-int *read_file(FILE *this_file, int *count_out) {
-    int *numbers = NULL, temp, capacity = 0, count = 0;
+int *read_file(FILE *this_file, int *count) {
+    int *numbers = NULL, temp;
 
     while (fscanf(this_file, "%d", &temp) == 1) {
-        // Increase capacity if needed
-        if (count >= capacity) {
-            capacity = (capacity == 0) ? 4 : capacity * 2;
-            numbers = realloc(numbers, capacity * sizeof(int));
-            if (numbers == NULL) {
-                printf("Memory allocation failed!\n");
-                fclose(this_file);
-                return 0;
-            }
+        int *buffer = realloc(numbers, sizeof(temp) * (*count+1));
+        if (!buffer) {
+            free(buffer);
         }
-        numbers[count++] = temp;
+        else {
+            numbers = buffer;
+            numbers[(*count)++] = temp;
+        }
     }
 
     fclose(this_file);
-    *count_out = count;
-
     return numbers;
 }
 
-void handle_print(int *numbers, int count) {
+void handle_print(const int *numbers, const int count) {
     int lowest = numbers[0], highest = numbers[0];
 
     for (int i = 0; i < count; i++) {
-        if (numbers[i] < lowest) lowest = numbers[i];
-        if (numbers[i] > highest) highest = numbers[i];
+        if (numbers[i] < lowest)
+            lowest = numbers[i];
+        if (numbers[i] > highest)
+            highest = numbers[i];
     }
 
     printf("%d numbers found.\n", count);
