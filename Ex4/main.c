@@ -9,7 +9,7 @@ int main()
 
     while (num >= 0) {
         num = read_integer();
-        if (num > 0) {
+        if (num >= 0) {
             sum += (float)num;
             count++;
         }

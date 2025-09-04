@@ -30,15 +30,15 @@ int handle_input()
     printf("Guess how much money I have!\n");
     printf("Enter a positive number: ");
 
-    if(scanf("%d", &value) != 1)
+    if(scanf_s("%d", &value) != 1)
     {
-        while(getchar() != '\n');
+        while(getchar() != '\n'){}
         printf("Incorrect input.\n");
         value = -1;
     }
     else
     {
-        bool positive = read_positive(&value);
+        const bool positive = read_positive(&value);
         if(!positive)
         {
             printf("Incorrect input.\n");
