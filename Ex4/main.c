@@ -25,9 +25,9 @@ int read_integer(void)
 {
     int value;
     printf("Enter positive numbers or negative to stop: ");
-    if(scanf("%d", &value) != 1)
+    if(scanf_s("%d", &value) != 1)
     {
-        while(getchar() != '\n');
+        while(getchar() != '\n'){}
         printf("Invalid input\n");
         return 0;
     }

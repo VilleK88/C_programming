@@ -36,9 +36,9 @@ int handle_input(void)
 {
     int value;
 
-    if(scanf("%d", &value) != 1)
+    if(scanf_s("%d", &value) != 1)
     {
-        while(getchar() != '\n');
+        while(getchar() != '\n'){}
         printf("Invalid input.\n");
         return 0;
     }
@@ -52,9 +52,9 @@ void menu_info(void)
     printf("Input value: ");
 }
 
-void roll_dice(int max)
+void roll_dice(const int max)
 {
     printf("\n");
-    int value = rand() % max + 1;
+    const int value = rand() % max + 1;
     printf("%d\n\n", value);
 }
