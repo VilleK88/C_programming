@@ -1,104 +1,88 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-
-typedef struct node {
-    int number;
-    struct node *next;
-} nnode;
 
 char *handle_input();
-void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val);
-struct node *add_to_llist(struct node *head, int value);
-void print_numbers(struct node *head);
-void input_warning_and_free_memory(char *description, char* string);
+FILE *open_file(char *this_filename);
+int *read_file(FILE *this_file, int *count_out);
+void handle_print(int *numbers, int count);
 
 int main() {
-    nnode **node_array = NULL;
-    size_t count = 0;
-    char *input;
-    struct node *head = NULL;
-    bool check = true;
+    int count = 0;
 
-    do {
-        printf("Enter integer: ");
-        input = handle_input();
-        if (input != NULL) {
-            char *parse_end;
-            // Convert string in 'input' to a long integer in base 10.
-            // 'parse_end' will point to the first character after the parsed number.
-            // If the whole string was a number, then *parse_end == '\0'.
-            const long val = strtol(input, &parse_end, 10);
-            if (*parse_end == '\0')
-                update_list_and_array(&node_array, &count, &head, val);
-            else if((strcmp(input, "end") == 0))
-                check = false;
-        }
+    char *filename = handle_input();
+    FILE *file = open_file(filename);
+    int *numbers = read_file(file, &count);
+    if (numbers != NULL)
+        handle_print(numbers, count);
 
-    } while (check == true);
+    free(numbers);
+    free(filename);
 
-    print_numbers(head);
-
-    free(input);
-    free(node_array);
     return 0;
 }
 
 char *handle_input() {
     char *string = malloc(32);
     if (!string) {
-        input_warning_and_free_memory("Memory allocation failed.\n", string);
+        printf("Memory allocation failed!\n");
         return NULL;
     }
 
-    printf("Enter a integer or 'end' to stop: ");
+    printf("Enter a filename: ");
     if (!fgets(string, 32, stdin)) {
-        input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
+        free(string);
         return NULL;
     }
 
     string[strcspn(string, "\n")] = '\0';
 
-    if (string[0] == '\0') {
-        input_warning_and_free_memory("Empty input.\n", string);
-        return NULL;
-    }
-
     return string;
 }
 
-void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val) {
-    int value = (int)val;
-    nnode **tmp = realloc(*node_array, (*count + 1) * sizeof * node_array);
-    *node_array = tmp;
-    *head = add_to_llist(*head, value);
-    (*node_array)[(*count)++] = *head;
-}
+FILE *open_file(char *this_filename) {
+    FILE *file;
 
-struct node *add_to_llist(struct node *head, int value) {
-    nnode *newline = malloc(sizeof(*newline));
-    newline->next = NULL;
-    newline->number = value;
-
-    if (!head)
-        return newline;
-
-    struct node *tail = head;
-    while (tail->next) tail = tail->next;
-    tail->next = newline;
-
-    return head;
-}
-
-void print_numbers(struct node *head) {
-    printf("Numbers:\n");
-    for (nnode *p = head; p; p = p->next) {
-        printf("%d ", p->number);
+    if ((file = fopen(this_filename, "r")) == NULL) {
+        fprintf(stderr, "Error: could not open file '%s'\n", this_filename);
+        free(this_filename);
+        exit(EXIT_FAILURE);
     }
+
+    return file;
 }
 
-void input_warning_and_free_memory(char *description, char* string) {
-    printf("%s", description);
-    free(string);
+int *read_file(FILE *this_file, int *count_out) {
+    int *numbers = NULL, temp, capacity = 0, count = 0;
+
+    while (fscanf(this_file, "%d", &temp) == 1) {
+        // Increase capacity if needed
+        if (count >= capacity) {
+            capacity = (capacity == 0) ? 4 : capacity * 2;
+            numbers = realloc(numbers, capacity * sizeof(int));
+            if (numbers == NULL) {
+                printf("Memory allocation failed!\n");
+                fclose(this_file);
+                return 0;
+            }
+        }
+        numbers[count++] = temp;
+    }
+
+    fclose(this_file);
+    *count_out = count;
+
+    return numbers;
+}
+
+void handle_print(int *numbers, int count) {
+    int lowest = numbers[0], highest = numbers[0];
+
+    for (int i = 0; i < count; i++) {
+        if (numbers[i] < lowest) lowest = numbers[i];
+        if (numbers[i] > highest) highest = numbers[i];
+    }
+
+    printf("%d numbers found.\n", count);
+    printf("Lowest number: %d, highest number: %d\n", lowest, highest);
 }

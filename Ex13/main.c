@@ -13,7 +13,8 @@ int main() {
     char *filename = handle_input();
     FILE *file = open_file(filename);
     int *numbers = read_file(file, &count);
-    handle_print(numbers, count);
+    if (numbers != NULL)
+        handle_print(numbers, count);
 
     free(numbers);
     free(filename);
