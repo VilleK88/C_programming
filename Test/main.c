@@ -1,85 +1,111 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h> // printf, fgets, scanf
+#include <stdlib.h> // malloc, realloc, free, atoi
+#include <string.h> // strcmp, strlen, strcspn, strstr, strcpy
+#include <stdbool.h>
+#include <time.h>
 
 char *handle_input();
-FILE *open_file(char *this_filename);
-int *read_file(FILE *this_file, int *this_count);
-void handle_print(const int *this_numbers, int this_count);
+char *input_warning_and_free_memory(char *error_msg, char *string);
+char *handle_input_error(char **this_string);
+bool password_generator(char *word_out, int this_size, char *word_in);
 
 int main() {
     int count = 0;
+    char *passwords[3][32];
+    srand((unsigned int)time(NULL));
+    bool continue_loop = true;
 
-    char *filename = handle_input();
-    FILE *file = open_file(filename);
-    int *numbers = read_file(file, &count);
-    if (numbers != NULL)
-        handle_print(numbers, count);
-
-    free(numbers);
-    free(filename);
+    do {
+        printf("Enter password: ");
+        char *word = handle_input();
+        if (word != NULL) {
+            if (strcmp(word, "stop") != 0) {
+                const size_t size = sizeof(passwords) / sizeof(passwords[0]);
+                char word_out[strlen(word)];
+                const bool successful = password_generator(&word_out, size, word);
+                if (successful) {
+                    //printf("Word out: %s\n", word_out);
+                    *passwords[count++] = word_out;
+                    printf("Word in array: %s\n", *passwords[count-1]);
+                }
+            }
+            else continue_loop = false;
+        }
+        free(word);
+    } while (continue_loop);
 
     return 0;
 }
 
 char *handle_input() {
     char *string = malloc(32);
-    if (!string) {
-        printf("Memory allocation failed!\n");
-        return NULL;
-    }
 
-    printf("Enter a filename: ");
-    if (!fgets(string, 32, stdin)) {
-        free(string);
-        return NULL;
-    }
+    if (string) {
+        if (fgets(string, 32, stdin)) {
+            if (strchr(string, '\n') == NULL) {
+                int ch;
+                while ((ch = getchar()) != '\n' && ch != EOF){}
+                return input_warning_and_free_memory("Input too long (max 32 characters).\n", string);
+            }
 
-    string[strcspn(string, "\n")] = '\0';
+            string[strcspn(string, "\n")] = '\0';
+
+            if (string[0] == '\0')
+                return input_warning_and_free_memory("Empty input.\n", string);
+        }
+        else
+            return input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
+    }
+    else
+        return input_warning_and_free_memory("Memory allocation failed.\n", string);
 
     return string;
 }
 
-FILE *open_file(char *this_filename) {
-    FILE *file;
-
-    if ((file = fopen(this_filename, "r")) == NULL) {
-        fprintf(stderr, "Error: could not open file '%s'\n", this_filename);
-        free(this_filename);
-        exit(EXIT_FAILURE);
-    }
-
-    return file;
+char *input_warning_and_free_memory(char *error_msg, char *string) {
+    printf("%s", error_msg);
+    free(string);
+    return NULL;
 }
 
-int *read_file(FILE *this_file, int *this_count) {
-    int *numbers = NULL, temp;
+bool password_generator(char *word_out, int const this_size, char *word_in) {
+    char numbers[] = "0123456789", symbols[] = "!@#$^&*?";
+    char letter[] = "abcdefghijklmnoqprstuvwyzx";
+    char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
+    char *table[] = {numbers, symbols, letter, LETTER};
 
-    while (fscanf(this_file, "%d", &temp) == 1) {
-        int *buffer = realloc(numbers, sizeof(temp) * (*this_count+1));
-        if (!buffer) {
-            free(buffer);
+    if (this_size <= 3) {
+        int word_length = strlen(word_in);
+        int max_length = word_length * 2 + 1;
+        //printf("Word is: %s\n", word_in);
+        //printf("Word length is: %d\n", word_length);
+        //printf("this_size is: %d\n", this_size);
+        if (max_length <= 32) {
+            char new_word[max_length+1];
+            bool rotation = true;
+            int count = 0;
+            for (int i = 0; i <= max_length; i++) {
+                const int randomTable = rand() % 4;
+                const int len = strlen(table[randomTable]);
+                const int randomIndex = rand() % len;
+                const char randomChar = table[randomTable][randomIndex];
+                if (rotation) {
+                    new_word[i] = randomChar;
+                    rotation = false;
+                }
+                else {
+                    new_word[i] = word_in[count++];
+                    rotation = true;
+                }
+                //printf("word in i: %c\n", word_in[i]);
+            }
+            //printf("New word inside function: %s\n", new_word);
+            strcpy(word_out, new_word);
+            //printf("Word length is less than 32.\n");
+            return true;
         }
-        else {
-            numbers = buffer;
-            numbers[(*this_count)++] = temp;
-        }
+
     }
 
-    fclose(this_file);
-    return numbers;
-}
-
-void handle_print(const int *this_numbers, const int this_count) {
-    int lowest = this_numbers[0], highest = this_numbers[0];
-
-    for (int i = 0; i < this_count; i++) {
-        if (this_numbers[i] < lowest)
-            lowest = this_numbers[i];
-        if (this_numbers[i] > highest)
-            highest = this_numbers[i];
-    }
-
-    printf("%d numbers found.\n", this_count);
-    printf("Lowest number: %d, highest number: %d\n", lowest, highest);
+    return false;
 }

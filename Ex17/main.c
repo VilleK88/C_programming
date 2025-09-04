@@ -1,17 +1,19 @@
-#include <stdio.h> // printf, fgets, scanf
-#include <stdlib.h> // malloc, realloc, free, atoi
-#include <string.h> // strcmp, strlen, strcspn, strstr, strcpy
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <stdbool.h>
 #include <time.h>
 
 char *handle_input();
 char *input_warning_and_free_memory(char *error_msg, char *string);
-char *handle_input_error(char **this_string);
-bool password_generator(char *word_out, int this_size, char *word_in);
+//char *handle_input_error(char **this_string);
+bool password_generator(char *word_out, int array_size, char *word_in);
+void add_password(char *this_passwords, char *this_word, int *this_count);
 
 int main() {
     int count = 0;
-    char *passwords[3][32];
+    //char *passwords[3][32];
+    char **passwords = NULL;
     srand((unsigned int)time(NULL));
     bool continue_loop = true;
 
@@ -20,13 +22,18 @@ int main() {
         char *word = handle_input();
         if (word != NULL) {
             if (strcmp(word, "stop") != 0) {
-                const size_t size = sizeof(passwords) / sizeof(passwords[0]);
                 char word_out[strlen(word)];
-                const bool successful = password_generator(&word_out, size, word);
+                const bool successful = password_generator(&word_out, 32, word);
                 if (successful) {
-                    printf("Word out: %s\n", word_out);
-                    *passwords[count++] = word_out;
-                    printf("Word in array: %s\n", *passwords[count-1]);
+                    char **tmp = realloc(passwords, (size_t)(count+1) * sizeof * passwords);
+                    if (!tmp)
+                        free(tmp);
+                    else {
+                        passwords = tmp;
+                        // allocates heap memory and copies word_out
+                        passwords[count++] = strdup(word_out);
+                    }
+                    printf("Word in array: %s\n", passwords[count-1]);
                 }
             }
             else continue_loop = false;
@@ -34,6 +41,7 @@ int main() {
         free(word);
     } while (continue_loop);
 
+    free(passwords);
     return 0;
 }
 
@@ -68,44 +76,44 @@ char *input_warning_and_free_memory(char *error_msg, char *string) {
     return NULL;
 }
 
-bool password_generator(char *word_out, int const this_size, char *word_in) {
-    char numbers[] = "0123456789", symbols[] = "!@#$^&*?";
-    char letter[] = "abcdefghijklmnoqprstuvwyzx";
-    char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
-    char *table[] = {numbers, symbols, letter, LETTER};
+bool password_generator(char *word_out, int const array_size, char *word_in) {
+    const char numbers[] = "0123456789", symbols[] = "!@#$^&*?";
+    const char letter[] = "abcdefghijklmnoqprstuvwyzx";
+    const char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
+    const char *table[] = {numbers, symbols, letter, LETTER};
 
-    if (this_size <= 3) {
-        int word_length = strlen(word_in);
-        int max_length = word_length * 2 + 1;
-        printf("Word is: %s\n", word_in);
-        printf("Word length is: %d\n", word_length);
-        printf("this_size is: %d\n", this_size);
-        if (max_length <= 32) {
-            char new_word[max_length+1];
-            bool rotation = true;
-            int count = 0;
-            for (int i = 0; i <= max_length; i++) {
-                const int randomTable = rand() % 4;
-                const int len = strlen(table[randomTable]);
-                const int randomIndex = rand() % len;
-                const char randomChar = table[randomTable][randomIndex];
-                if (rotation) {
-                    new_word[i] = randomChar;
-                    rotation = false;
-                }
-                else {
-                    new_word[i] = word_in[count++];
-                    rotation = true;
-                }
-                printf("word in i: %c\n", word_in[i]);
+    int word_length = strlen(word_in);
+    int max_length = word_length * 2 + 1;
+    if (max_length <= array_size) {
+        char new_word[max_length+1];
+        bool rotation = true;
+        int j = 0;
+        for (int i = 0; i <= max_length; i++) {
+            const int randomTable = rand() % 4;
+            const int len = strlen(table[randomTable]);
+            const int randomIndex = rand() % len;
+            const char randomChar = table[randomTable][randomIndex];
+            if (rotation) {
+                new_word[i] = randomChar;
+                rotation = false;
             }
-            printf("New word inside function: %s\n", new_word);
-            strcpy(word_out, new_word);
-            printf("Word length is less than 32.\n");
-            return true;
+            else {
+                new_word[i] = word_in[j++];
+                rotation = true;
+            }
+            //printf("word in i: %c\n", word_in[i]);
         }
-
+        //printf("New word inside function: %s\n", new_word);
+        strcpy(word_out, new_word);
+        //printf("Word length is less than 32.\n");
+        return true;
     }
-
     return false;
+}
+
+void add_password(char *this_passwords, char *this_word, int *this_count) {
+    //printf("This word: %s\n", this_word);
+    //printf("This count: %d\n", *this_count);
+    //printf("This passwords: %s\n", this_passwords);
+
 }
