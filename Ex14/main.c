@@ -15,11 +15,13 @@ int main() {
     char *filename = handle_input();
     FILE *file = open_file(filename);
     char (*lines)[81] = read_file(file, &count);
-    convert_to_uppercase(lines, count);
-    write_to_file(filename, lines, count);
+    if (lines != NULL) {
+        convert_to_uppercase(lines, count);
+        write_to_file(filename, lines, count);
+        free(lines);
+    }
 
-    free(lines);
-    free(filename);
+    if (!filename) free(filename);
     return 0;
 }
 
@@ -71,7 +73,7 @@ char *read_file(FILE *this_file, int *count_out) {
     return (char*)lines;
 }
 
-void convert_to_uppercase(char (*this_lines)[81], int this_count) {
+void convert_to_uppercase(char (*this_lines)[81], const int this_count) {
     for (int i = 0; i < this_count; i++) {
         for (int j = 0; j < strlen(this_lines[i]); j++) {
             const char c = this_lines[i][j];
@@ -81,11 +83,12 @@ void convert_to_uppercase(char (*this_lines)[81], int this_count) {
 }
 
 
-void write_to_file(char *this_filename, char (*this_lines)[81], int this_count) {
+void write_to_file(char *this_filename, char (*this_lines)[81], const int this_count) {
     FILE *file = fopen(this_filename, "w");
     if (file == NULL) {
         fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
         free(this_filename);
+        fclose(file);
         return;
     }
 
