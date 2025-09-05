@@ -18,7 +18,6 @@ int main() {
     do {
         printf("Enter password: ");
         char *word = handle_input();
-
         if (word != NULL) {
 
             if (strcmp(word, "stop") != 0) {
