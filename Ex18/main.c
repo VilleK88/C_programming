@@ -9,6 +9,7 @@ int main() {
     int num;
 
     do {
+        printf("Enter a number: ");
         num = handle_input();
         if (num >= 0 && num <= 15) {
             const int rand_num = generate_random(num);
@@ -23,11 +24,9 @@ int main() {
 
 int handle_input() {
     int value;
-    printf("Enter a number: ");
-    if (scanf_s("%d", &value) != 1) {
+    while (scanf_s("%d", &value) != 1) {
         while (getchar() != '\n'){}
         printf("Invalid input.\n");
-        return 0;
     }
     return value;
 }
