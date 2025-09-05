@@ -26,9 +26,8 @@ int main() {
         input = handle_input();
         if (input != NULL) {
             char *parse_end;
-            // Convert string in 'input' to a long integer in base 10.
-            // 'parse_end' will point to the first character after the parsed number.
-            // If the whole string was a number, then *parse_end == '\0'.
+            // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
+            // mihin asti luvun lukeminen onnistui (parse_end osoittaa siihen merkkiin).
             const long val = strtol(input, &parse_end, 10);
             if (*parse_end == '\0')
                 update_list_and_array(&node_array, &count, &head, val);
