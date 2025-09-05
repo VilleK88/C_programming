@@ -19,7 +19,6 @@ int main() {
         printf("Enter password: ");
         char *word = handle_input();
         if (word != NULL) {
-
             if (strcmp(word, "stop") != 0) {
                 char word_out[strlen(word)];
                 const bool successful = password_generator(word_out, 32, word);
@@ -36,7 +35,6 @@ int main() {
             }
             else continue_loop = false;
         }
-
         free(word);
     } while (continue_loop);
 
@@ -81,17 +79,14 @@ bool password_generator(char *word_out, int const array_size, const char *word_i
     const size_t max_length = word_length * 2 + 1;
 
     if (max_length <= array_size) {
-
         char new_word[max_length+1];
         bool rotation = true;
         int j = 0;
-
         for (int i = 0; i <= max_length; i++) {
             const int randomTable = rand() % 4;
             const size_t len = strlen(table[randomTable]);
             const int randomIndex = rand() % (int)len;
             const char randomChar = table[randomTable][randomIndex];
-
             if (rotation) {
                 new_word[i] = randomChar;
                 rotation = false;
@@ -100,12 +95,9 @@ bool password_generator(char *word_out, int const array_size, const char *word_i
                 new_word[i] = word_in[j++];
                 rotation = true;
             }
-
         }
-
         strcpy(word_out, new_word);
         return true;
-
     }
     return false;
 }
