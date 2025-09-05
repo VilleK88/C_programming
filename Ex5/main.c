@@ -5,12 +5,13 @@ int read_range(int this_low, int this_high);
 
 int main()
 {
-    int high = 10, low = 1, count = 0;
+    int count = 0;
 
     printf("Let's play!\nRoll a die and enter your result.\n");
 
     while(count < 3)
     {
+        const int high = 10 , low = 1;
         const int num = read_range(low, high);
         if(num != 6)
             printf("I got %d. I win!\n", num + 1);

@@ -27,6 +27,7 @@ int handle_input() {
     if (scanf_s("%d", &value) != 1) {
         while (getchar() != '\n'){}
         printf("Invalid input.\n");
+        return 0;
     }
     return value;
 }
