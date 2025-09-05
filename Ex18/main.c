@@ -2,7 +2,7 @@
 #include <stdlib.h>
 
 int handle_input();
-int generate_random(int value);
+int generate_random();
 void print_hexadecimal(int num, int rand_num);
 
 int main() {
@@ -12,7 +12,7 @@ int main() {
         printf("Enter a number: ");
         num = handle_input();
         if (num >= 0 && num <= 15) {
-            const int rand_num = generate_random(num);
+            const int rand_num = generate_random();
             print_hexadecimal(num, rand_num);
         }
         else if (num > 15)
@@ -31,9 +31,8 @@ int handle_input() {
     return value;
 }
 
-int generate_random(const int value) {
-    int random = value;
-    random = rand() % 100;
+int generate_random() {
+    const int random = rand() % 100;
     return random;
 }
 
