@@ -1,27 +1,18 @@
-#include <stdio.h> // printf, fgets, scanf_s
-#include <stdlib.h> // malloc, realloc, free, atoi
-#include <string.h> // strcmp, strcspn, strlen, strstr, strdup, strchr
-#include <stdbool.h>
-
-typedef struct struct_line_ {
-    char string[200];
-    struct struct_line_ *next;
-} struct_line;
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 char *get_filename();
 FILE *open_file(char *filename);
-void read_file(FILE *file, struct_line **array,  size_t *count, struct struct_line_ **head);
-struct struct_line_ *append_node(struct struct_line_ *head, char *string);
+void read_file(FILE *file);
+int xor_get_sum(const char *dollar, const char *star);
+void print_line(int sum, int result, const char *line);
 
 int main() {
-    struct_line *array = NULL;
-    size_t count = 0;
-    struct struct_line *head = NULL;
 
     char *filename = get_filename();
     FILE *file = open_file(filename);
-    read_file(file, &array, &count, &head);
-    //printf("Random number hexadecimal: %02x\n", 76);
+    read_file(file);
 
     free(filename);
     return 0;
@@ -56,20 +47,33 @@ FILE *open_file(char *filename) {
     return file;
 }
 
-void read_file(FILE *file, struct_line **array,  size_t *count, struct struct_line_ **head) {
+void read_file(FILE *file) {
     char line[200];
 
     while (fgets(line, sizeof(line), file) != NULL) {
-        printf("%s\n", line);
-        char *star = strchr(line, '*');
-        struct_line **tmp = realloc(array, (*count + 1) * sizeof * array);
-        array = tmp;
+        const char *dollar = strchr(line, '$');
+        if (dollar != NULL) {
+            const char *star = strchr(dollar, '*');
+            if (star != NULL) {
+                const int sum = xor_get_sum(dollar, star);
+                const int result = strtol(star + 1, NULL, 16);
+                print_line(sum, result, line);
+            }
+        }
     }
-
 }
 
-struct struct_line_ *append_node(struct struct_line_ *head, char *string) {
-    struct_line *newline = malloc(sizeof(*newline));
-    newline->next = NULL;
-    newline->string = string;
+int xor_get_sum(const char *dollar, const char *star) {
+    int sum = 0;
+    for (const char *i = dollar + 1; i < star; i++) {
+        sum ^= *i;
+    }
+    return sum;
+}
+
+void print_line(const int sum, const int result, const char *line) {
+    if (sum == result)
+        printf("[ OK ]%s", line);
+    else
+        printf("[FAIL]%s", line);
 }
