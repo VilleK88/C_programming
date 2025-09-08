@@ -3,14 +3,14 @@
 #include <time.h>
 
 int handle_input();
-int *initialize_array();
+unsigned int *initialize_array();
 int find_first(const unsigned int *array, unsigned int what);
 
 int main() {
     int num = 0;
     srand((unsigned)time(NULL));
 
-    int *array = initialize_array();
+    unsigned int *array = initialize_array();
 
     do {
         printf("Enter a number to search for or zero to stop: ");
@@ -38,15 +38,15 @@ int handle_input() {
     return value;
 }
 
-int *initialize_array() {
-    int *this_array = malloc(20 * sizeof(int));
+unsigned int *initialize_array() {
+    unsigned int *this_array = malloc(20 * sizeof(int));
     if (this_array == NULL) {
         printf("Memory allocation failed.\n");
         return 0;
     }
 
     for (int i = 0; i < 19; i++) {
-        this_array[i] = rand() % 20 + 1;
+        this_array[i] = (unsigned int)(rand() % 20 + 1);
         printf("%d\n", this_array[i]);
     }
 
@@ -54,7 +54,7 @@ int *initialize_array() {
     return this_array;
 }
 
-int find_first(const unsigned int *array, unsigned int what) {
+int find_first(const unsigned int *array, const unsigned int what) {
     if (array != NULL) {
         for (int i = 0; array[i] != 0; i++) {
             if (array[i] == what)

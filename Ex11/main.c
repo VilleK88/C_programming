@@ -3,7 +3,6 @@
 
 int replace_char(char *str, const char *repl);
 void handle_input(char *description, char *this_text, int this_count);
-void trim_newline(char *input);
 
 int main() {
     char text[80], repl[3];
@@ -45,9 +44,5 @@ int replace_char(char *str, const char *repl) {
 void handle_input(char *description, char *this_text, int this_count) {
     printf("%s", description);
     fgets(this_text, this_count, stdin);
-    trim_newline(this_text);
-}
-
-void trim_newline(char *input) {
-    input[strcspn(input, "\n")] = '\0';
+    this_text[strcspn(this_text, "\n")] = '\0';
 }
