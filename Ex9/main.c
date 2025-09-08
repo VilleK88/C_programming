@@ -49,8 +49,8 @@ int *initialize_array() {
         this_array[i] = rand() % 20 + 1;
         printf("%d\n", this_array[i]);
     }
-    this_array[19] = 0;
 
+    this_array[19] = 0;
     return this_array;
 }
 
