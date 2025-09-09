@@ -19,9 +19,9 @@ int main() {
             if(strcmp(string, "stop") == 0)
                 check = false;
         }
+        free(string);
     } while (check == true);
-
-    free(string);
+    
     return 0;
 }
 
