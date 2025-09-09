@@ -2,17 +2,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h> // isdigit
 
 void initialize_rows(char rows[26][6]);
 void print_rows(char rows[26][6]);
-void load_rows(char rows[26][6]);
+void update_rows(char rows[26][6]);
 FILE *open_file(char *filename);
+int get_nums_from_a_string(const char *string);
 
 int main() {
     char rows[26][6];
     initialize_rows(rows);
     print_rows(rows);
-    load_rows(rows);
+    update_rows(rows);
 }
 
 void initialize_rows(char rows[26][6]) {
@@ -38,30 +40,35 @@ void print_rows(char rows[26][6]) {
     }
 }
 
-void load_rows(char rows[26][6]) {
+void update_rows(char rows[26][6]) {
     char line[100];
     FILE *file = open_file("seat_reservations.csv");
 
     while (fgets(line, sizeof(line), file) != NULL) {
-        //char *comma = strchr(line + count, ',');
         char *current_line = line;
         int count = 0;
         while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
             current_line++;
             count++;
         }
-        char *row;
-        for (int i = 0; i < strlen(current_line); i++) {
-            if (current_line[i] != ',') {
-                row = realloc(row, sizeof(current_line[i]));
-                if (!row) {
-                    free(row);
-                }
-                row += current_line[i];
-            }
 
+        const int row_num = get_nums_from_a_string(current_line);
+        printf("%d\n", row_num);
+        char last;
+        size_t len = strlen(current_line);
+        if (len > 0 && current_line[len - 1] == '\n') {
+            current_line[len- 1] = '\0';
+            len--;
         }
-        printf("%s\n", row);
+        if (len > 0) {
+            last = current_line[len - 1];
+            printf("%c\n", last);
+        }
+        //printf("Here: %c\n", current_line[0]);
+        char *row_string = malloc(count + 1);
+        strcpy(row_string, current_line);
+        //printf("%s\n", row_string);
+        free(row_string);
     }
 }
 
@@ -75,4 +82,22 @@ FILE *open_file(char *filename) {
     }
 
     return file;
+}
+
+int get_nums_from_a_string(const char *string) {
+    char *num_char = malloc(strlen(string) + 1);
+
+    int j = 0;
+    for (int i = 0; string[i] != '\0'; i++) {
+        if (isdigit(string[i])) {
+            num_char[j++] = string[i];
+        }
+    }
+    num_char[j] = '\0';
+    int result = 0;
+    if (j > 0)
+        result = atoi(num_char);
+
+    free(num_char);
+    return result;
 }
