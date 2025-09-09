@@ -30,5 +30,6 @@ int *initialize_array(const int this_count) {
 
 void print_numbers(const int *this_array, const int this_count) {
     if (this_array != NULL)
-        for (int i = 0; i < this_count; i++) printf("%d\n", this_array[i]);
+        for (int i = 0; i < this_count; i++)
+            printf("%8d\n", this_array[i]);
 }
