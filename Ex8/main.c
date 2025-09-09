@@ -17,7 +17,7 @@ int main() {
 }
 
 int *initialize_array(const int this_count) {
-    int *this_array = malloc(this_count * sizeof(unsigned int));
+    int *this_array = malloc(this_count * sizeof(int));
     if (!this_array) {
         printf("Memory allocation failed.\n");
         return 0;
