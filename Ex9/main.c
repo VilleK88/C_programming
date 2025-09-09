@@ -15,11 +15,13 @@ int main() {
     do {
         printf("Enter a number to search for or zero to stop: ");
         num = handle_input();
-        const int value = find_first(array, num);
-        if (value == -1)
-            printf("Not found.\n");
-        else
-            printf("Found at index: %d\n", value);
+        if (num != 0) {
+            const int value = find_first(array, num);
+            if (value == -1)
+                printf("Not found.\n");
+            else
+                printf("Found at index: %d\n", value);
+        }
     } while (num != 0);
 
     free(array);
@@ -29,17 +31,16 @@ int main() {
 int handle_input() {
     int value;
 
-    if (scanf_s("%d", &value) != 1) {
+    while (scanf("%d", &value) != 1) {
         while (getchar() != '\n'){}
         printf("Invalid input.\n");
-        return -2;
     }
 
     return value;
 }
 
 unsigned int *initialize_array() {
-    unsigned int *this_array = malloc(20 * sizeof(int));
+    unsigned int *this_array = malloc(20 * sizeof(unsigned int));
     if (this_array == NULL) {
         printf("Memory allocation failed.\n");
         return 0;
