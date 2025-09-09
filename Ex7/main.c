@@ -1,21 +1,24 @@
 #include <stdio.h>
 #include <stdbool.h>
 
-int handle_input();
-bool read_positive(const int *value);
+bool read_positive(int *value);
 
 int main()
 {
     int count = 0;
 
     do {
-        const int num = handle_input();
-        if(num != -1)
+        int value;
+        const bool positive = read_positive(&value);
+        if(positive)
         {
-            const int sum = num * 2 + 20;
+            const int sum = value * 2 + 20;
             printf("You didn't get it right. I have %d euros.\n", sum);
         }
-        else count++;
+        else {
+            printf("Incorrect input\n");
+            count++;
+        }
     } while (count < 3);
 
     printf("I give up! See you later!\n");
@@ -23,36 +26,22 @@ int main()
     return 0;
 }
 
-int handle_input()
+bool read_positive(int *value)
 {
-    int value;
-    
+    int num;
+
     printf("Guess how much money I have!\n");
     printf("Enter a positive number: ");
 
-    if(scanf_s("%d", &value) != 1)
+    if(scanf("%d", &num) != 1)
     {
         while(getchar() != '\n'){}
-        printf("Incorrect input.\n");
-        value = -1;
-    }
-    else
-    {
-        const bool positive = read_positive(&value);
-        if(!positive)
-        {
-            printf("Incorrect input.\n");
-            value = -1;
-        }
+        return false;
     }
 
-    return value;
-}
-
-bool read_positive(const int *value)
-{
-    if(*value < 0)
+    if(num <= 0)
         return false;
 
+    *value = num;
     return true;
 }
