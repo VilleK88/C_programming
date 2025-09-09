@@ -9,12 +9,15 @@ void print_rows(char rows[26][6]);
 void update_rows(char rows[26][6]);
 FILE *open_file(char *filename);
 int get_nums_from_a_string(const char *string);
+int find_seat(const char *string, char c);
 
 int main() {
     char rows[26][6];
     initialize_rows(rows);
     print_rows(rows);
     update_rows(rows);
+    printf("\n");
+    print_rows(rows);
 }
 
 void initialize_rows(char rows[26][6]) {
@@ -53,22 +56,18 @@ void update_rows(char rows[26][6]) {
         }
 
         const int row_num = get_nums_from_a_string(current_line);
-        printf("%d\n", row_num);
-        char last;
         size_t len = strlen(current_line);
         if (len > 0 && current_line[len - 1] == '\n') {
             current_line[len- 1] = '\0';
             len--;
         }
         if (len > 0) {
-            last = current_line[len - 1];
-            printf("%c\n", last);
+            const char last = current_line[len - 1];
+            if (row_num > 0) {
+                const int seat_num = find_seat(rows[row_num], last);
+                rows[row_num][seat_num] = 'x';
+            }
         }
-        //printf("Here: %c\n", current_line[0]);
-        char *row_string = malloc(count + 1);
-        strcpy(row_string, current_line);
-        //printf("%s\n", row_string);
-        free(row_string);
     }
 }
 
@@ -100,4 +99,14 @@ int get_nums_from_a_string(const char *string) {
 
     free(num_char);
     return result;
+}
+
+int find_seat(const char *string, const char c) {
+    if (string != NULL) {
+        for (int i = 0; string[i] != '\n'; i++) {
+            if (string[i] == c)
+                return i;
+        }
+    }
+    return 0;
 }
