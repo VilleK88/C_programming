@@ -23,7 +23,8 @@ int *initialize_array(const int this_count) {
         return 0;
     }
 
-    for (int i = 0; i < this_count; i++) this_array[i] = rand() % this_count + 1;
+    for (int i = 0; i < this_count; i++)
+        this_array[i] = rand() % this_count + 1;
 
     return this_array;
 }

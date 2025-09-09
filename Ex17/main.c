@@ -58,8 +58,6 @@ char *handle_input() {
             if (string[0] == '\0')
                 return input_warning_and_free_memory("Empty input.\n", string);
         }
-        else
-            return input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
     }
     else
         return input_warning_and_free_memory("Memory allocation failed.\n", string);

@@ -21,7 +21,7 @@ int main() {
         }
         free(string);
     } while (check == true);
-    
+
     return 0;
 }
 
