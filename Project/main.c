@@ -10,11 +10,11 @@
 void initialize_rows(char rows[row_c][seat_c]);
 void print_rows(char rows[row_c][seat_c]);
 void update_rows(char rows[row_c][seat_c]);
-FILE *open_file(char *filename);
+FILE *open_file(char *filename, const char *state);
 int get_nums_from_a_string(const char *string);
 int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[row_c][seat_c]);
-bool add_passenger(char rows[row_c][seat_c]);
+void add_passenger(const char *first_name, const char *last_name, int row, char seat);
 char *handle_input(int size);
 char *input_warning_free_memory(char *error_msg, char *string);
 
@@ -37,7 +37,8 @@ int main() {
                         reserve_a_seat(rows);
                         break;
                     case 2:
-                        printf("Seat map chosen.\n");
+                        update_rows(rows);
+                        print_rows(rows);
                         break;
                     case 3:
                         printf("Exit chosen.\n");
@@ -83,7 +84,7 @@ void print_rows(char rows[row_c][seat_c]) {
 
 void update_rows(char rows[row_c][seat_c]) {
     char line[100];
-    FILE *file = open_file("seat_reservations.csv");
+    FILE *file = open_file("seat_reservations.csv", "r");
 
     while (fgets(line, sizeof(line), file) != NULL) {
         char *current_line = line;
@@ -114,10 +115,10 @@ void update_rows(char rows[row_c][seat_c]) {
 
 }
 
-FILE *open_file(char *filename) {
+FILE *open_file(char *filename, const char *state) {
     FILE *file;
 
-    if ((file = fopen(filename, "r")) == NULL) {
+    if ((file = fopen(filename, state)) == NULL) {
         fprintf(stderr, "Error: could not open file %s\n", filename);
         free(filename);
         exit(EXIT_FAILURE);
@@ -196,8 +197,8 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
 }
 
 
-bool add_passenger(char rows[row_c][seat_c]) {
-    return true;
+void add_passenger(const char *first_name, const char *last_name, int row, char seat) {
+
 }
 
 char *handle_input(const int size) {
