@@ -16,7 +16,7 @@ int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[row_c][seat_c]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
 bool needs_line_break();
-char *handle_input(int size);
+char *handle_input(int size, char *text);
 char *input_warning_free_memory(char *error_msg, char *string);
 
 
@@ -28,8 +28,7 @@ int main() {
     //print_rows(rows);
 
     do {
-        printf("1) reserve a seat\n2) seat map\n3) exit\n");
-        char *c = handle_input(3);
+        char *c = handle_input(3, "1) reserve a seat\n2) seat map\n3) exit\n");
         if (c) {
             if (isdigit(*c)) {
                 const int choice = atoi(c);
@@ -108,12 +107,12 @@ void update_rows(char rows[row_c][seat_c]) {
             const char last = current_line[len - 1];
             if (row_num > 0) {
                 const int seat_num = find_seat(rows[row_num], last);
-                rows[row_num][seat_num] = 'x';
+                rows[row_num-1][seat_num] = 'x';
             }
         }
 
     }
-
+    fclose(file);
 }
 
 FILE *open_file(char *filename, const char *state) {
@@ -161,26 +160,20 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
     bool continue_loop = true;
 
     do {
-        printf("Enter first name: ");
-        char *first_name = handle_input(32);
-        printf("Enter last name: ");
-        char *last_name = handle_input(32);
+        char *first_name = handle_input(32, "Enter first name: ");
+        char *last_name = handle_input(32, "Enter last name: ");
         if (first_name && last_name) {
             print_rows(rows);
-            printf("Enter a row number: ");
-            char *row_str = handle_input(3);
+            char *row_str = handle_input(3, "Enter a row number: ");
             if (row_str) {
                 if (isdigit(*row_str)) {
                     const int row_num = atoi(row_str);
-                    printf("Enter a seat (A-F): ");
-                    char *seat_str = handle_input(3);
+                    char *seat_str = handle_input(3, "Enter a seat (A-F): ");
                     if (seat_str) {
                         const int seat_int = toupper(*seat_str) - 'A';
                         printf("%d\n", row_num-1);
                         printf("%d\n", seat_int);
                         if (rows[row_num-1][seat_int] != 'x') {
-                            //rows[row_num-1][seat_int] = 'x';
-                            //print_rows(rows);
                             add_passenger(first_name, last_name, row_num, *seat_str);
                             continue_loop = false;
                         }
@@ -220,21 +213,16 @@ bool needs_line_break() {
         const bool result = fseek(file, -1, SEEK_END) == 0 && fgetc(file) == line_feed;
         if (!result) {
             fclose(file);
-            printf("Needs a line break\n");
             return true;
         }
-        fclose(file);
-        printf("Doesn't need a line break\n");
-        return false;
     }
     fclose(file);
-    printf("Doesn't need a line break\n");
     return false;
 }
 
-char *handle_input(const int size) {
+char *handle_input(const int size, char* text) {
+    printf("%s", text);
     char *string = malloc(size);
-
     if (string) {
         if (fgets(string, size, stdin)) {
             if (strchr(string, '\n') == NULL) {
