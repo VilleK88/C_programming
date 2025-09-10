@@ -25,7 +25,6 @@ int main() {
     bool continue_loop = true;
     initialize_rows(rows);
     update_rows(rows);
-    //print_rows(rows);
 
     do {
         char *c = handle_input(3, "1) reserve a seat\n2) seat map\n3) exit\n");
@@ -171,8 +170,6 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
                     char *seat_str = handle_input(3, "Enter a seat (A-F): ");
                     if (seat_str) {
                         const int seat_int = toupper(*seat_str) - 'A';
-                        printf("%d\n", row_num-1);
-                        printf("%d\n", seat_int);
                         if (rows[row_num-1][seat_int] != 'x') {
                             add_passenger(first_name, last_name, row_num, *seat_str);
                             continue_loop = false;
@@ -201,6 +198,7 @@ void add_passenger(const char *first_name, const char *last_name, const int row,
 
     fprintf(file, "%s,%s,%d,%c", first_name, last_name, row, toupper(seat));
     fclose(file);
+    printf("Passenger added\n");
 }
 
 bool needs_line_break() {
@@ -231,7 +229,6 @@ char *handle_input(const int size, char* text) {
                 return input_warning_free_memory("Input too long.", string);
             }
             string[strcspn(string, "\n")] = '\0';
-
             if (string[0] == '\0')
                 return input_warning_free_memory("Empty input.", string);
         }
