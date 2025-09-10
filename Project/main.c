@@ -160,32 +160,34 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
 
     do {
         char *first_name = handle_input(32, "Enter first name: ");
-        char *last_name = handle_input(32, "Enter last name: ");
-        if (first_name && last_name) {
-            print_rows(rows);
-            char *row_str = handle_input(3, "Enter a row number: ");
-            if (row_str) {
-                if (isdigit(*row_str)) {
-                    const int row_num = atoi(row_str);
-                    char *seat_str = handle_input(3, "Enter a seat (A-F): ");
-                    if (seat_str) {
-                        const int seat_int = toupper(*seat_str) - 'A';
-                        if (rows[row_num-1][seat_int] != 'x') {
-                            add_passenger(first_name, last_name, row_num, *seat_str);
-                            continue_loop = false;
+        if (first_name) {
+            char *last_name = handle_input(32, "Enter last name: ");
+            if (last_name) {
+                print_rows(rows);
+                char *row_str = handle_input(3, "Enter a row number: ");
+                if (row_str) {
+                    if (isdigit(*row_str)) {
+                        const int row_num = atoi(row_str);
+                        char *seat_str = handle_input(3, "Enter a seat (A-F): ");
+                        if (seat_str) {
+                            const int seat_int = toupper(*seat_str) - 'A';
+                            if (rows[row_num-1][seat_int] != 'x') {
+                                add_passenger(first_name, last_name, row_num, *seat_str);
+                                continue_loop = false;
+                            }
+                            else {
+                                printf("Seat already taken.\n");
+                                continue_loop = false;
+                            }
                         }
-                        else {
-                            printf("Seat already taken.\n");
-                            continue_loop = false;
-                        }
+                        free(seat_str);
                     }
-                    free(seat_str);
                 }
+                free(row_str);
+                free(last_name);
             }
-            free(row_str);
         }
         free(first_name);
-        free(last_name);
     } while (continue_loop);
 }
 
@@ -222,7 +224,7 @@ char *handle_input(const int size, char* text) {
     printf("%s", text);
     char *string = malloc(size);
     if (string) {
-        if (fgets(string, size, stdin)) {
+        if(fgets(string, size, stdin)) {
             if (strchr(string, '\n') == NULL) {
                 int ch;
                 while ((ch = getchar()) != '\n' && ch != EOF){}
