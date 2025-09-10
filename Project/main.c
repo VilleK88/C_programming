@@ -16,6 +16,7 @@ int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[row_c][seat_c]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
 bool needs_line_break();
+void show_passengers();
 char *handle_input(int size, char *text);
 char *input_warning_free_memory(char *error_msg, char *string);
 
@@ -27,7 +28,7 @@ int main() {
     update_rows(rows);
 
     do {
-        char *c = handle_input(3, "1) reserve a seat\n2) seat map\n3) exit\n");
+        char *c = handle_input(3, "1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
         if (c) {
             if (isdigit(*c)) {
                 const int choice = atoi(c);
@@ -40,7 +41,9 @@ int main() {
                         print_rows(rows);
                         break;
                     case 3:
-                        printf("Exit chosen.\n");
+                        show_passengers();
+                        break;
+                    case 4:
                         continue_loop = false;
                         break;
                     default:
@@ -218,6 +221,31 @@ bool needs_line_break() {
     }
     fclose(file);
     return false;
+}
+
+void show_passengers() {
+    char buffer[200];
+    char *data;
+    FILE *file = open_file("seat_reservations.csv", "r");
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        //printf("%s\n", buffer);
+
+        // parsing
+        data = strtok(buffer, ",");
+        printf("%15s ", data);
+
+        data = strtok(NULL, ",");
+        printf("%15s ", data);
+
+        data = strtok(NULL, ",");
+        printf("%15s ", data);
+
+        data = strtok(NULL, ",");
+        printf("%15s\n", data);
+    }
+
+    fclose(file);
 }
 
 char *handle_input(const int size, char* text) {
