@@ -13,11 +13,11 @@ void update_rows(char rows[row_c][seat_c]);
 FILE *open_file(char *filename);
 int get_nums_from_a_string(const char *string);
 int find_seat(const char *string, char c);
-int menu();
-void input_passenger_info();
-bool add_passenger();
+void reserve_a_seat(char rows[row_c][seat_c]);
+bool add_passenger(char rows[row_c][seat_c]);
 char *handle_input(int size);
 char *input_warning_free_memory(char *error_msg, char *string);
+
 
 int main() {
     char rows[row_c][seat_c];
@@ -27,16 +27,14 @@ int main() {
     //print_rows(rows);
 
     do {
-        //menu();
         printf("1) reserve a seat\n2) seat map\n3) exit\n");
         const char *c = handle_input(3);
         if (c) {
             if (isdigit(*c)) {
                 const int choice = atoi(c);
-                //printf("You chose: %d\n", choice);
                 switch (choice) {
                     case 1:
-                        printf("Reserve a seat chosen.\n");
+                        reserve_a_seat(rows);
                         break;
                     case 2:
                         printf("Seat map chosen.\n");
@@ -54,6 +52,7 @@ int main() {
                 printf("Invalid input. Only enter integers (1-3).\n");
         }
 
+        free(c);
     } while (continue_loop);
 
     return 0;
@@ -156,15 +155,46 @@ int find_seat(const char *string, const char c) {
     return 0;
 }
 
-int menu() {
-    printf("1) reserve a seat\n2) seat map\nexit\n");
+void reserve_a_seat(char rows[row_c][seat_c]) {
+    bool continue_loop;
+
+    do {
+        printf("Enter first name: ");
+        char *first_name = handle_input(32);
+        printf("Enter last name: ");
+        char *last_name = handle_input(32);
+        if (first_name && last_name) {
+            print_rows(rows);
+            printf("Enter a row number: ");
+            const char *row_str = handle_input(3);
+            if (row_str) {
+                if (isdigit(*row_str)) {
+                    const int row_num = atoi(row_str);
+                    printf("Enter a seat (A-F): ");
+                    const char *seat_str = handle_input(3);
+                    if (seat_str) {
+                        const int seat_int = toupper(*seat_str) - 'A';
+                        printf("%d\n", row_num-1);
+                        printf("%d\n", seat_int);
+                        if (rows[row_num-1][seat_int] != 'x') {
+                            rows[row_num-1][seat_int] = 'x';
+                            print_rows(rows);
+                        }
+                        else {
+                            printf("Seat already taken.\n");
+                            continue_loop = false;
+                        }
+                    }
+                }
+            }
+        }
+        free(first_name);
+        free(last_name);
+    } while (continue_loop);
 }
 
-void input_passenger_info() {
 
-}
-
-bool add_passenger() {
+bool add_passenger(char rows[row_c][seat_c]) {
     return true;
 }
 
