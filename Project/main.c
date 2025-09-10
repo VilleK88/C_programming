@@ -15,6 +15,7 @@ int get_nums_from_a_string(const char *string);
 int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[row_c][seat_c]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
+bool needs_line_break();
 char *handle_input(int size);
 char *input_warning_free_memory(char *error_msg, char *string);
 
@@ -178,8 +179,10 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
                         printf("%d\n", row_num-1);
                         printf("%d\n", seat_int);
                         if (rows[row_num-1][seat_int] != 'x') {
-                            rows[row_num-1][seat_int] = 'x';
-                            print_rows(rows);
+                            //rows[row_num-1][seat_int] = 'x';
+                            //print_rows(rows);
+                            add_passenger(first_name, last_name, row_num, *seat_str);
+                            continue_loop = false;
                         }
                         else {
                             printf("Seat already taken.\n");
@@ -197,8 +200,36 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
 }
 
 
-void add_passenger(const char *first_name, const char *last_name, int row, char seat) {
+void add_passenger(const char *first_name, const char *last_name, const int row, const char seat) {
+    FILE *file = fopen("seat_reservations.csv", "a");
 
+    if (needs_line_break())
+        fputc('\n', file);
+
+    fprintf(file, "%s,%s,%d,%c", first_name, last_name, row, toupper(seat));
+    fclose(file);
+}
+
+bool needs_line_break() {
+    FILE *file = open_file("seat_reservations.csv", "rb"); // open file in binary mode
+    // check if the file is empty
+    const bool empty_file = fseek(file, 0, SEEK_END) == 0 &&  ftell(file) == 0;
+    if (!empty_file) {
+        const int line_feed = '\x0A'; // represents '\n'
+        // determine if a newline character is present if file is not empty
+        const bool result = fseek(file, -1, SEEK_END) == 0 && fgetc(file) == line_feed;
+        if (!result) {
+            fclose(file);
+            printf("Needs a line break\n");
+            return true;
+        }
+        fclose(file);
+        printf("Doesn't need a line break\n");
+        return false;
+    }
+    fclose(file);
+    printf("Doesn't need a line break\n");
+    return false;
 }
 
 char *handle_input(const int size) {
