@@ -28,7 +28,7 @@ int main() {
 
     do {
         printf("1) reserve a seat\n2) seat map\n3) exit\n");
-        const char *c = handle_input(3);
+        char *c = handle_input(3);
         if (c) {
             if (isdigit(*c)) {
                 const int choice = atoi(c);
@@ -156,7 +156,7 @@ int find_seat(const char *string, const char c) {
 }
 
 void reserve_a_seat(char rows[row_c][seat_c]) {
-    bool continue_loop;
+    bool continue_loop = true;
 
     do {
         printf("Enter first name: ");
@@ -166,12 +166,12 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
         if (first_name && last_name) {
             print_rows(rows);
             printf("Enter a row number: ");
-            const char *row_str = handle_input(3);
+            char *row_str = handle_input(3);
             if (row_str) {
                 if (isdigit(*row_str)) {
                     const int row_num = atoi(row_str);
                     printf("Enter a seat (A-F): ");
-                    const char *seat_str = handle_input(3);
+                    char *seat_str = handle_input(3);
                     if (seat_str) {
                         const int seat_int = toupper(*seat_str) - 'A';
                         printf("%d\n", row_num-1);
@@ -185,8 +185,10 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
                             continue_loop = false;
                         }
                     }
+                    free(seat_str);
                 }
             }
+            free(row_str);
         }
         free(first_name);
         free(last_name);
