@@ -20,23 +20,31 @@ int main() {
                 check = false;
         }
         free(string);
-    } while (check == true);
+    } while (check);
 
     return 0;
 }
 
 char *handle_input() {
-    char *string = malloc(32);
-    if (!string)
-        return input_warning_and_free_memory("Memory allocation failed.\n", string);
+    const int length = 33;
+    char *string = malloc(length);
 
-    if (!fgets(string, 32, stdin))
-        return input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
+    if (string) {
+        if (fgets(string, length, stdin)) {
+            if (strchr(string, '\n') == NULL) {
+                int ch;
+                while ((ch = getchar()) != '\n' && ch != EOF){}
+                return input_warning_and_free_memory("Input too long (max 32 characters).", string);
+            }
+            // replaces the first '\n' in the string with '\0' to remove the newline
+            string[strcspn(string, "\n")] = '\0';
 
-    string[strcspn(string, "\n")] = '\0';
-
-    if (string[0] == '\0')
-        return input_warning_and_free_memory("Empty input.\n", string);
+            if (string[0] == '\0')
+                return input_warning_and_free_memory("Empty input.", string);
+        }
+    }
+    else
+        return input_warning_and_free_memory("Memory allocation failed.", string);
 
     return string;
 }
