@@ -5,9 +5,9 @@ int replace_char(char *str, const char *repl);
 void handle_input(char *description, char *this_text, int this_count);
 
 int main() {
-    char text[80], repl[3];
+    char text[32], repl[3];
 
-    handle_input("Enter string: ", text, 80);
+    handle_input("Enter string: ", text, 32);
     handle_input("Enter replace: ", repl, 3);
 
     const int count = replace_char(text, repl);

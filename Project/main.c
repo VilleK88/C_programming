@@ -225,7 +225,6 @@ bool needs_line_break() {
 
 void show_passengers() {
     char buffer[200];
-    char *data;
     FILE *file = open_file("seat_reservations.csv", "r");
 
     fgets(buffer, sizeof(buffer), file);
