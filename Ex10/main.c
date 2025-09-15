@@ -3,8 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-char *handle_input();
-char *input_warning_and_free_memory(char *description, char* string);
+char *handle_input(int length);
+bool get_input(char *user_input, int length);
 
 int main() {
     char *string = NULL;
@@ -12,12 +12,13 @@ int main() {
 
     do {
         printf("Enter a string: ");
-        string = handle_input();
+        string = handle_input(33);
         if (string != NULL) {
             const size_t length = strlen(string);
-            printf("Length of the string: %zu.\n", length);
             if(strcmp(string, "stop") == 0)
                 check = false;
+            else
+                printf("Length of the string: %zu.\n", length);
         }
         free(string);
     } while (check);
@@ -25,32 +26,33 @@ int main() {
     return 0;
 }
 
-char *handle_input() {
-    const int length = 33;
+char *handle_input(const int length) {
     char *string = malloc(length);
-
     if (string) {
-        if (fgets(string, length, stdin)) {
-            if (strchr(string, '\n') == NULL) {
-                int ch;
-                while ((ch = getchar()) != '\n' && ch != EOF){}
-                return input_warning_and_free_memory("Input too long (max 32 characters).", string);
-            }
-            // replaces the first '\n' in the string with '\0' to remove the newline
-            string[strcspn(string, "\n")] = '\0';
-
-            if (string[0] == '\0')
-                return input_warning_and_free_memory("Empty input.", string);
+        bool stop_loop = false;
+        while (!stop_loop) {
+            stop_loop = get_input(string, length);
         }
+        return string;
     }
-    else
-        return input_warning_and_free_memory("Memory allocation failed.", string);
-
-    return string;
+    printf("Memory allocation failed.\n");
+    return NULL;
 }
 
-char *input_warning_and_free_memory(char *description, char* string) {
-    printf("%s\n", description);
-    free(string);
-    return NULL;
+bool get_input(char *user_input, const int length) {
+    if(fgets(user_input, length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", length-1);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
