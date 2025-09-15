@@ -12,7 +12,7 @@ int main() {
 
     do {
         printf("Enter a string: ");
-        string = handle_input(33);
+        string = handle_input(34);
         if (string != NULL) {
             const size_t length = strlen(string);
             if(strcmp(string, "stop") == 0)
@@ -44,7 +44,7 @@ bool get_input(char *user_input, const int length) {
         if (strchr(user_input, '\n') == NULL) {
             int c = 0;
             while ((c = getchar()) != '\n' && c != EOF) {}
-            printf("Input too long (max %d characters).\n", length-1);
+            printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
         user_input[strcspn(user_input, "\n")] = '\0';

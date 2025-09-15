@@ -26,7 +26,7 @@ int main() {
 }
 
 int replace_char(char *str, const char *repl) {
-    if (strlen(repl) < 2) return 0;
+    if (strlen(repl) != 2) return 0;
     int count = 0;
     for (int i = 0; i < (int)strlen(str); i++) {
         if (str[i] == repl[0]) {
@@ -56,9 +56,9 @@ bool get_input(char *user_input, const int length) {
 }
 
 void handle_input(char *input_text, char *user_input, const int length) {
-    bool continue_loop = false;
-    while (!continue_loop) {
+    bool stop_loop = false;
+    while (!stop_loop) {
         printf("%s", input_text);
-        continue_loop = get_input(user_input, length);
+        stop_loop = get_input(user_input, length);
     }
 }
