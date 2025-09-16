@@ -11,7 +11,6 @@ int main() {
     bool check = true;
 
     do {
-        printf("Enter a string: ");
         string = handle_input(34);
         if (string != NULL) {
             const size_t length = strlen(string);
@@ -31,6 +30,7 @@ char *handle_input(const int length) {
     if (string) {
         bool stop_loop = false;
         while (!stop_loop) {
+            printf("Enter a string: ");
             stop_loop = get_input(string, length);
         }
         return string;
