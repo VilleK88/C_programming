@@ -3,6 +3,8 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define input_length 34
+
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
 
@@ -11,7 +13,7 @@ int main() {
     bool check = true;
 
     do {
-        string = handle_input(34);
+        string = handle_input(input_length);
         if (string != NULL) {
             const size_t length = strlen(string);
             if(strcmp(string, "stop") == 0)

@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define text_length 34
+#define repl_length 4
+
 int replace_char(char *str, const char *repl);
 bool get_input(char *user_input, int length);
 void handle_input(char *input_text, char *user_input, int length);
-
-#define text_length 34
-#define repl_length 4
 
 int main() {
     char text[34];

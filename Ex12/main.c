@@ -2,12 +2,12 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define string_length 82
+#define word_length 34
+
 void handle_input(char *input_text, char *user_input, int length);
 bool get_input(char *user_input, int length);
 int count_words(const char* str, const char *word);
-
-#define string_length 82
-#define word_length 34
 
 int main() {
     char string[string_length],  word[34];
