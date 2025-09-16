@@ -2,12 +2,14 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdbool.h>
 
 #define line_length 82
 #define max_lines 100
-#define filename_length 32
+#define filename_length 34
 
 char *get_filename();
+bool get_input(char *user_input);
 FILE *open_file(char *this_filename);
 char (*read_file(FILE *this_file, int *count_out))[line_length];
 void convert_to_uppercase(char (*this_lines)[line_length], int this_count);
@@ -29,21 +31,35 @@ int main() {
 }
 
 char *get_filename() {
-    char *string = malloc(filename_length);
-    if (!string) {
-        printf("Memory allocation failed!\n");
-        free(string);
-        return NULL;
+    char *user_input = malloc(filename_length);
+    if (user_input) {
+        bool stop_loop = false;
+        while (!stop_loop) {
+            printf("Enter a filename: ");
+            stop_loop = get_input(user_input);
+        }
+        return user_input;
     }
+    printf("Memory allocation failed.\n");
+    return NULL;
+}
 
-    printf("Enter a filename: ");
-    if (!fgets(string, filename_length, stdin)) {
-        free(string);
-        return NULL;
+bool get_input(char *user_input) {
+    if (fgets(user_input, filename_length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", filename_length-2);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
     }
-
-    string[strcspn(string, "\n")] = '\0';
-    return string;
+    return false;
 }
 
 FILE *open_file(char *this_filename) {
