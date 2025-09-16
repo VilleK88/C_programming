@@ -10,8 +10,8 @@ bool get_input(char *user_input, int length);
 void handle_input(char *input_text, char *user_input, int length);
 
 int main() {
-    char text[34];
-    char repl[4];
+    char text[text_length];
+    char repl[repl_length];
 
     handle_input("Enter string: ", text, text_length);
     handle_input("Enter replace: ", repl, repl_length);

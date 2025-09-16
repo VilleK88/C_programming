@@ -10,7 +10,7 @@ bool get_input(char *user_input, int length);
 int count_words(const char* str, const char *word);
 
 int main() {
-    char string[string_length],  word[34];
+    char string[string_length],  word[word_length];
 
     do {
         handle_input("Enter a string: ", string, string_length);
@@ -24,7 +24,7 @@ int main() {
     return 0;
 }
 
-void handle_input(char *input_text, char *user_input, int length) {
+void handle_input(char *input_text, char *user_input, const int length) {
     bool continue_loop = false;
     while (!continue_loop) {
         printf("%s", input_text);
