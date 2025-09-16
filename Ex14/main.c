@@ -19,12 +19,15 @@ int main() {
     int count = 0;
 
     char *filename = get_filename();
-    FILE *file = open_file(filename);
-    char (*lines)[line_length] = read_file(file, &count);
-    if (lines != NULL) {
-        convert_to_uppercase(lines, count);
-        write_to_file(filename, lines, count);
-        free(lines);
+    if (filename) {
+        FILE *file = open_file(filename);
+        char (*lines)[line_length] = read_file(file, &count);
+        if (lines != NULL) {
+            convert_to_uppercase(lines, count);
+            write_to_file(filename, lines, count);
+            free(lines);
+        }
+        free(filename);
     }
 
     return 0;
@@ -66,30 +69,28 @@ FILE *open_file(char *this_filename) {
     FILE *file;
     if ((file = fopen(this_filename, "r")) == NULL) {
         fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
-        free(this_filename);
         exit(EXIT_FAILURE);
     }
     return file;
 }
 
 char (*read_file(FILE *this_file, int *count_out))[line_length] {
-    int count = 0;
-    char (*lines)[line_length] = malloc(100 * sizeof *lines);
-    if (!lines) {
-        printf("Memory allocation failed!\n");
+    char (*lines)[line_length] = malloc(max_lines * sizeof *lines);
+    if (lines) {
+        int count = 0;
+        for (int i = 0; i < max_lines; i++) {
+            if (fgets(lines[i], line_length, this_file) == NULL) break;
+            lines[i][strcspn(lines[i], "\n")] = '\0';
+            count++;
+        }
+
+        *count_out = count;
         fclose(this_file);
-        return NULL;
+        return lines;
     }
-
-    for (int i = 0; i < max_lines; i++) {
-        if (fgets(lines[i], line_length, this_file) == NULL) break;
-        lines[i][strcspn(lines[i], "\n")] = '\0';
-        count++;
-    }
-
-    *count_out = count;
+    printf("Memory allocation failed!\n");
     fclose(this_file);
-    return lines;
+    return NULL;
 }
 
 void convert_to_uppercase(char (*this_lines)[line_length], const int this_count) {
@@ -103,16 +104,15 @@ void convert_to_uppercase(char (*this_lines)[line_length], const int this_count)
 
 void write_to_file(char *this_filename, char (*this_lines)[line_length], const int this_count) {
     FILE *file = fopen(this_filename, "w");
-    if (file == NULL) {
-        fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
-        free(this_filename);
+    if (file) {
+        for (int i = 0; i < this_count; i++) {
+            fprintf(file, "%s\n", this_lines[i]);
+        }
+
         fclose(file);
-        return;
     }
-
-    for (int i = 0; i < this_count; i++) {
-        fprintf(file, "%s\n", this_lines[i]);
+    else {
+        fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
+        fclose(file);
     }
-
-    fclose(file);
 }
