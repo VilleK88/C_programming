@@ -21,9 +21,12 @@ int main() {
     struct menu_item_ menu_items[40];
 
     char *filename = get_filename();
-    FILE *file = open_file(filename);
-    read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
-    print_menu(menu_items, count);
+    if (filename) {
+        FILE *file = open_file(filename);
+        read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
+        print_menu(menu_items, count);
+    }
+
 
     free(filename);
     return 0;
