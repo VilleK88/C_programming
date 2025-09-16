@@ -138,7 +138,7 @@ int get_choice() {
     return value;
 }
 
-bool make_the_choice(char *string, int choice, menu_item *items, const int *count) {
+bool make_the_choice(char *string, const int choice, menu_item *items, const int *count) {
     printf("%s", string);
     if (choice == 1)
         qsort(items, *count, sizeof(menu_item), sort_by_name);
@@ -148,21 +148,13 @@ bool make_the_choice(char *string, int choice, menu_item *items, const int *coun
 }
 
 int sort_by_name(const void *a, const void *b) {
-    const menu_item *item_a = a;
-    const menu_item *item_b = b;
-    return strcmp(item_a->name, item_b->name);
+    return strcmp(((struct menu_item_*)a)->name, ((struct menu_item_*)b)->name);
 }
 
 int sort_by_price(const void *a, const void *b) {
     const menu_item *item_a = a;
     const menu_item *item_b = b;
-
-    if (item_a->price < item_b->price)
-        return -1;
-    if (item_a->price > item_b->price)
-        return 1;
-
-    return 0;
+    return (item_a->price > item_b->price) - (item_a->price < item_b->price);
 }
 
 void print_menu(menu_item *items, const int count) {
