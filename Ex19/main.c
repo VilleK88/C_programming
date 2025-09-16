@@ -44,7 +44,7 @@ char *get_filename(const int length) {
     if (string) {
         bool stop_loop = false;
         while (!stop_loop) {
-            printf("Enter a string: ");
+            printf("Enter a filename: ");
             stop_loop = get_input(string, length);
         }
         return string;
