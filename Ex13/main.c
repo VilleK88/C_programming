@@ -15,12 +15,14 @@ int main() {
     int count = 0;
 
     char *filename = get_filename();
-    FILE *file = open_file(filename);
-    int *numbers = read_file(file, &count);
-    if (numbers != NULL)
-        handle_print(numbers, count);
+    if (filename) {
+        FILE *file = open_file(filename);
+        int *numbers = read_file(file, &count);
+        if (numbers != NULL)
+            handle_print(numbers, count);
 
-    free(numbers);
+        free(numbers);
+    }
     free(filename);
 
     return 0;
@@ -62,7 +64,6 @@ FILE *open_file(char *this_filename) {
     FILE *file;
     if ((file = fopen(this_filename, "r")) == NULL) {
         fprintf(stderr, "Error: could not open file '%s'\n", this_filename);
-        free(this_filename);
         exit(EXIT_FAILURE);
     }
     return file;
