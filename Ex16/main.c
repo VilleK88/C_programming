@@ -3,27 +3,28 @@
 #include <string.h>
 #include <stdbool.h>
 
+#define input_length 34
+
 typedef struct node {
     int number;
     struct node *next;
 } nnode;
 
-char *handle_input();
+char *handle_input(int length);
+bool get_input(char *user_input, int length);
 void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val);
 struct node *append_node(struct node *head, int value);
 void print_numbers(struct node *head);
-char *input_warning_and_free_memory(char *description, char* string);
 
 int main() {
     nnode **node_array = NULL;
     size_t count = 0;
-    char *input;
+    //char *input;
     struct node *head = NULL;
     bool check = true;
 
     do {
-        printf("Enter integer: ");
-        input = handle_input();
+        char *input = handle_input(input_length);
         if (input != NULL) {
             char *parse_end;
             // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
@@ -36,31 +37,46 @@ int main() {
             else
                 printf("Invalid input.\n");
         }
-
+        free(input);
     } while (check == true);
 
     print_numbers(head);
 
-    free(input);
+    //free(input);
     free(node_array);
     return 0;
 }
 
-char *handle_input() {
-    char *string = malloc(32);
-    if (!string)
-        return input_warning_and_free_memory("Memory allocation failed.\n", string);
+char *handle_input(const int length) {
+    char *string = malloc(length);
+    if (string) {
+        bool stop_loop = false;
+        while (!stop_loop) {
+            printf("Enter integer: ");
+            stop_loop = get_input(string, length);
+        }
+        return string;
+    }
+    printf("Memory allocation failed.\n");
+    return NULL;
+}
 
-    printf("Enter a integer or 'end' to stop: ");
-    if (!fgets(string, 32, stdin))
-        return input_warning_and_free_memory("The input reading failed (EOF or input error).\n", string);
-
-    string[strcspn(string, "\n")] = '\0';
-
-    if (string[0] == '\0')
-        return input_warning_and_free_memory("Empty input.\n", string);
-
-    return string;
+bool get_input(char *user_input, const int length) {
+    if(fgets(user_input, length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", length-2);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
+    }
+    return false;
 }
 
 void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val) {
@@ -91,10 +107,4 @@ void print_numbers(struct node *head) {
     for (nnode *p = head; p; p = p->next) {
         printf("%d ", p->number);
     }
-}
-
-char *input_warning_and_free_memory(char *description, char* string) {
-    printf("%s", description);
-    free(string);
-    return NULL;
 }
