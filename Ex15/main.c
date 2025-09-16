@@ -1,13 +1,17 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
+
+#define filename_length 34
 
 typedef struct menu_item_ {
     char name[50];
     double price;
 } menu_item;
 
-char *handle_input();
+char *get_filename();
+bool get_input(char *user_input);
 FILE *open_file(char *this_filename);
 void read_file(FILE *this_file, menu_item *items, int *count, int capacity);
 void print_menu(menu_item *items, int count);
@@ -16,7 +20,7 @@ int main() {
     int count = 0;
     struct menu_item_ menu_items[40];
 
-    char *filename = handle_input();
+    char *filename = get_filename();
     FILE *file = open_file(filename);
     read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
     print_menu(menu_items, count);
@@ -25,32 +29,44 @@ int main() {
     return 0;
 }
 
-char *handle_input() {
-    char *string = malloc(32);
-    if (!string) {
-        printf("Memory allocation failed!\n");
-        return NULL;
+char *get_filename() {
+    char *string = malloc(filename_length);
+    if (string) {
+        bool stop_loop = false;
+        while (!stop_loop) {
+            printf("Enter a string: ");
+            stop_loop = get_input(string);
+        }
+        return string;
     }
+    printf("Memory allocation failed.\n");
+    return NULL;
+}
 
-    printf("Enter a filename: ");
-    if (!fgets(string, 32, stdin)) {
-        free(string);
-        return NULL;
+bool get_input(char *user_input) {
+    if(fgets(user_input, filename_length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", filename_length-2);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
     }
-
-    string[strcspn(string, "\n")] = '\0';
-    return string;
+    return false;
 }
 
 FILE *open_file(char *this_filename) {
     FILE * file;
-
     if ((file = fopen(this_filename, "r")) == NULL) {
         fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
-        free(this_filename);
         exit(EXIT_FAILURE);
     }
-
     return file;
 }
 
