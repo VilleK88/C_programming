@@ -28,9 +28,9 @@ int main() {
     update_rows(rows);
 
     do {
-        char *c = handle_input(3, "1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
-        if (isdigit(*c)) {
-            const int choice = atoi(c);
+        char *c_str = handle_input(3, "1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
+        if (isdigit(*c_str)) {
+            const int choice = atoi(c_str);
             switch (choice) {
                 case 1:
                     reserve_a_seat(rows);
@@ -53,7 +53,7 @@ int main() {
         else
             printf("Invalid input. Only enter integers (1-3).\n");
 
-        free(c);
+        free(c_str);
     } while (continue_loop);
 
     return 0;
