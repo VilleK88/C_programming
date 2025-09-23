@@ -19,17 +19,13 @@ int main() {
     int count = 0;
 
     char *filename = get_filename();
-    if (filename) {
-        FILE *file = open_file(filename);
-        char (*lines)[line_length] = read_file(file, &count);
-        if (lines != NULL) {
-            convert_to_uppercase(lines, count);
-            write_to_file(filename, lines, count);
-            free(lines);
-        }
-        free(filename);
-    }
+    FILE *file = open_file(filename);
+    char (*lines)[line_length] = read_file(file, &count);
+    convert_to_uppercase(lines, count);
+    write_to_file(filename, lines, count);
 
+    free(lines);
+    free(filename);
     return 0;
 }
 
@@ -44,7 +40,7 @@ char *get_filename() {
         return user_input;
     }
     printf("Memory allocation failed.\n");
-    return NULL;
+    exit(EXIT_FAILURE);
 }
 
 bool get_input(char *user_input) {
@@ -89,8 +85,7 @@ char (*read_file(FILE *this_file, int *count_out))[line_length] {
         return lines;
     }
     printf("Memory allocation failed!\n");
-    fclose(this_file);
-    return NULL;
+    exit(EXIT_FAILURE);
 }
 
 void convert_to_uppercase(char (*this_lines)[line_length], const int this_count) {
@@ -108,7 +103,6 @@ void write_to_file(char *this_filename, char (*this_lines)[line_length], const i
         for (int i = 0; i < this_count; i++) {
             fprintf(file, "%s\n", this_lines[i]);
         }
-
         fclose(file);
     }
     else {

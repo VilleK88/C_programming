@@ -15,16 +15,13 @@ int main() {
     int count = 0;
 
     char *filename = get_filename();
-    if (filename) {
-        FILE *file = open_file(filename);
-        int *numbers = read_file(file, &count);
-        if (numbers != NULL)
-            handle_print(numbers, count);
+    FILE *file = open_file(filename);
+    int *numbers = read_file(file, &count);
+    if (numbers != NULL)
+        handle_print(numbers, count);
 
-        free(numbers);
-    }
+    free(numbers);
     free(filename);
-
     return 0;
 }
 
@@ -39,7 +36,7 @@ char *get_filename() {
         return user_input;
     }
     printf("Memory allocation failed.\n");
-    return NULL;
+    exit(EXIT_FAILURE);
 }
 
 bool get_input(char *user_input) {
