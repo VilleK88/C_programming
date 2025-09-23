@@ -28,12 +28,10 @@ int main() {
     struct menu_item_ menu_items[40];
 
     char *filename = get_filename(filename_length);
-    if (filename) {
-        FILE *file = open_file(filename);
-        read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
-        choose_sort_order(menu_items, &count);
-        print_menu(menu_items, count);
-    }
+    FILE *file = open_file(filename);
+    read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
+    choose_sort_order(menu_items, &count);
+    print_menu(menu_items, count);
 
     free(filename);
     return 0;
@@ -50,7 +48,7 @@ char *get_filename(const int length) {
         return string;
     }
     printf("Memory allocation failed.\n");
-    return NULL;
+    exit(EXIT_FAILURE);
 }
 
 bool get_input(char *user_input, const int length) {
