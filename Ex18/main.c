@@ -4,6 +4,8 @@
 #include <ctype.h>
 #include <string.h>
 
+#define input_length 4
+
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
 bool get_nums_from_a_string(const char *string, int *num);
@@ -13,7 +15,7 @@ int main() {
     bool continue_loop = true;
 
     do {
-        char *num_str = handle_input(34);
+        char *num_str = handle_input(input_length);
         int num;
         const bool if_number = get_nums_from_a_string(num_str, &num);
         if (if_number) {
