@@ -19,30 +19,25 @@ void print_numbers(struct node *head);
 int main() {
     nnode **node_array = NULL;
     size_t count = 0;
-    //char *input;
     struct node *head = NULL;
     bool check = true;
 
     do {
         char *input = handle_input(input_length);
-        if (input != NULL) {
-            char *parse_end;
-            // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
-            // mihin asti luvun lukeminen onnistui (parse_end osoittaa siihen merkkiin).
-            const long val = strtol(input, &parse_end, 10);
-            if (*parse_end == '\0')
-                update_list_and_array(&node_array, &count, &head, val);
-            else if(strcmp(input, "end") == 0)
-                check = false;
-            else
-                printf("Invalid input.\n");
-        }
+        char *parse_end;
+        // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
+        // mihin asti luvun lukeminen onnistui (parse_end osoittaa siihen merkkiin).
+        const long val = strtol(input, &parse_end, 10);
+        if (*parse_end == '\0')
+            update_list_and_array(&node_array, &count, &head, val);
+        else if(strcmp(input, "end") == 0)
+            check = false;
+        else
+            printf("Invalid input.\n");
         free(input);
     } while (check == true);
 
     print_numbers(head);
-
-    //free(input);
     free(node_array);
     return 0;
 }
@@ -58,7 +53,7 @@ char *handle_input(const int length) {
         return string;
     }
     printf("Memory allocation failed.\n");
-    return NULL;
+    exit(EXIT_FAILURE);
 }
 
 bool get_input(char *user_input, const int length) {
