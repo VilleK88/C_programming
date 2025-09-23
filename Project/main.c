@@ -116,13 +116,11 @@ void update_rows(char rows[row_c][seat_c]) {
 
 FILE *open_file(char *filename, const char *state) {
     FILE *file;
-
     if ((file = fopen(filename, state)) == NULL) {
         fprintf(stderr, "Error: could not open file %s\n", filename);
         free(filename);
         exit(EXIT_FAILURE);
     }
-
     return file;
 }
 
