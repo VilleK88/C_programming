@@ -177,18 +177,15 @@ void reserve_a_seat(char rows[row_c][seat_c]) {
             }
             free(row_str);
         }
-
     } while (continue_loop);
 }
 
 
 void add_passenger(const char *first_name, const char *last_name, const int row, const char seat) {
     FILE *file = fopen("seat_reservations.csv", "a");
-
     if (needs_line_break()) {
         fputc('\n', file);
     }
-
     fprintf(file, "%s,%s,%d,%c", first_name, last_name, row, toupper(seat));
     fclose(file);
     printf("Passenger added\n");
@@ -214,7 +211,6 @@ bool needs_line_break() {
 void show_passengers() {
     char buffer[200];
     FILE *file = open_file("seat_reservations.csv", "r");
-
     while (fgets(buffer, sizeof(buffer), file)) {
         char *token = strtok(buffer, ",");
         while (token) {
@@ -223,7 +219,6 @@ void show_passengers() {
         }
         printf("\n");
     }
-
     fclose(file);
 }
 
