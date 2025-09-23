@@ -215,19 +215,13 @@ void show_passengers() {
     char buffer[200];
     FILE *file = open_file("seat_reservations.csv", "r");
 
-    fgets(buffer, sizeof(buffer), file);
-    char *t1 = strtok(buffer, ",");
-    char *t2 = strtok(NULL, ",");
-    char *t3 = strtok(NULL, ",");
-    char *t4 = strtok(NULL, ",");
-    printf("%-15s %-15s %-15s %-15s\n", t1, t2, t3, t4);
-
     while (fgets(buffer, sizeof(buffer), file)) {
-        char *col1 = strtok(buffer, ",");
-        char *col2 = strtok(NULL, ",");
-        char *col3 = strtok(NULL, ",");
-        char *col4 = strtok(NULL, ",");
-        printf("%9s %14s %10s %17s\n\n", col1, col2, col3, col4);
+        char *token = strtok(buffer, ",");
+        while (token) {
+            printf("%-20s", token);
+            token = strtok(NULL, ",");
+        }
+        printf("\n");
     }
 
     fclose(file);
