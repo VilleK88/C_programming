@@ -1,33 +1,98 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
+#include <ctype.h>
+#include <string.h>
 
-int handle_input();
+char *handle_input(int length);
+bool get_input(char *user_input, int length);
+bool get_nums_from_a_string(const char *string, int *num);
 void print_hexadecimal(int num, int rand_num);
 
 int main() {
-    int num;
+    bool continue_loop = true;
 
     do {
-        printf("Enter a number: ");
-        num = handle_input();
-        if (num >= 0 && num <= 15) {
-            const int rand_num = rand() % 100;
-            print_hexadecimal(num, rand_num);
+        char *num_str = handle_input(34);
+        int num;
+        const bool if_number = get_nums_from_a_string(num_str, &num);
+        if (if_number) {
+            if (num < 0) {
+                continue_loop = false;
+            }
+            else {
+                if (num >= 0 && num <= 15) {
+                    const int rand_num = rand() % 100;
+                    print_hexadecimal(num, rand_num);
+                }
+                else if (num > 15) {
+                    printf("Number is out of range.\n");
+                }
+            }
         }
-        else if (num > 15)
-            printf("Number is out of range.\n");
-    } while (num > -1);
+        else {
+            printf("Invalid input.\n");
+        }
+
+        free(num_str);
+    } while (continue_loop);
 
     return 0;
 }
 
-int handle_input() {
-    int value;
-    while (scanf_s("%d", &value) != 1) {
-        while (getchar() != '\n'){}
-        printf("Invalid input.\n");
+char *handle_input(const int length) {
+    char *string = malloc(length);
+    if (string) {
+        bool stop_loop = false;
+        while (!stop_loop) {
+            printf("Enter a number: ");
+            stop_loop = get_input(string, length);
+        }
+        return string;
     }
-    return value;
+    printf("Memory allocation failed.\n");
+    exit(EXIT_FAILURE);
+}
+
+bool get_input(char *user_input, const int length) {
+    if(fgets(user_input, length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", length-2);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool get_nums_from_a_string(const char *string, int *num) {
+    char *num_char = malloc(strlen(string) + 1);
+
+    int j = 0;
+    for (int i = 0; string[i] != '\0'; i++) {
+        if (isdigit(string[i])) {
+            num_char[j++] = string[i];
+        }
+    }
+    num_char[j] = '\0';
+    if (j > 0) {
+        *num = atoi(num_char);
+        if (string[0] == '-') {
+            *num = -*num;
+        }
+        free(num_char);
+        return true;
+    }
+
+    free(num_char);
+    return false;
 }
 
 void print_hexadecimal(const int num, const int rand_num) {
