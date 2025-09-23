@@ -1,8 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
-char *get_filename();
+#define filename_length 34
+
+char *get_filename(int length);
+bool get_input(char *user_input, int length);
 FILE *open_file(char *filename);
 void read_file(FILE *file);
 int xor_get_sum(const char *dollar, const char *star);
@@ -10,7 +14,7 @@ void print_line(int sum, int result, const char *line);
 
 int main() {
 
-    char *filename = get_filename();
+    char *filename = get_filename(filename_length);
     FILE *file = open_file(filename);
     read_file(file);
 
@@ -18,32 +22,45 @@ int main() {
     return 0;
 }
 
-char *get_filename() {
-    char *string = malloc(32);
-    if (!string) {
-        printf("Memory allocation failed.\n");
-        return NULL;
+char *get_filename(const int length) {
+    char *string = malloc(length);
+    if (string) {
+        bool stop_loop = false;
+        while (!stop_loop) {
+            printf("Enter a filename: ");
+            stop_loop = get_input(string, length);
+        }
+        return string;
     }
+    printf("Memory allocation failed.\n");
+    exit(EXIT_FAILURE);
+}
 
-    printf("Enter a filename: ");
-    if (!fgets(string, 32, stdin)) {
-        free(string);
-        return NULL;
+bool get_input(char *user_input, const int length) {
+    if(fgets(user_input, length, stdin)) {
+        if (strchr(user_input, '\n') == NULL) {
+            int c = 0;
+            while ((c = getchar()) != '\n' && c != EOF) {}
+            printf("Input too long (max %d characters).\n", length-2);
+            return false;
+        }
+        user_input[strcspn(user_input, "\n")] = '\0';
+        if (user_input[0] == '\0') {
+            printf("Empty input.\n");
+            return false;
+        }
+        return true;
     }
-
-    string[strcspn(string, "\n")] = '\0';
-    return string;
+    return false;
 }
 
 FILE *open_file(char *filename) {
     FILE *file;
-
     if ((file = fopen(filename, "r")) == NULL) {
         fprintf(stderr, "Error: could not open file : '%s'\n", filename);
         free(filename);
         exit(EXIT_FAILURE);
     }
-
     return file;
 }
 
