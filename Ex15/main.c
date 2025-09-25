@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define filename_length 34
+#define FILENAME_LENGTH 34
 
 typedef struct menu_item_ {
     char name[50];
@@ -30,7 +30,7 @@ int main() {
 }
 
 char *get_filename() {
-    char *string = malloc(filename_length);
+    char *string = malloc(FILENAME_LENGTH);
     if (string) {
         bool stop_loop = false;
         while (!stop_loop) {
@@ -44,11 +44,11 @@ char *get_filename() {
 }
 
 bool get_input(char *user_input) {
-    if(fgets(user_input, filename_length, stdin)) {
+    if(fgets(user_input, FILENAME_LENGTH, stdin)) {
         if (strchr(user_input, '\n') == NULL) {
             int c = 0;
             while ((c = getchar()) != '\n' && c != EOF) {}
-            printf("Input too long (max %d characters).\n", filename_length-2);
+            printf("Input too long (max %d characters).\n", FILENAME_LENGTH-2);
             return false;
         }
         user_input[strcspn(user_input, "\n")] = '\0';

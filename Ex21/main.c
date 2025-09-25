@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define filename_length 34
+#define FILENAME_LENGTH 34
 
 char *get_filename(int length);
 bool get_input(char *user_input, int length);
@@ -14,7 +14,7 @@ void print_line(int sum, int result, const char *line);
 
 int main() {
 
-    char *filename = get_filename(filename_length);
+    char *filename = get_filename(FILENAME_LENGTH);
     FILE *file = open_file(filename);
     read_file(file);
 

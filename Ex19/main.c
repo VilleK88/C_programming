@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define filename_length 34
+#define FILENAME_LENGTH 34
 
 typedef struct menu_item_ {
     char name[50];
@@ -27,7 +27,7 @@ int main() {
     int count = 0;
     struct menu_item_ menu_items[40];
 
-    char *filename = get_filename(filename_length);
+    char *filename = get_filename(FILENAME_LENGTH);
     FILE *file = open_file(filename);
     read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
     choose_sort_order(menu_items, &count);
