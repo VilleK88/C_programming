@@ -46,7 +46,7 @@ int main() {
     } while (check == true);
 
     print_numbers(head);
-    free(head);
+    free_linked_list(head);
     return 0;
 }
 
