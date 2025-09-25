@@ -51,7 +51,7 @@ bool get_input(char *user_input) {
             printf("Input too long (max %d characters).\n", FILENAME_LENGTH-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        user_input[strcspn(user_input, "\n\r")] = '\0';
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
