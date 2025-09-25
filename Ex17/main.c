@@ -79,10 +79,9 @@ bool get_input(char *user_input, const int length) {
 
 bool password_generator(char *word_out, int const array_size, const char *word_in) {
     const char * const *table = get_table();
-    const size_t word_length = strlen(word_in);
-    const size_t max_length = word_length * 2 + 1;
+    const int max_length = INPUT_LENGTH;
 
-    if (max_length <= array_size) {
+    if (max_length >= array_size) {
         char new_word[max_length+1];
         bool rotation = true;
         int j = 0;
