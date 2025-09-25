@@ -12,33 +12,41 @@ typedef struct node {
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
-void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val);
-struct node *append_node(struct node *head, int value);
+struct node *add(struct node *head, struct node *item, int value);
 void print_numbers(struct node *head);
+void free_linked_list(struct node *head);
 
 int main() {
-    nnode **node_array = NULL;
-    size_t count = 0;
     struct node *head = NULL;
     bool check = true;
 
     do {
         char *input = handle_input(INPUT_LENGTH);
         char *parse_end;
-        // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
+        // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallentaa osoittimen siihen kohtaan,
         // mihin asti luvun lukeminen onnistui (parse_end osoittaa siihen merkkiin).
         const long val = strtol(input, &parse_end, 10);
-        if (*parse_end == '\0')
-            update_list_and_array(&node_array, &count, &head, val);
-        else if(strcmp(input, "end") == 0)
+        if (*parse_end == '\0') {
+            nnode *item = malloc(sizeof(*item));
+            if (item) {
+                head = add(head, item, (int)val);
+            }
+            else {
+                printf("Memory allocation failed.\n");
+                exit(EXIT_FAILURE);
+            }
+        }
+        else if(strcmp(input, "end") == 0) {
             check = false;
-        else
+        }
+        else {
             printf("Invalid input.\n");
+        }
         free(input);
     } while (check == true);
 
     print_numbers(head);
-    free(node_array);
+    free(head);
     return 0;
 }
 
@@ -74,25 +82,19 @@ bool get_input(char *user_input, const int length) {
     return false;
 }
 
-void update_list_and_array(struct node ***node_array, size_t *count, struct node **head, long val) {
-    int value = (int)val;
-    nnode **tmp = realloc(*node_array, (*count + 1) * sizeof * node_array);
-    *node_array = tmp;
-    *head = append_node(*head, value);
-    (*node_array)[(*count)++] = *head;
-}
-
-struct node *append_node(struct node *head, int value) {
-    nnode *newline = malloc(sizeof(*newline));
-    newline->next = NULL;
-    newline->number = value;
-
-    if (!head)
-        return newline;
-
-    struct node *tail = head;
-    while (tail->next) tail = tail->next;
-    tail->next = newline;
+struct node *add(struct node *head, struct node *item, const int value) {
+    item->number = value;
+    item->next = NULL;
+    if (head == NULL) {
+        head = item;
+    }
+    else {
+        struct node *this = head;
+        while (this->next != NULL) {
+            this = this->next;
+        }
+        this->next = item;
+    }
 
     return head;
 }
@@ -101,5 +103,13 @@ void print_numbers(struct node *head) {
     printf("Numbers:\n");
     for (nnode *p = head; p; p = p->next) {
         printf("%d ", p->number);
+    }
+}
+
+void free_linked_list(struct node *head) {
+    while (head) {
+        nnode *next = head->next;
+        free(head);
+        head = next;
     }
 }
