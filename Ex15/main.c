@@ -72,7 +72,6 @@ FILE *open_file(char *this_filename) {
 
 void read_file(FILE *this_file, menu_item *items, int *count, const int capacity) {
     char line[200];
-
     while (fgets(line, sizeof(line), this_file) != NULL && *count < capacity) {
         char *semicolon = strchr(line, ';');
         if (semicolon) {
@@ -83,7 +82,6 @@ void read_file(FILE *this_file, menu_item *items, int *count, const int capacity
             (*count)++;
         }
     }
-
     fclose(this_file);
 }
 

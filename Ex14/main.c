@@ -76,7 +76,7 @@ char (*read_file(FILE *this_file, int *count_out))[LINE_LENGTH] {
         int count = 0;
         for (int i = 0; i < MAX_LINES; i++) {
             if (fgets(lines[i], LINE_LENGTH, this_file) == NULL) break;
-            lines[i][strcspn(lines[i], "\n")] = '\0';
+            lines[i][strcspn(lines[i], "\n\r")] = '\0';
             count++;
         }
 
@@ -92,7 +92,7 @@ void convert_to_uppercase(char (*this_lines)[LINE_LENGTH], const int this_count)
     for (int i = 0; i < this_count; i++) {
         for (int j = 0; j < strlen(this_lines[i]); j++) {
             const char c = this_lines[i][j];
-            this_lines[i][j] = toupper(c);
+            this_lines[i][j] = (char)toupper(c);
         }
     }
 }
@@ -107,6 +107,6 @@ void write_to_file(char *this_filename, char (*this_lines)[LINE_LENGTH], const i
     }
     else {
         fprintf(stderr, "Error: could not open file: '%s'\n", this_filename);
-        fclose(file);
+        exit(EXIT_FAILURE);
     }
 }
