@@ -21,10 +21,13 @@ int main() {
         char *word = handle_input(INPUT_LENGTH);
         if (strcmp(word, "stop") != 0) {
             char word_out[strlen(word)];
-            const bool successful = password_generator(word_out, 32, word);
+            const int word_len = (int)strlen(word) * 2 + 1;
+            const bool successful = password_generator(word_out, word_len, word);
             if (successful) {
                 char **tmp = realloc(passwords, (size_t)(count+1) * sizeof * passwords);
-                if (!tmp) free(tmp);
+                if (!tmp) {
+                    free(tmp);
+                }
                 else {
                     passwords = tmp;
                     // allocates heap memory and copies word_out
