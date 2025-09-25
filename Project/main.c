@@ -4,16 +4,16 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-#define row_c 26
-#define seat_c 6
+#define ROW_C 26
+#define SEAT_C 6
 
-void initialize_rows(char rows[row_c][seat_c]);
-void print_rows(char rows[row_c][seat_c]);
-void update_rows(char rows[row_c][seat_c]);
+void initialize_rows(char rows[ROW_C][SEAT_C]);
+void print_rows(char rows[ROW_C][SEAT_C]);
+void update_rows(char rows[ROW_C][SEAT_C]);
 FILE *open_file(char *filename, const char *state);
 int get_nums_from_a_string(const char *string);
 int find_seat(const char *string, char c);
-void reserve_a_seat(char rows[row_c][seat_c]);
+void reserve_a_seat(char rows[ROW_C][SEAT_C]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
 bool needs_line_break();
 void show_passengers();
@@ -22,7 +22,7 @@ bool get_input(char *user_input, int length);
 
 
 int main() {
-    char rows[row_c][seat_c];
+    char rows[ROW_C][SEAT_C];
     bool continue_loop = true;
     initialize_rows(rows);
     update_rows(rows);
@@ -59,30 +59,30 @@ int main() {
     return 0;
 }
 
-void initialize_rows(char rows[row_c][seat_c]) {
-    for (int i = 0; i < row_c; i++) {
-        for (int j = 0; j < seat_c; j++) {
-            const char seats[seat_c] = {'A', 'B', 'C', 'D', 'E', 'F'};
+void initialize_rows(char rows[ROW_C][SEAT_C]) {
+    for (int i = 0; i < ROW_C; i++) {
+        for (int j = 0; j < SEAT_C; j++) {
+            const char seats[SEAT_C] = {'A', 'B', 'C', 'D', 'E', 'F'};
             rows[i][j] = seats[j];
         }
     }
 }
 
-void print_rows(char rows[row_c][seat_c]) {
-    for (int i = 0; i < row_c; i++) {
+void print_rows(char rows[ROW_C][SEAT_C]) {
+    for (int i = 0; i < ROW_C; i++) {
         printf("%2d ", i+1);
         for (int j = 0; j < 3; j++) {
             printf("%c", rows[i][j]);
         }
         printf("   ");
-        for (int j = 3; j < seat_c; j++) {
+        for (int j = 3; j < SEAT_C; j++) {
             printf("%c", rows[i][j]);
         }
         printf("\n");
     }
 }
 
-void update_rows(char rows[row_c][seat_c]) {
+void update_rows(char rows[ROW_C][SEAT_C]) {
     char line[100];
     FILE *file = open_file("seat_reservations.csv", "r");
 
@@ -153,7 +153,7 @@ int find_seat(const char *string, const char c) {
     return 0;
 }
 
-void reserve_a_seat(char rows[row_c][seat_c]) {
+void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
     bool continue_loop = true;
 
     do {
