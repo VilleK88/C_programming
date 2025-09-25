@@ -4,7 +4,7 @@
 #include <stdbool.h>
 #include <time.h>
 
-#define input_length 34
+#define INPUT_LENGTH 34
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
@@ -18,7 +18,7 @@ int main() {
     bool continue_loop = true;
 
     do {
-        char *word = handle_input(input_length);
+        char *word = handle_input(INPUT_LENGTH);
         if (strcmp(word, "stop") != 0) {
             char word_out[strlen(word)];
             const bool successful = password_generator(word_out, 32, word);

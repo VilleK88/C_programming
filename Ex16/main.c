@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define input_length 34
+#define INPUT_LENGTH 34
 
 typedef struct node {
     int number;
@@ -23,7 +23,7 @@ int main() {
     bool check = true;
 
     do {
-        char *input = handle_input(input_length);
+        char *input = handle_input(INPUT_LENGTH);
         char *parse_end;
         // Muuntaa input-merkkijonon long-luvuksi (desimaalina) ja tallettaa osoittimen siihen kohtaan,
         // mihin asti luvun lukeminen onnistui (parse_end osoittaa siihen merkkiin).
