@@ -12,7 +12,7 @@ bool password_generator(char *word_out, int array_size, const char *word_in);
 const char * const *get_table(void);
 
 int main() {
-    int count = 0;
+    //int count = 0;
     char **passwords = NULL;
     srand((unsigned int)time(NULL));
     bool continue_loop = true;
@@ -24,7 +24,7 @@ int main() {
             const int word_len = (int)strlen(word) * 2 + 1;
             const bool successful = password_generator(word_out, word_len, word);
             if (successful) {
-                char **tmp = realloc(passwords, (size_t)(count+1) * sizeof * passwords);
+                /*char **tmp = realloc(passwords, (size_t)(count+1) * sizeof * passwords);
                 if (!tmp) {
                     free(tmp);
                 }
@@ -33,7 +33,8 @@ int main() {
                     // allocates heap memory and copies word_out
                     passwords[count++] = strdup(word_out);
                     printf("Word in array: %s\n", passwords[count-1]);
-                }
+                }*/
+                printf("Word in array: %s\n", word_out);
             }
         }
         else continue_loop = false;
