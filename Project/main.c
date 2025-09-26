@@ -109,7 +109,9 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
                 const char last = current_line[len - 1];
                 if (row_num > 0) {
                     const int seat_num = find_seat(rows[row_num], last);
-                    rows[row_num-1][seat_num] = 'x';
+                    if (seat_num >= 0) {
+                        rows[row_num-1][seat_num] = 'x';
+                    }
                 }
             }
         }
@@ -147,13 +149,12 @@ int get_nums_from_a_string(const char *string) {
 }
 
 int find_seat(const char *string, const char c) {
-    if (string != NULL) {
-        for (int i = 0; string[i] != '\n'; i++) {
-            if (string[i] == c)
-                return i;
+    for (int i = 0; string[i] != '\n'; i++) {
+        if (string[i] == c) {
+            return i;
         }
     }
-    return 0;
+    return -1;
 }
 
 void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
@@ -224,13 +225,6 @@ void show_passengers() {
             }
             printf("\n");
         }
-        /*char *token = strtok(buffer, ",");
-        while (token) {
-            token[strcspn(token, "\n")] = '\0';
-            printf("%-20s", token);
-            token = strtok(NULL, ",");
-        }
-        printf("\n");*/
     }
     fclose(file);
 }
