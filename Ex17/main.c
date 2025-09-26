@@ -20,8 +20,8 @@ int main() {
     do {
         char *word = handle_input(INPUT_LENGTH);
         if (strcmp(word, "stop") != 0) {
-            char word_out[strlen(word)];
             const int word_len = (int)strlen(word) * 2 + 1;
+            char word_out[word_len];
             const bool successful = password_generator(word_out, word_len, word);
             if (successful) {
                 /*char **tmp = realloc(passwords, (size_t)(count+1) * sizeof * passwords);
@@ -35,6 +35,7 @@ int main() {
                     printf("Word in array: %s\n", passwords[count-1]);
                 }*/
                 printf("Word in array: %s\n", word_out);
+                //printf("password length: %d\n", (int)strlen(word_out));
             }
         }
         else continue_loop = false;
