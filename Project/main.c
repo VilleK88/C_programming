@@ -162,7 +162,7 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
 
         print_rows(rows);
 
-        char *row_str = handle_input(3, "Enter a row number: ");
+        char *row_str = handle_input(4, "Enter a row number: ");
         if (isdigit(*row_str)) {
             const int row_num = atoi(row_str);
             const char *seat_str = handle_input(3, "Enter a seat (A-F): ");
