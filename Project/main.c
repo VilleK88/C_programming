@@ -6,6 +6,7 @@
 
 #define ROW_C 26
 #define SEAT_C 6
+#define BUFFER_SIZE 200
 
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
@@ -19,7 +20,7 @@ bool needs_line_break();
 void show_passengers();
 char *handle_input(int length, char *text);
 bool get_input(char *user_input, int length);
-
+bool line_is_not_empty(char buffer[BUFFER_SIZE]);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -87,27 +88,29 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
     FILE *file = open_file("seat_reservations.csv", "r");
 
     while (fgets(line, sizeof(line), file) != NULL) {
-        char *current_line = line;
-        int count = 0;
+        if (line_is_not_empty(line)) {
+            char *current_line = line;
+            int count = 0;
 
-        while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
-            current_line++;
-            count++;
-        }
+            while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
+                current_line++;
+                count++;
+            }
 
-        const int row_num = get_nums_from_a_string(current_line);
-        size_t len = strlen(current_line);
+            const int row_num = get_nums_from_a_string(current_line);
+            size_t len = strlen(current_line);
 
-        if (len > 0 && current_line[len - 1] == '\n') {
-            current_line[len- 1] = '\0';
-            len--;
-        }
+            if (len > 0 && current_line[len - 1] == '\n') {
+                current_line[len- 1] = '\0';
+                len--;
+            }
 
-        if (len > 0) {
-            const char last = current_line[len - 1];
-            if (row_num > 0) {
-                const int seat_num = find_seat(rows[row_num], last);
-                rows[row_num-1][seat_num] = 'x';
+            if (len > 0) {
+                const char last = current_line[len - 1];
+                if (row_num > 0) {
+                    const int seat_num = find_seat(rows[row_num], last);
+                    rows[row_num-1][seat_num] = 'x';
+                }
             }
         }
     }
@@ -209,16 +212,25 @@ bool needs_line_break() {
 }
 
 void show_passengers() {
-    char buffer[200];
+    char buffer[BUFFER_SIZE];
     FILE *file = open_file("seat_reservations.csv", "r");
     while (fgets(buffer, sizeof(buffer), file)) {
-        char *token = strtok(buffer, ",");
+        if (line_is_not_empty(buffer)) {
+            char *token = strtok(buffer, ",");
+            while (token) {
+                token[strcspn(token, "\n")] = '\0';
+                printf("%-20s", token);
+                token = strtok(NULL, ",");
+            }
+            printf("\n");
+        }
+        /*char *token = strtok(buffer, ",");
         while (token) {
             token[strcspn(token, "\n")] = '\0';
             printf("%-20s", token);
             token = strtok(NULL, ",");
         }
-        printf("\n");
+        printf("\n");*/
     }
     fclose(file);
 }
@@ -250,6 +262,15 @@ bool get_input(char *user_input, const int length) {
             printf("Empty input.\n");
             return false;
         }
+        return true;
+    }
+    return false;
+}
+
+bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
+    if (strcmp(buffer, "\n") != 0 &&
+            strcmp(buffer, "\r\n") != 0 &&
+            strcmp(buffer, "\0") != 0) {
         return true;
     }
     return false;
