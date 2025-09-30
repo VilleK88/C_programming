@@ -5,8 +5,9 @@
 #include <ctype.h>
 
 #define ROW_C 26
-#define SEAT_C 6
+#define SEAT_C 7
 #define BUFFER_SIZE 200
+#define NAME_LEN 34
 
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
@@ -63,7 +64,7 @@ int main() {
 void initialize_rows(char rows[ROW_C][SEAT_C]) {
     for (int i = 0; i < ROW_C; i++) {
         for (int j = 0; j < SEAT_C; j++) {
-            const char seats[SEAT_C] = {'A', 'B', 'C', 'D', 'E', 'F'};
+            const char seats[SEAT_C] = {'A', 'B', 'C', 'D', 'E', 'F', '\0'};
             rows[i][j] = seats[j];
         }
     }
@@ -92,26 +93,28 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
             char *current_line = line;
             int count = 0;
 
+            // skip first name and last name
             while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
                 current_line++;
                 count++;
             }
 
+            // get the row number
             const int row_num = get_nums_from_a_string(current_line);
-            size_t len = strlen(current_line);
+            if (row_num > 0) {
 
-            if (len > 0 && current_line[len - 1] == '\n') {
-                current_line[len- 1] = '\0';
-                len--;
-            }
+                // get the seat char
+                size_t len = strlen(current_line);
+                while (len > 0 && (current_line[len - 1] == '\n' || current_line[len - 1] == '\r')) {
+                    current_line[--len] = '\0';
+                }
+                const char seat_num_char = current_line[len - 1];
 
-            if (len > 0) {
-                const char last = current_line[len - 1];
-                if (row_num > 0) {
-                    const int seat_num = find_seat(rows[row_num], last);
-                    if (seat_num >= 0) {
-                        rows[row_num-1][seat_num] = 'x';
-                    }
+                // get the seat index
+                const int row_index = row_num - 1;
+                const int seat_index = find_seat(rows[row_index], seat_num_char);
+                if (seat_index >= 0) {
+                    rows[row_index][seat_index] = 'x';
                 }
             }
         }
@@ -123,7 +126,6 @@ FILE *open_file(char *filename, const char *state) {
     FILE *file;
     if ((file = fopen(filename, state)) == NULL) {
         fprintf(stderr, "Error: could not open file %s\n", filename);
-        free(filename);
         exit(EXIT_FAILURE);
     }
     return file;
@@ -149,7 +151,7 @@ int get_nums_from_a_string(const char *string) {
 }
 
 int find_seat(const char *string, const char c) {
-    for (int i = 0; string[i] != '\n'; i++) {
+    for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == c) {
             return i;
         }
@@ -161,15 +163,15 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
     bool continue_loop = true;
 
     do {
-        const char *first_name = handle_input(32, "Enter first name: ");
-        const char *last_name = handle_input(32, "Enter last name: ");
+        char *first_name = handle_input(NAME_LEN, "Enter first name: ");
+        char *last_name = handle_input(NAME_LEN, "Enter last name: ");
 
         print_rows(rows);
 
         char *row_str = handle_input(4, "Enter a row number: ");
         if (isdigit(*row_str)) {
             const int row_num = atoi(row_str);
-            const char *seat_str = handle_input(3, "Enter a seat (A-F): ");
+            char *seat_str = handle_input(3, "Enter a seat (A-F): ");
             const int seat_int = toupper(*seat_str) - 'A';
             if (rows[row_num-1][seat_int] != 'x') {
                 add_passenger(first_name, last_name, row_num, *seat_str);
@@ -179,8 +181,11 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
                 printf("Seat already taken.\n");
                 continue_loop = false;
             }
-            free(row_str);
+            free(seat_str);
         }
+        free(first_name);
+        free(last_name);
+        free(row_str);
     } while (continue_loop);
 }
 
