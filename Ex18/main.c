@@ -8,6 +8,7 @@
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
+void remove_newline(char *user_input);
 bool get_nums_from_a_string(const char *string, int *num);
 void print_hexadecimal(int num, int rand_num);
 
@@ -72,6 +73,12 @@ bool get_input(char *user_input, const int length) {
         return true;
     }
     return false;
+}
+
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
 }
 
 bool get_nums_from_a_string(const char *string, int *num) {

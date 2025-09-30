@@ -12,6 +12,7 @@ typedef struct node {
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
+void remove_newline(char *user_input);
 struct node *add(struct node *head, struct node *item, int value);
 void print_numbers(struct node *head);
 void free_linked_list(struct node *head);
@@ -72,7 +73,7 @@ bool get_input(char *user_input, const int length) {
             printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        remove_newline(user_input);
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
@@ -80,6 +81,12 @@ bool get_input(char *user_input, const int length) {
         return true;
     }
     return false;
+}
+
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
 }
 
 struct node *add(struct node *head, struct node *item, const int value) {

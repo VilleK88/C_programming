@@ -5,11 +5,12 @@
 #include <time.h>
 
 #define INPUT_LENGTH 34
+//#define PASSWORD_LENGTH (2 * INPUT_LENGTH + 2);
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
+void remove_newline(char *user_input);
 bool password_generator(char *word_out, int array_size, const char *word_in);
-const char * const *get_table(void);
 
 int main() {
     char **passwords = NULL;
@@ -57,7 +58,7 @@ bool get_input(char *user_input, const int length) {
             printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        remove_newline(user_input);
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
@@ -67,19 +68,20 @@ bool get_input(char *user_input, const int length) {
     return false;
 }
 
-bool password_generator(char *word_out, int const array_size, const char *word_in) {
-    const char * const *table = get_table();
-    const int max_length = INPUT_LENGTH;
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
+}
 
-    if (max_length >= array_size) {
-        char new_word[max_length+1];
+bool password_generator(char *word_out, int const array_size, const char *word_in) {
+    if (INPUT_LENGTH >= array_size) {
+        char new_word[INPUT_LENGTH + 1];
         bool rotation = true;
         int j = 0;
-        for (int i = 0; i <= max_length; i++) {
-            const int randomTable = rand() % 4;
-            const size_t len = strlen(table[randomTable]);
-            const int randomIndex = rand() % (int)len;
-            const char randomChar = table[randomTable][randomIndex];
+        for (int i = 0; i <= INPUT_LENGTH; i++) {
+            const int random_num = 33 + rand() % (126 - 33 + 1);
+            const char randomChar = (char)random_num;
             if (rotation) {
                 new_word[i] = randomChar;
                 rotation = false;
@@ -93,12 +95,4 @@ bool password_generator(char *word_out, int const array_size, const char *word_i
         return true;
     }
     return false;
-}
-
-const char * const *get_table(void) {
-    static const char numbers[] = "0123456789", symbols[] = "!@#$^&*?";
-    static const char letter[] = "abcdefghijklmnoqprstuvwyzx";
-    static const char LETTER[] = "ABCDEFGHIJKLMNOQPRSTUYWVZX";
-    static const char * const table[] = {numbers, symbols, letter, LETTER};
-    return table;
 }
