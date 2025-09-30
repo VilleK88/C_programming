@@ -109,7 +109,7 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
                     current_line[--len] = '\0';
                 }
                 const char seat_num_char = current_line[len - 1];
-                
+
                 const int row_index = row_num - 1;
                 // get the seat index
                 const int seat_index = find_seat(rows[row_index], seat_num_char);
