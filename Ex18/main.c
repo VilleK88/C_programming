@@ -28,7 +28,7 @@ int main() {
             }
             else {
                 if (num >= 0 && num <= 15) {
-                    const int rand_num = rand() % 100;
+                    const int rand_num = rand() % 256;
                     print_hexadecimal(num, rand_num);
                 }
                 else if (num > 15) {
@@ -108,7 +108,9 @@ bool get_nums_from_a_string(const char *string, int *num) {
 }
 
 void print_hexadecimal(const int num, const int rand_num) {
-    const unsigned int shift_right = rand_num  >> num;
-    const unsigned int bits = shift_right & 0x3f;
-    printf("Random number hexadecimal: %02x\n", bits);
+    const unsigned int original = rand_num & 0xFFu;
+    const unsigned int shifted_right = original >> num;
+    const unsigned int masked = shifted_right & 0x3Fu;
+    printf("%02X\n", original);
+    printf("%02X\n", masked);
 }
