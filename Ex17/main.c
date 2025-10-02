@@ -5,7 +5,6 @@
 #include <time.h>
 
 #define INPUT_LENGTH 34
-//#define PASSWORD_LENGTH (2 * INPUT_LENGTH + 2);
 
 char *handle_input(int length);
 bool get_input(char *user_input, int length);
@@ -13,7 +12,6 @@ void remove_newline(char *user_input);
 bool password_generator(char *word_out, int array_size, const char *word_in);
 
 int main() {
-    char **passwords = NULL;
     srand((unsigned int)time(NULL));
     bool continue_loop = true;
 
@@ -32,7 +30,6 @@ int main() {
         free(word);
     } while (continue_loop);
 
-    free(passwords);
     return 0;
 }
 
