@@ -18,9 +18,9 @@ int main() {
     do {
         char *word = handle_input(INPUT_LENGTH);
         if (strcmp(word, "stop") != 0) {
-            const int word_len = (int)strlen(word) * 2 + 1;
-            char word_out[word_len];
-            const bool successful = password_generator(word_out, word_len, word);
+            const int password_len = (int)strlen(word) * 2 + 1;
+            char word_out[password_len];
+            const bool successful = password_generator(word_out, password_len, word);
             if (successful) {
                 printf("Word in array: %s\n", word_out);
             }

@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
+#include <time.h>
 
 #define INPUT_LENGTH 4
 
@@ -14,6 +15,8 @@ void print_hexadecimal(int num, int rand_num);
 
 int main() {
     bool continue_loop = true;
+
+    srand((unsigned int)time(NULL));
 
     do {
         char *num_str = handle_input(INPUT_LENGTH);
@@ -65,7 +68,7 @@ bool get_input(char *user_input, const int length) {
             printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        remove_newline(user_input);
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
