@@ -14,6 +14,7 @@ int main() {
     char buffer[100];
     if (fgets(buffer, sizeof(buffer), stdin) != NULL) {
         int count = 0;
+        int invalid_position = 0;
         int numbers[2];
         int result = 0;
         char *str_num = NULL;
@@ -22,7 +23,6 @@ int main() {
         for (int i = 0; i < strlen(buffer); i++) {
             if (count < 2) {
                 if (buffer[i] != ' ') {
-                    //str_num[j++] = buffer[i];
                     char *tmp_str_num = realloc(str_num, j + 2);
                     if (!tmp_str_num) {
                         free(str_num);
@@ -32,7 +32,16 @@ int main() {
                     str_num[j] = '\0';
                 }
                 else {
-                    numbers[count++] = atoi(str_num);
+                    //numbers[count++] = atoi(str_num);
+                    char *endptr;
+                    const long val = strtol(str_num, &endptr, 10);
+                    if (endptr == str_num || *endptr != '\0') {
+                        invalid_position = count+1;
+                    }
+                    else {
+                        numbers[count] = (int)val;
+                    }
+                    count++;
                     j = 0;
                 }
             }
@@ -48,7 +57,12 @@ int main() {
                 }
             }
         }
-        printf("%d + %d %s\n", numbers[0], numbers[1], cmd);
+        if (invalid_position == 0) {
+            printf("%d + %d %s\n", numbers[0], numbers[1], cmd);
+        }
+        else {
+            printf("Input: %s Invalid argument in position: %d\n", buffer, invalid_position);
+        }
     }
     else {
         printf("Error");
