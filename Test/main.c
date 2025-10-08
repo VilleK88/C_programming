@@ -23,12 +23,11 @@ int main() {
             if (count < 2) {
                 if (buffer[i] != ' ') {
                     char *tmp_str_num = realloc(str_num, j + 2);
-                    if (!tmp_str_num) {
-                        free(str_num);
+                    if (tmp_str_num) {
+                        str_num = tmp_str_num;
+                        str_num[j++] = buffer[i];
+                        str_num[j] = '\0';
                     }
-                    str_num = tmp_str_num;
-                    str_num[j++] = buffer[i];
-                    str_num[j] = '\0';
                 }
                 else {
                     char *endptr;
@@ -46,12 +45,11 @@ int main() {
             else {
                 if (buffer[i] != ' ') {
                     char *tmp = realloc(cmd, j + 2);
-                    if (!tmp) {
-                        free(cmd);
+                    if (tmp) {
+                        cmd = tmp;
+                        cmd[j++] = buffer[i];
+                        cmd[j] = '\0';
                     }
-                    cmd = tmp;
-                    cmd[j++] = buffer[i];
-                    cmd[j] = '\0';
                 }
             }
         }
@@ -79,6 +77,9 @@ int main() {
         else {
             printf("Input: %s Invalid argument in position: %d\n", buffer, invalid_position);
         }
+
+        free(str_num);
+        free(cmd);
     }
     else {
         printf("Error");
