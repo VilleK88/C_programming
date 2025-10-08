@@ -4,11 +4,13 @@
 #include <stdbool.h>
 #include <ctype.h>
 
-int add(int num1, int num2);
-int sub(int num1, int num2);
-int mul(int num1, int num2);
-int division(int num1, int num2);
+void add(int num1, int num2);
+void sub(int num1, int num2);
+void mul(int num1, int num2);
+void division(int num1, int num2);
 int get_nums_from_a_string(const char *string);
+int get_choice(char *choice);
+void remove_newline(char *user_input);
 
 int main() {
     char buffer[100];
@@ -32,7 +34,6 @@ int main() {
                     str_num[j] = '\0';
                 }
                 else {
-                    //numbers[count++] = atoi(str_num);
                     char *endptr;
                     const long val = strtol(str_num, &endptr, 10);
                     if (endptr == str_num || *endptr != '\0') {
@@ -58,7 +59,25 @@ int main() {
             }
         }
         if (invalid_position == 0) {
-            printf("%d + %d %s\n", numbers[0], numbers[1], cmd);
+            const int choice = get_choice(cmd);
+            switch (choice) {
+                case 1:
+                    add(numbers[0], numbers[1]);
+                    break;
+                case 2:
+                    sub(numbers[0], numbers[1]);
+                    break;
+                case 3:
+                    mul(numbers[0], numbers[1]);
+                    break;
+                case 4:
+                    division(numbers[0], numbers[1]);
+                    break;
+                default:
+                    remove_newline(buffer);
+                    printf("Input: %s Unknown command: %s\n", buffer, cmd);
+                    break;
+            }
         }
         else {
             printf("Input: %s Invalid argument in position: %d\n", buffer, invalid_position);
@@ -71,18 +90,38 @@ int main() {
     return 0;
 }
 
-int add(int num1, int num2) {
-
+void add(const int num1, const int num2) {
+    const int result = num1 + num2;
+    printf("%d + %d = %d\n", num1, num2, result);
 }
 
-int sub(int num1, int num2) {
-
+void sub(const int num1, const int num2) {
+    const int result = num1 - num2;
+    printf("%d - %d = %d\n", num1, num2, result);
 }
 
-int mul(int num1, int num2) {
-
+void mul(const int num1, const int num2) {
+    const int result = num1 * num2;
+    printf("%d * %d = %d\n", num1, num2, result);
 }
 
-int division(int num1, int num2) {
+void division(const int num1, const int num2) {
+    const int result = num1 / num2;
+    printf("%d / %d = %d\n", num1, num2, result);
+}
 
+int get_choice(char *choice) {
+    remove_newline(choice);
+    const char *choices[] = {"add", "sub", "mul", "div"};
+    for (int i = 0; i < 4; i++) {
+        if (strcmp(choice, choices[i]) == 0)
+            return i+1;
+    }
+    return -1;
+}
+
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
 }
