@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
-#include <ctype.h>
 
 void add(int num1, int num2);
 void sub(int num1, int num2);
@@ -18,7 +16,6 @@ int main() {
         int count = 0;
         int invalid_position = 0;
         int numbers[2];
-        int result = 0;
         char *str_num = NULL;
         int j = 0;
         char *cmd = NULL;
