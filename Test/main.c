@@ -109,11 +109,13 @@ void division(const int num1, const int num2) {
 }
 
 int get_choice(char *choice) {
-    remove_newline(choice);
-    const char *choices[] = {"add", "sub", "mul", "div"};
-    for (int i = 0; i < 4; i++) {
-        if (strcmp(choice, choices[i]) == 0)
-            return i+1;
+    if (choice) {
+        remove_newline(choice);
+        const char *choices[] = {"add", "sub", "mul", "div"};
+        for (int i = 0; i < 4; i++) {
+            if (strcmp(choice, choices[i]) == 0)
+                return i+1;
+        }
     }
     return -1;
 }
