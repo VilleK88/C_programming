@@ -90,8 +90,9 @@ void read_file(FILE *this_file, menu_item *items, int *count, const int capacity
     char line[LINE_LENGTH];
     while (fgets(line, sizeof(line), this_file) != NULL && *count < capacity) {
         char *semicolon = strchr(line, ';');
-        if (semicolon)
+        if (semicolon) {
             add_to_items(items, count, line, semicolon);
+        }
     }
     fclose(this_file);
 }
