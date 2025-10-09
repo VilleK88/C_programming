@@ -133,13 +133,17 @@ int get_choice() {
 
     do {
         char *choice = handle_input(34, "Enter choice: ");
-        const long int val = strtol(choice, NULL, 10);
-        if (val == 1 || val == 2) {
+        char *endPtr;
+        const long int val = strtol(choice, &endPtr, 10);
+        if (*endPtr == '\0' && (val == 1 || val == 2)) {
             value = val;
             continue_loop = false;
         }
         else {
-            printf("Invalid input: %s\n", choice);
+            if (*endPtr != '\0')
+                printf("Invalid input: %s\n", choice);
+            else
+                printf("Input out of range: %d\n", (int)val);
             print_order_info();
         }
         free(choice);
