@@ -10,6 +10,13 @@
 #define BUFFER_SIZE 200
 #define LINE_LENGTH 100
 
+typedef struct passenger_ {
+    char first_name[32];
+    char last_name[32];
+    int row_num;
+    char row_seat[2];
+} passenger;
+
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
 void update_rows(char rows[ROW_C][SEAT_C]);
@@ -30,6 +37,7 @@ int handle_row_num();
 char *handle_seat();
 bool check_if_seat_exists(const char * seat_str);
 void remove_newline(char *user_input);
+void passenger_to_list(passenger *passengers, int *count, const char *line);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -216,11 +224,17 @@ bool needs_line_break() {
 }
 
 void show_passengers() {
+    struct passenger_ passengers[156];
+    int count = 0;
     char buffer[BUFFER_SIZE];
     FILE *file = open_file("seat_reservations.csv", "r");
     while (fgets(buffer, sizeof(buffer), file)) {
         if (line_is_not_empty(buffer)) {
-            char *token = strtok(buffer, ",");
+            char *comma = strchr(buffer, ',');
+            if (comma) {
+                passenger_to_list(passengers, &count, buffer);
+            }
+            /*char *token = strtok(buffer, ",");
             int count = 0;
             while (token) {
                 token[strcspn(token, "\n")] = '\0';
@@ -233,10 +247,15 @@ void show_passengers() {
                 }
                 token = strtok(NULL, ",");
             }
-            printf("\n");
+            printf("\n");*/
         }
     }
     fclose(file);
+
+    for (int i = 0; i < count; i++) {
+        printf("%s %s %d %s\n", passengers[i].first_name, passengers[i].last_name,
+            passengers[i].row_num, passengers[i].row_seat);
+    }
 }
 
 char *handle_input(const int length, const char *text) {
@@ -379,7 +398,7 @@ char *handle_seat() {
             }
         }
         else {
-            printf("Invalid input. Only letters allowed. %s\n", seat_str);
+            printf("Invalid input. Only letters allowed.\n");
             free(seat_str);
         }
 
@@ -405,4 +424,30 @@ void remove_newline(char *user_input) {
     if (user_input[strlen(user_input) - 1] == '\n') {
         user_input[strlen(user_input) - 1] = '\0';
     }
+}
+
+void passenger_to_list(passenger *passengers, int *count, const char *line) {
+    char *token1 = strchr(line, ',');
+    *token1 = '\0';
+
+    strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
+    passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
+
+    token1++;
+    char *token2 = strchr(token1, ',');
+    *token2 = '\0';
+    strncpy(passengers[*count].last_name, token1,sizeof passengers[*count].last_name - 1);
+    passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
+
+    token2++;
+    char *token3 = strchr(token2, ',');
+    *token3 = '\0';
+    passengers[*count].row_num = (int)strtol(token2, NULL, 10);
+
+    char *token4 = token3 + 1;
+    token4[strcspn(token4, "\r\n")] = '\0';
+    passengers[*count].row_seat[0] = token4[0];
+    passengers[*count].row_seat[1] = '\0';
+
+    (*count)++;
 }
