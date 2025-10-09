@@ -2,14 +2,14 @@
 #include <stdio.h>
 #include <stdarg.h>
 
-static int g_debug_level = 0;
+static int d_debug_level = 0;
 
 void set_debug_level(const int debug_level) {
-    g_debug_level = debug_level;
+    d_debug_level = debug_level;
 }
 
 int dprintf(const int debug_level, const char *fmt, ...) {
-    if (debug_level < g_debug_level) {
+    if (debug_level <= d_debug_level) {
         int written = 0;
         written += fprintf(stderr, "[DBG%d] ", debug_level);
 
