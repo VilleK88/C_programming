@@ -8,6 +8,7 @@
 #define SEAT_C 7
 #define BUFFER_SIZE 200
 #define NAME_LEN 34
+#define LINE_LENGTH 100
 
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
@@ -78,7 +79,7 @@ void print_rows(char rows[ROW_C][SEAT_C]) {
 }
 
 void update_rows(char rows[ROW_C][SEAT_C]) {
-    char line[100];
+    char line[LINE_LENGTH];
     FILE *file = open_file("seat_reservations.csv", "r");
 
     while (fgets(line, sizeof(line), file) != NULL) {
