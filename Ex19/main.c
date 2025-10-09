@@ -139,10 +139,8 @@ int get_choice() {
             continue_loop = false;
         }
         else {
-            if (val)
-                printf("Choice is out of range: %d\n", (int)val);
-            else
-                printf("Only integers 1 and 2 allowed: %s\n", choice);
+            printf("Invalid input: %s\n", choice);
+            print_order_info();
         }
         free(choice);
     } while (continue_loop);
