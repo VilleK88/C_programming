@@ -35,7 +35,7 @@ int main() {
 
     set_debug_level(level);
 
-    for (int i = 0; i <= 5; i++) {
+    for (int i = 0; i < 5; i++) {
         const int msg_lvl = rand() % 5;
         dprintf(msg_lvl, "Message: %d: this is an example log", i+1);
     }
