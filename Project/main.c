@@ -217,9 +217,17 @@ void show_passengers() {
     while (fgets(buffer, sizeof(buffer), file)) {
         if (line_is_not_empty(buffer)) {
             char *token = strtok(buffer, ",");
+            int count = 0;
             while (token) {
                 token[strcspn(token, "\n")] = '\0';
-                printf("%-20s", token);
+                if (count < 2) {
+                    printf("%-32s", token);
+                    count++;
+                }
+                else {
+                    printf("%-7s", token);
+                }
+                //printf("%-20s", token);
                 token = strtok(NULL, ",");
             }
             printf("\n");
