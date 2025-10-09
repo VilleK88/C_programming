@@ -227,7 +227,6 @@ void show_passengers() {
                 else {
                     printf("%-7s", token);
                 }
-                //printf("%-20s", token);
                 token = strtok(NULL, ",");
             }
             printf("\n");
