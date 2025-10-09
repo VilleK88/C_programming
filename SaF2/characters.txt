@@ -1,0 +1,5 @@
+Hello world!
+this is a test file.
+C programming is fun.
+Mixed CaSe LiNeS
+The last line of the file.
