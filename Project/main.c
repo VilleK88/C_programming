@@ -6,8 +6,8 @@
 
 #define ROW_C 26
 #define SEAT_C 7
+#define INPUT_LENGTH 34
 #define BUFFER_SIZE 200
-#define NAME_LEN 34
 #define LINE_LENGTH 100
 
 void initialize_rows(char rows[ROW_C][SEAT_C]);
@@ -26,6 +26,10 @@ bool line_is_not_empty(char buffer[BUFFER_SIZE]);
 int get_choice();
 bool check_if_nums(const char *string);
 char *get_name(const char* text);
+int handle_row_num();
+char *handle_seat();
+bool check_if_seat_exists(const char * seat_str);
+void remove_newline(char *user_input);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -164,25 +168,22 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
 
         print_rows(rows);
 
-        char *row_str = handle_input(4, "Enter a row number: ");
-        if (isdigit(*row_str)) {
-            const int row_num = atoi(row_str);
-            char *seat_str = handle_input(3, "Enter a seat (A-F): ");
-            const int seat_int = toupper(*seat_str) - 'A';
-            if (rows[row_num-1][seat_int] != 'x') {
-                add_passenger(first_name, last_name, row_num, *seat_str);
-                continue_loop = false;
-            }
-            else {
-                printf("Seat already taken.\n");
-                continue_loop = false;
-            }
-            free(seat_str);
+        const int row_num = handle_row_num();
+        char *seat_str = handle_seat();
+
+        // converts seat letter to array index
+        const int seat_int = *seat_str - 'A';
+        if (rows[row_num-1][seat_int] != 'x') {
+            add_passenger(first_name, last_name, row_num, *seat_str);
+            continue_loop = false;
+        }
+        else {
+            printf("Seat already taken.\n");
         }
 
         free(first_name);
         free(last_name);
-        free(row_str);
+        free(seat_str);
     } while (continue_loop);
 }
 
@@ -260,7 +261,7 @@ bool get_input(char *user_input, const int length) {
             printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        remove_newline(user_input);
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
@@ -318,13 +319,84 @@ char *get_name(const char *text) {
     char *name = NULL;
     bool continue_loop = true;
     do {
-        name = handle_input(NAME_LEN, text);
-        if (check_if_nums(name)) {
+        name = handle_input(INPUT_LENGTH, text);
+        if (check_if_nums(name))
             printf("Invalid input. Only letters allowed: %s\n", name);
-        }
-        else {
+        else
             continue_loop = false;
-        }
     } while (continue_loop);
     return name;
+}
+
+int handle_row_num() {
+    int row_num = 0;
+    bool continue_loop = true;
+
+    do {
+        char *row_str = handle_input(INPUT_LENGTH, "Enter a row number: ");
+        char *endPtr;
+        const long int val = strtol(row_str, &endPtr, 10);
+        if (*endPtr == '\0' && val >= 1 && val <= ROW_C) {
+            row_num = val;
+            continue_loop = false;
+        }
+        else {
+            if (*endPtr != '\0') {
+                printf("Invalid input. Only numbers allowed %s\n", row_str);
+            }
+            else {
+                printf("Input out of range: %d\n", (int)val);
+                printf("Choose seat row between 1 - %d\n", ROW_C);
+            }
+        }
+
+        free(row_str);
+    } while (continue_loop);
+
+    return row_num;
+}
+
+char *handle_seat() {
+    char *seat_str;
+    bool continue_loop = true;
+
+    do {
+        seat_str = handle_input(INPUT_LENGTH, "Enter a seat (A-F): ");
+        if (!check_if_nums(seat_str)) {
+            *seat_str = toupper(*seat_str);
+            if (check_if_seat_exists(seat_str)) {
+                continue_loop = false;
+            }
+            else {
+                printf("Invalid input. No seat: %s\n", seat_str);
+                free(seat_str);
+            }
+        }
+        else {
+            printf("Invalid input. Only letters allowed. %s\n", seat_str);
+            free(seat_str);
+        }
+
+    } while (continue_loop);
+
+    return seat_str;
+}
+
+bool check_if_seat_exists(const char *seat_str) {
+    const char seats[] = {'A', 'B', 'C', 'D', 'E', 'F'};
+    const int len = (int)strlen(seats);
+
+    for (int i = 0; i < len; i++) {
+        if (seats[i] == seat_str[0]) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
 }
