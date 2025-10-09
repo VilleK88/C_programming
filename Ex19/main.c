@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 #define FILENAME_LENGTH 34
 
@@ -10,7 +11,7 @@ typedef struct menu_item_ {
     double price;
 } menu_item;
 
-char *get_filename(int length);
+char *handle_input(int length, char *text);
 bool get_input(char *user_input, int length);
 void remove_newline(char *user_input);
 FILE *open_file(char *this_filename);
@@ -28,7 +29,7 @@ int main() {
     int count = 0;
     struct menu_item_ menu_items[40];
 
-    char *filename = get_filename(FILENAME_LENGTH);
+    char *filename = handle_input(FILENAME_LENGTH, "Enter a filename: ");
     FILE *file = open_file(filename);
     read_file(file, menu_items, &count, sizeof(menu_items) / sizeof(menu_items[0]));
     choose_sort_order(menu_items, &count);
@@ -38,12 +39,12 @@ int main() {
     return 0;
 }
 
-char *get_filename(const int length) {
+char *handle_input(const int length, char *text) {
     char *string = malloc(length);
     if (string) {
         bool stop_loop = false;
         while (!stop_loop) {
-            printf("Enter a filename: ");
+            printf("%s", text);
             stop_loop = get_input(string, length);
         }
         return string;
@@ -113,7 +114,7 @@ void choose_sort_order(menu_item *items, const int *count) {
 
     print_order_info();
     do {
-        printf("Enter choice: ");
+        //printf("Enter choice: ");
         const int choice = get_choice();
         switch (choice) {
             case 1:
@@ -123,20 +124,30 @@ void choose_sort_order(menu_item *items, const int *count) {
                 continue_loop = make_the_choice("Sort by price.\n", 2, items, count);
                 break;
             default:
-                printf("Choice is out of range.\n");
                 break;
         }
     } while (continue_loop);
 }
 
 int get_choice() {
-    int value;
+    long int value = 0;
+    bool continue_loop = true;
 
-    if (scanf("%d", &value) != 1) {
-        while (getchar() != '\n'){}
-        printf("Invalid input.\n");
-        return 0;
-    }
+    do {
+        char *choice = handle_input(34, "Enter choice: ");
+        const long int val = strtol(choice, NULL, 10);
+        if (val == 1 || val == 2) {
+            value = val;
+            continue_loop = false;
+        }
+        else {
+            if (val)
+                printf("Choice is out of range: %d\n", (int)val);
+            else
+                printf("Only integers 1 and 2 allowed: %s\n", choice);
+        }
+        free(choice);
+    } while (continue_loop);
 
     return value;
 }
