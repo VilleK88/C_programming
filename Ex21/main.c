@@ -18,6 +18,7 @@ int main() {
     FILE *file = open_file(filename);
     read_file(file);
 
+    fclose(file);
     free(filename);
     return 0;
 }
