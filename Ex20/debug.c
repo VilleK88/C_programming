@@ -10,16 +10,16 @@ void set_debug_level(const int debug_level) {
 
 int dprintf(const int debug_level, const char *fmt, ...) {
     if (debug_level <= d_debug_level) {
-        int standard_error = 0;
-        standard_error += fprintf(stderr, "[DBG%d] ", debug_level);
+        int bytes_written = 0;
+        bytes_written += fprintf(stderr, "[DBG%d] ", debug_level);
 
         va_list ap;
         va_start(ap, fmt);
-        standard_error += vfprintf(stderr, fmt, ap);
+        bytes_written += vfprintf(stderr, fmt, ap);
         va_end(ap);
 
-        standard_error += fputc('\n', stderr);
-        return standard_error;
+        bytes_written += fputc('\n', stderr);
+        return bytes_written;
     }
 
     return 0;
