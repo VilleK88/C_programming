@@ -427,26 +427,26 @@ void remove_newline(char *user_input) {
 }
 
 void passenger_to_list(passenger *passengers, int *count, const char *line) {
-    char *token1 = strchr(line, ',');
-    *token1 = '\0';
+    char *f_name = strchr(line, ',');
+    *f_name = '\0';
 
     strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
     passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
 
-    token1++;
-    char *token2 = strchr(token1, ',');
-    *token2 = '\0';
-    strncpy(passengers[*count].last_name, token1,sizeof passengers[*count].last_name - 1);
+    f_name++;
+    char *l_name = strchr(f_name, ',');
+    *l_name = '\0';
+    strncpy(passengers[*count].last_name, f_name,sizeof passengers[*count].last_name - 1);
     passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
 
-    token2++;
-    char *token3 = strchr(token2, ',');
-    *token3 = '\0';
-    passengers[*count].row_num = (int)strtol(token2, NULL, 10);
+    l_name++;
+    char *r_num = strchr(l_name, ',');
+    *r_num = '\0';
+    passengers[*count].row_num = (int)strtol(l_name, NULL, 10);
 
-    char *token4 = token3 + 1;
-    token4[strcspn(token4, "\r\n")] = '\0';
-    passengers[*count].row_seat[0] = token4[0];
+    char *r_seat = r_num + 1;
+    r_seat[strcspn(r_seat, "\r\n")] = '\0';
+    passengers[*count].row_seat[0] = r_seat[0];
     passengers[*count].row_seat[1] = '\0';
 
     (*count)++;
