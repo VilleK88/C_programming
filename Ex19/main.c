@@ -12,6 +12,7 @@ typedef struct menu_item_ {
 
 char *get_filename(int length);
 bool get_input(char *user_input, int length);
+void remove_newline(char *user_input);
 FILE *open_file(char *this_filename);
 void read_file(FILE *this_file, menu_item *items, int *count, int capacity);
 void add_to_items(menu_item *items, int *count, const char *line, char *semicolon);
@@ -59,7 +60,7 @@ bool get_input(char *user_input, const int length) {
             printf("Input too long (max %d characters).\n", length-2);
             return false;
         }
-        user_input[strcspn(user_input, "\n")] = '\0';
+        remove_newline(user_input);
         if (user_input[0] == '\0') {
             printf("Empty input.\n");
             return false;
@@ -67,6 +68,12 @@ bool get_input(char *user_input, const int length) {
         return true;
     }
     return false;
+}
+
+void remove_newline(char *user_input) {
+    if (user_input[strlen(user_input) - 1] == '\n') {
+        user_input[strlen(user_input) - 1] = '\0';
+    }
 }
 
 FILE *open_file(char *this_filename) {
@@ -80,13 +87,11 @@ FILE *open_file(char *this_filename) {
 
 void read_file(FILE *this_file, menu_item *items, int *count, const int capacity) {
     char line[200];
-
     while (fgets(line, sizeof(line), this_file) != NULL && *count < capacity) {
         char *semicolon = strchr(line, ';');
         if (semicolon)
             add_to_items(items, count, line, semicolon);
     }
-
     fclose(this_file);
 }
 
@@ -127,7 +132,7 @@ void choose_sort_order(menu_item *items, const int *count) {
 int get_choice() {
     int value;
 
-    if (scanf_s("%d", &value) != 1) {
+    if (scanf("%d", &value) != 1) {
         while (getchar() != '\n'){}
         printf("Invalid input.\n");
         return 0;
