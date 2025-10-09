@@ -11,7 +11,7 @@ typedef struct menu_item_ {
     double price;
 } menu_item;
 
-char *handle_input(int length, char *text);
+char *handle_input(int length, const char *text);
 bool get_input(char *user_input, int length);
 void remove_newline(char *user_input);
 FILE *open_file(char *this_filename);
@@ -39,7 +39,7 @@ int main() {
     return 0;
 }
 
-char *handle_input(const int length, char *text) {
+char *handle_input(const int length, const char *text) {
     char *string = malloc(length);
     if (string) {
         bool stop_loop = false;
