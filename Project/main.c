@@ -20,10 +20,12 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
 bool needs_line_break();
 void show_passengers();
-char *handle_input(int length, char *text);
+char *handle_input(int length, const char *text);
 bool get_input(char *user_input, int length);
 bool line_is_not_empty(char buffer[BUFFER_SIZE]);
 int get_choice();
+bool check_if_nums(const char *string);
+char *get_name(const char* text);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -157,8 +159,8 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
     bool continue_loop = true;
 
     do {
-        char *first_name = handle_input(NAME_LEN, "Enter first name: ");
-        char *last_name = handle_input(NAME_LEN, "Enter last name: ");
+        char *first_name = get_name("Enter first name: ");
+        char *last_name = get_name("Enter last name: ");
 
         print_rows(rows);
 
@@ -236,7 +238,7 @@ void show_passengers() {
     fclose(file);
 }
 
-char *handle_input(const int length, char *text) {
+char *handle_input(const int length, const char *text) {
     char *string = malloc(length);
     if (string) {
         bool stop_loop = false;
@@ -300,4 +302,29 @@ int get_choice() {
     } while (continue_loop);
 
     return value;
+}
+
+bool check_if_nums(const char *string) {
+    const int len = (int)strlen(string);
+    for (int i = 0; i < len; i++) {
+        if (isdigit(string[i])) {
+            return true;
+        }
+    }
+    return false;
+}
+
+char *get_name(const char *text) {
+    char *name = NULL;
+    bool continue_loop = true;
+    do {
+        name = handle_input(NAME_LEN, text);
+        if (check_if_nums(name)) {
+            printf("Invalid input. Only letters allowed: %s\n", name);
+        }
+        else {
+            continue_loop = false;
+        }
+    } while (continue_loop);
+    return name;
 }
