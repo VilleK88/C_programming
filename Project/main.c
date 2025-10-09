@@ -22,6 +22,7 @@ void show_passengers();
 char *handle_input(int length, char *text);
 bool get_input(char *user_input, int length);
 bool line_is_not_empty(char buffer[BUFFER_SIZE]);
+int get_choice();
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -30,33 +31,25 @@ int main() {
     update_rows(rows);
 
     do {
-        char *c_str = handle_input(3, "1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
-        if (isdigit(*c_str)) {
-            const int choice = atoi(c_str);
-            switch (choice) {
-                case 1:
-                    reserve_a_seat(rows);
-                    break;
-                case 2:
-                    update_rows(rows);
-                    print_rows(rows);
-                    break;
-                case 3:
-                    show_passengers();
-                    break;
-                case 4:
-                    continue_loop = false;
-                    break;
-                default:
-                    printf("Invalid input. Only enter integers (1-3).\n");
-                    break;
+        const int choice = get_choice();
+        switch (choice) {
+            case 1:
+                reserve_a_seat(rows);
+                break;
+            case 2:
+                update_rows(rows);
+                print_rows(rows);
+                break;
+            case 3:
+                show_passengers();
+                break;
+            case 4:
+                continue_loop = false;
+                break;
+            default:
+                break;
             }
-        }
-        else
-            printf("Invalid input. Only enter integers (1-3).\n");
-
-        free(c_str);
-    } while (continue_loop);
+        } while (continue_loop);
 
     return 0;
 }
@@ -183,6 +176,7 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
             }
             free(seat_str);
         }
+
         free(first_name);
         free(last_name);
         free(row_str);
@@ -239,7 +233,7 @@ char *handle_input(const int length, char *text) {
     if (string) {
         bool stop_loop = false;
         while (!stop_loop) {
-            printf("%s\n", text);
+            printf("%s", text);
             stop_loop = get_input(string, length);
         }
         return string;
@@ -273,4 +267,29 @@ bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
         return true;
     }
     return false;
+}
+
+int get_choice() {
+    long int value = 0;
+    bool continue_loop = true;
+
+    do {
+        printf("1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
+        char *choice = handle_input(34, "Enter choice: ");
+        char *endPtr;
+        const long int val = strtol(choice, &endPtr, 10);
+        if (*endPtr == '\0' && val >= 1 && val <= 4) {
+            value = val;
+            continue_loop = false;
+        }
+        else {
+            if (*endPtr != '\0')
+                printf("Invalid input: %s\n", choice);
+            else
+                printf("Input out of range: %d\n", (int)val);
+        }
+        free(choice);
+    } while (continue_loop);
+
+    return value;
 }
