@@ -249,6 +249,7 @@ char *handle_input(const int length, const char *text) {
         }
         return string;
     }
+
     printf("Memory allocation failed.\n");
     exit(EXIT_FAILURE);
 }
@@ -266,8 +267,10 @@ bool get_input(char *user_input, const int length) {
             printf("Empty input.\n");
             return false;
         }
+
         return true;
     }
+
     return false;
 }
 
@@ -299,6 +302,7 @@ int get_choice() {
             else
                 printf("Input out of range: %d\n", (int)val);
         }
+
         free(choice);
     } while (continue_loop);
 
@@ -318,6 +322,7 @@ bool check_if_nums(const char *string) {
 char *get_name(const char *text) {
     char *name = NULL;
     bool continue_loop = true;
+
     do {
         name = handle_input(INPUT_LENGTH, text);
         if (check_if_nums(name))
@@ -325,6 +330,7 @@ char *get_name(const char *text) {
         else
             continue_loop = false;
     } while (continue_loop);
+
     return name;
 }
 
