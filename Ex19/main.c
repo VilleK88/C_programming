@@ -2,9 +2,9 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-#include <ctype.h>
 
 #define FILENAME_LENGTH 34
+#define LINE_LENGTH 200
 
 typedef struct menu_item_ {
     char name[50];
@@ -87,7 +87,7 @@ FILE *open_file(char *this_filename) {
 }
 
 void read_file(FILE *this_file, menu_item *items, int *count, const int capacity) {
-    char line[200];
+    char line[LINE_LENGTH];
     while (fgets(line, sizeof(line), this_file) != NULL && *count < capacity) {
         char *semicolon = strchr(line, ';');
         if (semicolon)
@@ -111,10 +111,8 @@ void print_order_info() {
 
 void choose_sort_order(menu_item *items, const int *count) {
     bool continue_loop = true;
-
     print_order_info();
     do {
-        //printf("Enter choice: ");
         const int choice = get_choice();
         switch (choice) {
             case 1:
