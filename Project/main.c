@@ -405,7 +405,7 @@ char *handle_seat() {
             }
         }
         else {
-            printf("Invalid input. Only letters allowed: %s\n", seat_str);
+            printf("Invalid input(only letters allowed): %s\n", seat_str);
             free(seat_str);
         }
 
