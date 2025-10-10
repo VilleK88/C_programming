@@ -22,7 +22,6 @@ void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
 void update_rows(char rows[ROW_C][SEAT_C]);
 FILE *open_file(char *filename, const char *state);
-int get_nums_from_a_string(const char *string);
 int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[ROW_C][SEAT_C]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
@@ -37,7 +36,6 @@ char *get_name(const char* text);
 int handle_row_num();
 char *handle_seat();
 bool check_if_seat_exists(const char * seat_str);
-//void remove_newline(char *user_input);
 void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
@@ -147,25 +145,6 @@ FILE *open_file(char *filename, const char *state) {
         exit(EXIT_FAILURE);
     }
     return file;
-}
-
-int get_nums_from_a_string(const char *string) {
-    char *num_char = malloc(strlen(string) + 1);
-
-    int j = 0;
-    for (int i = 0; string[i] != '\0'; i++) {
-        if (isdigit(string[i])) {
-            num_char[j++] = string[i];
-        }
-    }
-    num_char[j] = '\0';
-    int result = 0;
-    if (j > 0) {
-        result = atoi(num_char);
-    }
-
-    free(num_char);
-    return result;
 }
 
 int find_seat(const char *string, const char c) {
@@ -421,12 +400,6 @@ bool check_if_seat_exists(const char *seat_str) {
 
     return false;
 }
-
-/*void remove_newline(char *user_input) {
-    if (user_input[strlen(user_input) - 1] == '\n') {
-        user_input[strlen(user_input) - 1] = '\0';
-    }
-}*/
 
 void passenger_to_list(passenger *passengers, int *count, const char *line) {
     if (check_line_commas(line)) {
