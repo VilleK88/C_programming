@@ -228,6 +228,10 @@ void show_passengers() {
     int count = 0;
     char buffer[BUFFER_SIZE];
     FILE *file = open_file("seat_reservations.csv", "r");
+
+    // skip the first line
+    fgets(buffer, sizeof(buffer), file);
+
     while (fgets(buffer, sizeof(buffer), file)) {
         if (line_is_not_empty(buffer)) {
             char *comma = strchr(buffer, ',');
@@ -252,6 +256,9 @@ void show_passengers() {
     }
     fclose(file);
 
+
+    char *titles[] = {"Firstname", "Lastname", "Row", "Seat"};
+    printf("%-32s %-32s %-7s %-7s\n", titles[0], titles[1], titles[2], titles[3]);
     for (int i = 0; i < count; i++) {
         printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
             passengers[i].row_num, passengers[i].row_seat);
