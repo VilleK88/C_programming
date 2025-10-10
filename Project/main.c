@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <ctype.h>
+#include "utils/tools.h"
 
 #define ROW_C 26
 #define SEAT_C 7
@@ -36,7 +37,7 @@ char *get_name(const char* text);
 int handle_row_num();
 char *handle_seat();
 bool check_if_seat_exists(const char * seat_str);
-void remove_newline(char *user_input);
+//void remove_newline(char *user_input);
 void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
@@ -421,11 +422,11 @@ bool check_if_seat_exists(const char *seat_str) {
     return false;
 }
 
-void remove_newline(char *user_input) {
+/*void remove_newline(char *user_input) {
     if (user_input[strlen(user_input) - 1] == '\n') {
         user_input[strlen(user_input) - 1] = '\0';
     }
-}
+}*/
 
 void passenger_to_list(passenger *passengers, int *count, const char *line) {
     if (check_line_commas(line)) {
