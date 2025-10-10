@@ -420,30 +420,27 @@ void remove_newline(char *user_input) {
 }
 
 void passenger_to_list(passenger *passengers, int *count, const char *line) {
-
-
-
     if (check_line_commas(line)) {
-        char *f_name = strchr(line, ',');
-        *f_name = '\0';
+        char *first_comma = strchr(line, ',');
+        *first_comma = '\0';
 
         strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
         passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
 
-        f_name++;
-        char *l_name = strchr(f_name, ',');
-        *l_name = '\0';
-        strncpy(passengers[*count].last_name, f_name,sizeof passengers[*count].last_name - 1);
+        first_comma++;
+        char *second_comma = strchr(first_comma, ',');
+        *second_comma = '\0';
+        strncpy(passengers[*count].last_name, first_comma,sizeof passengers[*count].last_name - 1);
         passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
 
-        l_name++;
-        char *r_num = strchr(l_name, ',');
-        *r_num = '\0';
-        passengers[*count].row_num = (int)strtol(l_name, NULL, 10);
+        second_comma++;
+        char *third_comma = strchr(second_comma, ',');
+        *third_comma = '\0';
+        passengers[*count].row_num = (int)strtol(second_comma, NULL, 10);
 
-        char *r_seat = r_num + 1;
-        r_seat[strcspn(r_seat, "\r\n")] = '\0';
-        passengers[*count].row_seat[0] = r_seat[0];
+        char *line_after_last_comma = third_comma + 1;
+        line_after_last_comma[strcspn(line_after_last_comma, "\r\n")] = '\0';
+        passengers[*count].row_seat[0] = line_after_last_comma[0];
         passengers[*count].row_seat[1] = '\0';
 
         (*count)++;
