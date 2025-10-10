@@ -65,6 +65,7 @@ int main() {
             default:
                 break;
             }
+
         } while (continue_loop);
 
     return 0;
@@ -81,14 +82,17 @@ void initialize_rows(char rows[ROW_C][SEAT_C]) {
 
 void print_rows(char rows[ROW_C][SEAT_C]) {
     for (int i = 0; i < ROW_C; i++) {
+
         printf("%2d ", i+1);
         for (int j = 0; j < 3; j++) {
             printf("%c", rows[i][j]);
         }
+
         printf("   ");
         for (int j = 3; j < SEAT_C; j++) {
             printf("%c", rows[i][j]);
         }
+
         printf("\n");
     }
 }
@@ -292,6 +296,7 @@ bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
             strcmp(buffer, "\0") != 0) {
         return true;
     }
+
     return false;
 }
 
@@ -328,6 +333,7 @@ bool check_if_nums(const char *string) {
             return true;
         }
     }
+
     return false;
 }
 
