@@ -237,10 +237,7 @@ void show_passengers() {
 
     while (fgets(buffer, sizeof(buffer), file)) {
         if (line_is_not_empty(buffer)) {
-            char *comma = strchr(buffer, ',');
-            if (comma) {
-                passenger_to_list(passengers, &count, buffer);
-            }
+            passenger_to_list(passengers, &count, buffer);
         }
     }
     fclose(file);
