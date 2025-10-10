@@ -253,7 +253,7 @@ void show_passengers() {
     fclose(file);
 
     for (int i = 0; i < count; i++) {
-        printf("%s %s %d %s\n", passengers[i].first_name, passengers[i].last_name,
+        printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
             passengers[i].row_num, passengers[i].row_seat);
     }
 }
@@ -317,7 +317,7 @@ int get_choice() {
         }
         else {
             if (*endPtr != '\0')
-                printf("Invalid input: %s\n", choice);
+                printf("Invalid input (only numbers allowed): %s\n", choice);
             else
                 printf("Input out of range: %d\n", (int)val);
         }
@@ -345,7 +345,7 @@ char *get_name(const char *text) {
     do {
         name = handle_input(INPUT_LENGTH, text);
         if (check_if_nums(name))
-            printf("Invalid input. Only letters allowed: %s\n", name);
+            printf("Invalid input (only letters allowed): %s\n", name);
         else
             continue_loop = false;
     } while (continue_loop);
@@ -367,7 +367,7 @@ int handle_row_num() {
         }
         else {
             if (*endPtr != '\0') {
-                printf("Invalid input. Only numbers allowed %s\n", row_str);
+                printf("Invalid input (only numbers allowed): %s\n", row_str);
             }
             else {
                 printf("Input out of range: %d\n", (int)val);
@@ -398,7 +398,7 @@ char *handle_seat() {
             }
         }
         else {
-            printf("Invalid input. Only letters allowed.\n");
+            printf("Invalid input. Only letters allowed: %s\n", seat_str);
             free(seat_str);
         }
 
