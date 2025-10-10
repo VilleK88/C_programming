@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include "utils/tools.h"
+#include "utils/file_utils.h"
 
 #define ROW_C 26
 #define SEAT_C 7
@@ -21,11 +22,9 @@ typedef struct passenger_ {
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
 void update_rows(char rows[ROW_C][SEAT_C]);
-FILE *open_file(char *filename, const char *state);
 int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[ROW_C][SEAT_C]);
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
-bool needs_line_break();
 void show_passengers();
 char *handle_input(int length, const char *text);
 bool get_input(char *user_input, int length);
@@ -138,15 +137,6 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
     fclose(file);
 }
 
-FILE *open_file(char *filename, const char *state) {
-    FILE *file;
-    if ((file = fopen(filename, state)) == NULL) {
-        fprintf(stderr, "Error: could not open file %s\n", filename);
-        exit(EXIT_FAILURE);
-    }
-    return file;
-}
-
 int find_seat(const char *string, const char c) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == c) {
@@ -195,7 +185,7 @@ void add_passenger(const char *first_name, const char *last_name, const int row,
     printf("Passenger added\n");
 }
 
-bool needs_line_break() {
+/*bool needs_line_break() {
     FILE *file = open_file("seat_reservations.csv", "rb"); // open file in binary mode
     // check if the file is empty
     const bool empty_file = fseek(file, 0, SEEK_END) == 0 &&  ftell(file) == 0;
@@ -210,7 +200,7 @@ bool needs_line_break() {
     }
     fclose(file);
     return false;
-}
+}*/
 
 void show_passengers() {
     struct passenger_ passengers[156];
