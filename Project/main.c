@@ -398,7 +398,7 @@ char *handle_seat() {
     do {
         seat_str = handle_input(INPUT_LENGTH, "Enter a seat (A-F): ");
         if (!check_if_nums(seat_str)) {
-            *seat_str = toupper(*seat_str);
+            *seat_str = (char)toupper(*seat_str);
             if (check_if_seat_exists(seat_str)) {
                 continue_loop = false;
             }
@@ -478,6 +478,6 @@ bool check_line_commas(const char *line) {
 
     if (comma_count != 3)
         return false;
-    
+
     return true;
 }
