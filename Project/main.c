@@ -241,20 +241,6 @@ void show_passengers() {
             if (comma) {
                 passenger_to_list(passengers, &count, buffer);
             }
-            /*char *token = strtok(buffer, ",");
-            int count = 0;
-            while (token) {
-                token[strcspn(token, "\n")] = '\0';
-                if (count < 2) {
-                    printf("%-32s", token);
-                    count++;
-                }
-                else {
-                    printf("%-7s", token);
-                }
-                token = strtok(NULL, ",");
-            }
-            printf("\n");*/
         }
     }
     fclose(file);
