@@ -40,6 +40,7 @@ void remove_newline(char *user_input);
 void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
+bool no_spaces(const char *string);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -431,7 +432,8 @@ void passenger_to_list(passenger *passengers, int *count, const char *line) {
         char *first_comma = strchr(line, ',');
         *first_comma = '\0';
 
-        if (check_line_length(line, INPUT_LENGTH - 2) && !check_if_nums(line)) {
+        if (check_line_length(line, INPUT_LENGTH - 2) && !check_if_nums(line)
+            & no_spaces(line)) {
             strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
             passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
 
@@ -439,19 +441,22 @@ void passenger_to_list(passenger *passengers, int *count, const char *line) {
             first_comma++;
             char *second_comma = strchr(first_comma, ',');
             *second_comma = '\0';
-            if (check_line_length(first_comma, INPUT_LENGTH - 2) && !check_if_nums(second_comma)) {
+            if (check_line_length(first_comma, INPUT_LENGTH - 2) && !check_if_nums(second_comma)
+                && no_spaces(first_comma)) {
                 strncpy(passengers[*count].last_name, first_comma,sizeof passengers[*count].last_name - 1);
                 passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
 
                 second_comma++;
                 char *third_comma = strchr(second_comma, ',');
                 *third_comma = '\0';
-                if (check_line_length(second_comma, 5) && check_if_nums(second_comma)) {
+                if (check_line_length(second_comma, 5) && check_if_nums(second_comma)
+                    && no_spaces(second_comma)) {
                     passengers[*count].row_num = (int)strtol(second_comma, NULL, 10);
 
                     char *line_after_last_comma = third_comma + 1;
                     line_after_last_comma[strcspn(line_after_last_comma, "\r\n")] = '\0';
-                    if (check_line_length(line_after_last_comma, 5) && !check_if_nums(line_after_last_comma)) {
+                    if (check_line_length(line_after_last_comma, 5) && !check_if_nums(line_after_last_comma)
+                        && no_spaces(line_after_last_comma)) {
                         passengers[*count].row_seat[0] = line_after_last_comma[0];
                         passengers[*count].row_seat[1] = '\0';
 
@@ -484,4 +489,14 @@ bool check_line_length(const char *string, const int maxLen) {
         return true;
 
     return false;
+}
+
+bool no_spaces(const char *string) {
+    const int len = (int)strlen(string);
+    for (int i = 0; i < len; i++) {
+        if (string[i] == ' ')
+            return false;
+    }
+
+    return true;
 }
