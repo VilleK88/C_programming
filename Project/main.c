@@ -38,6 +38,7 @@ char *handle_seat();
 bool check_if_seat_exists(const char * seat_str);
 void remove_newline(char *user_input);
 void passenger_to_list(passenger *passengers, int *count, const char *line);
+bool check_line_commas(const char *line);
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -98,31 +99,33 @@ void update_rows(char rows[ROW_C][SEAT_C]) {
 
     while (fgets(line, sizeof(line), file) != NULL) {
         if (line_is_not_empty(line)) {
-            char *current_line = line;
-            int count = 0;
+            if (check_line_commas(line)) {
+                char *current_line = line;
+                int count = 0;
 
-            // skip first name and last name
-            while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
-                current_line++;
-                count++;
-            }
-
-            // get the row number
-            const int row_num = get_nums_from_a_string(current_line);
-            if (row_num > 0) {
-
-                // get the seat char
-                size_t len = strlen(current_line);
-                while (len > 0 && (current_line[len - 1] == '\n' || current_line[len - 1] == '\r')) {
-                    current_line[--len] = '\0';
+                // skip first name and last name
+                while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
+                    current_line++;
+                    count++;
                 }
-                const char seat_num_char = current_line[len - 1];
 
-                const int row_index = row_num - 1;
-                // get the seat index
-                const int seat_index = find_seat(rows[row_index], seat_num_char);
-                if (seat_index >= 0) {
-                    rows[row_index][seat_index] = 'x';
+                // get the row number
+                const int row_num = get_nums_from_a_string(current_line);
+                if (row_num > 0) {
+
+                    // get the seat char
+                    size_t len = strlen(current_line);
+                    while (len > 0 && (current_line[len - 1] == '\n' || current_line[len - 1] == '\r')) {
+                        current_line[--len] = '\0';
+                    }
+                    const char seat_num_char = current_line[len - 1];
+
+                    const int row_index = row_num - 1;
+                    // get the seat index
+                    const int seat_index = find_seat(rows[row_index], seat_num_char);
+                    if (seat_index >= 0) {
+                        rows[row_index][seat_index] = 'x';
+                    }
                 }
             }
         }
@@ -434,27 +437,47 @@ void remove_newline(char *user_input) {
 }
 
 void passenger_to_list(passenger *passengers, int *count, const char *line) {
-    char *f_name = strchr(line, ',');
-    *f_name = '\0';
 
-    strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
-    passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
 
-    f_name++;
-    char *l_name = strchr(f_name, ',');
-    *l_name = '\0';
-    strncpy(passengers[*count].last_name, f_name,sizeof passengers[*count].last_name - 1);
-    passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
 
-    l_name++;
-    char *r_num = strchr(l_name, ',');
-    *r_num = '\0';
-    passengers[*count].row_num = (int)strtol(l_name, NULL, 10);
+    if (check_line_commas(line)) {
+        char *f_name = strchr(line, ',');
+        *f_name = '\0';
 
-    char *r_seat = r_num + 1;
-    r_seat[strcspn(r_seat, "\r\n")] = '\0';
-    passengers[*count].row_seat[0] = r_seat[0];
-    passengers[*count].row_seat[1] = '\0';
+        strncpy(passengers[*count].first_name, line,sizeof passengers[*count].first_name - 1);
+        passengers[*count].first_name[sizeof passengers[*count].first_name - 1] = '\0';
 
-    (*count)++;
+        f_name++;
+        char *l_name = strchr(f_name, ',');
+        *l_name = '\0';
+        strncpy(passengers[*count].last_name, f_name,sizeof passengers[*count].last_name - 1);
+        passengers[*count].last_name[sizeof passengers[*count].last_name - 1] = '\0';
+
+        l_name++;
+        char *r_num = strchr(l_name, ',');
+        *r_num = '\0';
+        passengers[*count].row_num = (int)strtol(l_name, NULL, 10);
+
+        char *r_seat = r_num + 1;
+        r_seat[strcspn(r_seat, "\r\n")] = '\0';
+        passengers[*count].row_seat[0] = r_seat[0];
+        passengers[*count].row_seat[1] = '\0';
+
+        (*count)++;
+    }
+}
+
+bool check_line_commas(const char *line) {
+    const int len = (int)strlen(line);
+    int comma_count = 0;
+
+    for (int i = 0; i < len; i++) {
+        if (line[i] == ',')
+            comma_count++;
+    }
+
+    if (comma_count != 3)
+        return false;
+    
+    return true;
 }
