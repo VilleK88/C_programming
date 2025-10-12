@@ -76,7 +76,7 @@ bool get_input(char *user_input, const int length) {
     return false;
 }
 
-bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
+bool line_is_not_empty(char buffer[LINE_LENGTH]) {
     if (strcmp(buffer, "\n") != 0 &&
             strcmp(buffer, "\r\n") != 0 &&
             strcmp(buffer, "\0") != 0) {
