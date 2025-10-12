@@ -179,15 +179,35 @@ void show_passengers() {
     }
     fclose(file);
 
+    int longest_first_name = 0;
+    int longest_last_name = 0;
+    for (int i = 0; i < count; i++) {
+        const char *first_name = passengers[i].first_name;
+        const int first_name_len = (int)strlen(first_name);
+        if (first_name_len > longest_first_name)
+            longest_first_name = first_name_len;
+
+        const char *last_name = passengers[i].last_name;
+        const int last_name_len = (int)strlen(last_name);
+        if (last_name_len > longest_last_name)
+            longest_last_name = last_name_len;
+    }
+
+    longest_first_name += 10;
+    longest_last_name += 5;
 
     char *titles[] = {"Firstname", "Lastname", "Row", "Seat"};
-    printf("%-32s %-32s %-7s %-7s\n", titles[0], titles[1], titles[2], titles[3]);
+    //printf("%-32s %-32s %-7s %-7s\n", titles[0], titles[1], titles[2], titles[3]);
+    printf("%-*s %-*s %-7s %-7s\n", longest_first_name, titles[0], longest_last_name, titles[1],
+        titles[2], titles[3]);
 
     qsort(passengers, count, sizeof(passenger), sort_by_first_name);
     qsort(passengers, count, sizeof(passenger), sort_by_last_name);
 
     for (int i = 0; i < count; i++) {
-        printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
-            passengers[i].row_num, passengers[i].row_seat);
+        //printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
+            //passengers[i].row_num, passengers[i].row_seat);
+        printf("%-*s %-*s %-7d %-7s\n", longest_first_name, passengers[i].first_name,
+            longest_last_name, passengers[i].last_name, passengers[i].row_num, passengers[i].row_seat);
     }
 }
