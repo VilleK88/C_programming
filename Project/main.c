@@ -173,7 +173,7 @@ void show_passengers() {
     fgets(buffer, sizeof(buffer), file);
 
     while (fgets(buffer, sizeof(buffer), file)) {
-        if (line_is_not_empty(buffer)) {
+        if (line_is_not_empty(buffer) && count <= PASSENGERS_MAX_SIZE) {
             passenger_to_list(passengers, &count, buffer);
         }
     }
@@ -181,7 +181,7 @@ void show_passengers() {
 
     int longest_first_name = 0;
     int longest_last_name = 0;
-    for (int i = 0; i < count && i < PASSENGERS_MAX_SIZE; i++) {
+    for (int i = 0; i < count; i++) {
         const char *first_name = passengers[i].first_name;
         const int first_name_len = (int)strlen(first_name);
         if (first_name_len > longest_first_name)
