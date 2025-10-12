@@ -164,7 +164,7 @@ void print_rows(char rows[ROW_C][SEAT_C]) {
 }
 
 void show_passengers() {
-    struct passenger_ passengers[PASSENGER_SIZE];
+    struct passenger_ passengers[PASSENGERS_MAX_SIZE];
     int count = 0;
     char buffer[BUFFER_SIZE];
     FILE *file = open_file("seat_reservations.csv", "r");
@@ -181,7 +181,7 @@ void show_passengers() {
 
     int longest_first_name = 0;
     int longest_last_name = 0;
-    for (int i = 0; i < count; i++) {
+    for (int i = 0; i < count && i < PASSENGERS_MAX_SIZE; i++) {
         const char *first_name = passengers[i].first_name;
         const int first_name_len = (int)strlen(first_name);
         if (first_name_len > longest_first_name)
