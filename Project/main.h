@@ -7,4 +7,11 @@
 #define BUFFER_SIZE 200
 #define LINE_LENGTH 100
 
+typedef struct passenger_ {
+    char first_name[32];
+    char last_name[32];
+    int row_num;
+    char row_seat[2];
+} passenger;
+
 #endif

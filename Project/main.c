@@ -5,23 +5,15 @@
 #include <ctype.h>
 #include "main.h"
 #include "utils/tools.h"
-#include "utils/file_utils.h"
+#include "utils/file_handling.h"
 
-typedef struct passenger_ {
-    char first_name[32];
-    char last_name[32];
-    int row_num;
-    char row_seat[2];
-} passenger;
-
-void update_rows(char rows[ROW_C][SEAT_C]);
-int find_seat(const char *string, char c);
-void reserve_a_seat(char rows[ROW_C][SEAT_C]);
-void add_passenger(const char *first_name, const char *last_name, int row, char seat);
-void show_passengers();
-char *handle_input(int length, const char *text);
-bool get_input(char *user_input, int length);
-bool line_is_not_empty(char buffer[BUFFER_SIZE]);
+//int find_seat(const char *string, char c);
+//void reserve_a_seat(char rows[ROW_C][SEAT_C]);
+//void add_passenger(const char *first_name, const char *last_name, int row, char seat);
+//void show_passengers();
+//char *handle_input(int length, const char *text);
+//bool get_input(char *user_input, int length);
+/*bool line_is_not_empty(char buffer[BUFFER_SIZE]);
 int get_choice();
 bool check_if_nums(const char *string);
 char *get_name(const char* text);
@@ -31,7 +23,7 @@ bool check_if_seat_exists(const char * seat_str);
 void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
-bool no_spaces(const char *string);
+bool no_spaces(const char *string);*/
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -64,47 +56,7 @@ int main() {
     return 0;
 }
 
-void update_rows(char rows[ROW_C][SEAT_C]) {
-    char line[LINE_LENGTH];
-    FILE *file = open_file("seat_reservations.csv", "r");
-
-    while (fgets(line, sizeof(line), file) != NULL) {
-        if (line_is_not_empty(line)) {
-            if (check_line_commas(line)) {
-                char *current_line = line;
-                int count = 0;
-
-                // skip first name and last name
-                while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
-                    current_line++;
-                    count++;
-                }
-
-                // get the row number
-                const int row_num = get_nums_from_a_string(current_line);
-                if (row_num > 0) {
-
-                    // get the seat char
-                    size_t len = strlen(current_line);
-                    while (len > 0 && (current_line[len - 1] == '\n' || current_line[len - 1] == '\r')) {
-                        current_line[--len] = '\0';
-                    }
-                    const char seat_num_char = current_line[len - 1];
-
-                    const int row_index = row_num - 1;
-                    // get the seat index
-                    const int seat_index = find_seat(rows[row_index], seat_num_char);
-                    if (seat_index >= 0) {
-                        rows[row_index][seat_index] = 'x';
-                    }
-                }
-            }
-        }
-    }
-    fclose(file);
-}
-
-int find_seat(const char *string, const char c) {
+/*int find_seat(const char *string, const char c) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == c) {
             return i;
@@ -139,10 +91,10 @@ void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
         free(last_name);
         free(seat_str);
     } while (continue_loop);
-}
+}*/
 
 
-void add_passenger(const char *first_name, const char *last_name, const int row, const char seat) {
+/*void add_passenger(const char *first_name, const char *last_name, const int row, const char seat) {
     FILE *file = fopen("seat_reservations.csv", "a");
     if (needs_line_break()) {
         fputc('\n', file);
@@ -175,9 +127,9 @@ void show_passengers() {
         printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
             passengers[i].row_num, passengers[i].row_seat);
     }
-}
+}*/
 
-char *handle_input(const int length, const char *text) {
+/*char *handle_input(const int length, const char *text) {
     char *string = malloc(length);
     if (string) {
         bool stop_loop = false;
@@ -190,9 +142,9 @@ char *handle_input(const int length, const char *text) {
 
     printf("Memory allocation failed.\n");
     exit(EXIT_FAILURE);
-}
+}*/
 
-bool get_input(char *user_input, const int length) {
+/*bool get_input(char *user_input, const int length) {
     if(fgets(user_input, length, stdin)) {
         if (strchr(user_input, '\n') == NULL) {
             int c = 0;
@@ -210,9 +162,9 @@ bool get_input(char *user_input, const int length) {
     }
 
     return false;
-}
+}*/
 
-bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
+/*bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
     if (strcmp(buffer, "\n") != 0 &&
             strcmp(buffer, "\r\n") != 0 &&
             strcmp(buffer, "\0") != 0) {
@@ -413,4 +365,4 @@ bool no_spaces(const char *string) {
     }
 
     return true;
-}
+}*/
