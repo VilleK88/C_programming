@@ -104,7 +104,7 @@ char *get_name(const char *text) {
 
     do {
         name = handle_input(INPUT_LENGTH, text);
-        if (check_if_nums(name))
+        if (check_if_nums(name) || check_if_invalid_chars(name))
             printf("Invalid input (only letters allowed): %s\n", name);
         else
             continue_loop = false;
@@ -260,4 +260,22 @@ int sort_by_first_name(const void *a, const void *b) {
 
 int sort_by_last_name(const void *a, const void *b) {
     return strcmp(((struct passenger_*)a)->last_name, ((struct passenger_*)b)->last_name);
+}
+
+bool check_if_invalid_chars(const char *string) {
+    const char invalid_chars[] = {
+        '!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.',
+        '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '`', '{',
+        '|', '}', '~' };
+
+    const int len = (int)strlen(string);
+    const int invalid_len = (int)strlen(invalid_chars);
+    for (int i = 0; i < len; i++) {
+        for (int j = 0; j < invalid_len; j++) {
+            if (string[i] == invalid_chars[j])
+                return true;
+        }
+    }
+
+    return false;
 }

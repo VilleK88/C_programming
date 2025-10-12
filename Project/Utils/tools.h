@@ -20,5 +20,6 @@ bool check_line_length(const char *string, int maxLen);
 bool no_spaces(const char *string);
 int sort_by_first_name(const void *a, const void *b);
 int sort_by_last_name(const void *a, const void *b);
+bool check_if_invalid_chars(const char *string);
 
 #endif
