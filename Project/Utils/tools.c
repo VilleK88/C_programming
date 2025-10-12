@@ -3,6 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+
 #include "tools.h"
 #include "../main.h"
 #include "file_handling.h"
@@ -30,15 +31,6 @@ int get_nums_from_a_string(const char *string) {
 
     free(num_char);
     return result;
-}
-
-void initialize_rows(char rows[ROW_C][SEAT_C]) {
-    for (int i = 0; i < ROW_C; i++) {
-        for (int j = 0; j < SEAT_C; j++) {
-            const char seats[SEAT_C] = {'A', 'B', 'C', 'D', 'E', 'F', '\0'};
-            rows[i][j] = seats[j];
-        }
-    }
 }
 
 void print_rows(char rows[ROW_C][SEAT_C]) {
@@ -138,32 +130,6 @@ bool line_is_not_empty(char buffer[BUFFER_SIZE]) {
     }
 
     return false;
-}
-
-int get_choice() {
-    long int value = 0;
-    bool continue_loop = true;
-
-    do {
-        printf("1) reserve a seat\n2) seat map\n3) show passengers\n4) exit\n");
-        char *choice = handle_input(34, "Enter choice: ");
-        char *endPtr;
-        const long int val = strtol(choice, &endPtr, 10);
-        if (*endPtr == '\0' && val >= 1 && val <= 4) {
-            value = val;
-            continue_loop = false;
-        }
-        else {
-            if (*endPtr != '\0')
-                printf("Invalid input (only numbers allowed): %s\n", choice);
-            else
-                printf("Input out of range: %d\n", (int)val);
-        }
-
-        free(choice);
-    } while (continue_loop);
-
-    return value;
 }
 
 bool check_if_nums(const char *string) {

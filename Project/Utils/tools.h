@@ -5,14 +5,12 @@
 
 void remove_newline(char *user_input);
 int get_nums_from_a_string(const char *string);
-void initialize_rows(char rows[ROW_C][SEAT_C]);
 void print_rows(char rows[ROW_C][SEAT_C]);
 int find_seat(const char *string, char c);
 void reserve_a_seat(char rows[ROW_C][SEAT_C]);
-char *handle_input(const int length, const char *text);
-bool get_input(char *user_input, const int length);
+char *handle_input(int length, const char *text);
+bool get_input(char *user_input, int length);
 bool line_is_not_empty(char buffer[BUFFER_SIZE]);
-int get_choice();
 bool check_if_nums(const char *string);
 char *get_name(const char* text);
 int handle_row_num();
@@ -22,4 +20,5 @@ void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
 bool no_spaces(const char *string);
+
 #endif

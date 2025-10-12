@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
+
 #include "../main.h"
 #include "tools.h"
 
@@ -30,46 +30,6 @@ bool needs_line_break() {
     }
     fclose(file);
     return false;
-}
-
-void update_rows(char rows[ROW_C][SEAT_C]) {
-    char line[LINE_LENGTH];
-    FILE *file = open_file("seat_reservations.csv", "r");
-
-    while (fgets(line, sizeof(line), file) != NULL) {
-        if (line_is_not_empty(line)) {
-            if (check_line_commas(line)) {
-                char *current_line = line;
-                int count = 0;
-
-                // skip first name and last name
-                while (count < 2 && (current_line = strchr(current_line, ',')) != NULL) {
-                    current_line++;
-                    count++;
-                }
-
-                // get the row number
-                const int row_num = get_nums_from_a_string(current_line);
-                if (row_num > 0) {
-
-                    // get the seat char
-                    size_t len = strlen(current_line);
-                    while (len > 0 && (current_line[len - 1] == '\n' || current_line[len - 1] == '\r')) {
-                        current_line[--len] = '\0';
-                    }
-                    const char seat_num_char = current_line[len - 1];
-
-                    const int row_index = row_num - 1;
-                    // get the seat index
-                    const int seat_index = find_seat(rows[row_index], seat_num_char);
-                    if (seat_index >= 0) {
-                        rows[row_index][seat_index] = 'x';
-                    }
-                }
-            }
-        }
-    }
-    fclose(file);
 }
 
 void add_passenger(const char *first_name, const char *last_name, const int row, const char seat) {
