@@ -3,9 +3,6 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "../main.h"
-#include "tools.h"
-
 FILE *open_file(char *filename, const char *state) {
     FILE *file;
     if ((file = fopen(filename, state)) == NULL) {
