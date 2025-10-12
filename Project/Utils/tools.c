@@ -253,3 +253,11 @@ bool no_spaces(const char *string) {
 
     return true;
 }
+
+int sort_by_first_name(const void *a, const void *b) {
+    return strcmp(((struct passenger_*)a)->first_name, ((struct passenger_*)b)->first_name);
+}
+
+int sort_by_last_name(const void *a, const void *b) {
+    return strcmp(((struct passenger_*)a)->last_name, ((struct passenger_*)b)->last_name);
+}

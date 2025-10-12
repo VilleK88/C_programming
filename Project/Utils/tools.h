@@ -18,5 +18,7 @@ void passenger_to_list(passenger *passengers, int *count, const char *line);
 bool check_line_commas(const char *line);
 bool check_line_length(const char *string, int maxLen);
 bool no_spaces(const char *string);
+int sort_by_first_name(const void *a, const void *b);
+int sort_by_last_name(const void *a, const void *b);
 
 #endif
