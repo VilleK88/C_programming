@@ -3,10 +3,10 @@
 
 #define ROW_C 26
 #define SEAT_C 7
+#define PASSENGERS_MAX_SIZE ROW_C * (SEAT_C - 1)
 #define INPUT_LENGTH 100
 #define BUFFER_SIZE 200
 #define LINE_LENGTH 100
-#define PASSENGERS_MAX_SIZE ROW_C * (SEAT_C - 1)
 
 typedef struct passenger_ {
     char first_name[100];
