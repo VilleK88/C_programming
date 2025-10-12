@@ -5,9 +5,7 @@
 
 void remove_newline(char *user_input);
 int get_nums_from_a_string(const char *string);
-void print_rows(char rows[ROW_C][SEAT_C]);
 int find_seat(const char *string, char c);
-void reserve_a_seat(char rows[ROW_C][SEAT_C]);
 char *handle_input(int length, const char *text);
 bool get_input(char *user_input, int length);
 bool line_is_not_empty(char buffer[BUFFER_SIZE]);

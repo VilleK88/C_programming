@@ -7,6 +7,5 @@
 FILE *open_file(char *filename, const char *state);
 bool needs_line_break();
 void add_passenger(const char *first_name, const char *last_name, int row, char seat);
-void show_passengers();
 
 #endif

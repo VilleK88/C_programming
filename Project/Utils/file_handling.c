@@ -41,28 +41,3 @@ void add_passenger(const char *first_name, const char *last_name, const int row,
     fclose(file);
     printf("Passenger added\n");
 }
-
-void show_passengers() {
-    struct passenger_ passengers[156];
-    int count = 0;
-    char buffer[BUFFER_SIZE];
-    FILE *file = open_file("seat_reservations.csv", "r");
-
-    // skip the first line
-    fgets(buffer, sizeof(buffer), file);
-
-    while (fgets(buffer, sizeof(buffer), file)) {
-        if (line_is_not_empty(buffer)) {
-            passenger_to_list(passengers, &count, buffer);
-        }
-    }
-    fclose(file);
-
-
-    char *titles[] = {"Firstname", "Lastname", "Row", "Seat"};
-    printf("%-32s %-32s %-7s %-7s\n", titles[0], titles[1], titles[2], titles[3]);
-    for (int i = 0; i < count; i++) {
-        printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
-            passengers[i].row_num, passengers[i].row_seat);
-    }
-}

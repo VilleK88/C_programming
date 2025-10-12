@@ -8,6 +8,9 @@
 void initialize_rows(char rows[ROW_C][SEAT_C]);
 void update_rows(char rows[ROW_C][SEAT_C]);
 int get_choice();
+void reserve_a_seat(char rows[ROW_C][SEAT_C]);
+void print_rows(char rows[ROW_C][SEAT_C]);
+void show_passengers();
 
 int main() {
     char rows[ROW_C][SEAT_C];
@@ -113,4 +116,74 @@ int get_choice() {
     } while (continue_loop);
 
     return value;
+}
+
+void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
+    bool continue_loop = true;
+
+    do {
+        char *first_name = get_name("Enter first name: ");
+        char *last_name = get_name("Enter last name: ");
+
+        print_rows(rows);
+
+        const int row_num = handle_row_num();
+        char *seat_str = handle_seat();
+
+        // converts seat letter to array index
+        const int seat_int = *seat_str - 'A';
+        if (rows[row_num-1][seat_int] != 'x') {
+            add_passenger(first_name, last_name, row_num, *seat_str);
+            continue_loop = false;
+        }
+        else {
+            printf("Seat already taken.\n");
+        }
+
+        free(first_name);
+        free(last_name);
+        free(seat_str);
+    } while (continue_loop);
+}
+
+void print_rows(char rows[ROW_C][SEAT_C]) {
+    for (int i = 0; i < ROW_C; i++) {
+
+        printf("%2d ", i+1);
+        for (int j = 0; j < 3; j++) {
+            printf("%c", rows[i][j]);
+        }
+
+        printf("   ");
+        for (int j = 3; j < SEAT_C; j++) {
+            printf("%c", rows[i][j]);
+        }
+
+        printf("\n");
+    }
+}
+
+void show_passengers() {
+    struct passenger_ passengers[156];
+    int count = 0;
+    char buffer[BUFFER_SIZE];
+    FILE *file = open_file("seat_reservations.csv", "r");
+
+    // skip the first line
+    fgets(buffer, sizeof(buffer), file);
+
+    while (fgets(buffer, sizeof(buffer), file)) {
+        if (line_is_not_empty(buffer)) {
+            passenger_to_list(passengers, &count, buffer);
+        }
+    }
+    fclose(file);
+
+
+    char *titles[] = {"Firstname", "Lastname", "Row", "Seat"};
+    printf("%-32s %-32s %-7s %-7s\n", titles[0], titles[1], titles[2], titles[3]);
+    for (int i = 0; i < count; i++) {
+        printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
+            passengers[i].row_num, passengers[i].row_seat);
+    }
 }

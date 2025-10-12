@@ -33,23 +33,6 @@ int get_nums_from_a_string(const char *string) {
     return result;
 }
 
-void print_rows(char rows[ROW_C][SEAT_C]) {
-    for (int i = 0; i < ROW_C; i++) {
-
-        printf("%2d ", i+1);
-        for (int j = 0; j < 3; j++) {
-            printf("%c", rows[i][j]);
-        }
-
-        printf("   ");
-        for (int j = 3; j < SEAT_C; j++) {
-            printf("%c", rows[i][j]);
-        }
-
-        printf("\n");
-    }
-}
-
 int find_seat(const char *string, const char c) {
     for (int i = 0; string[i] != '\0'; i++) {
         if (string[i] == c) {
@@ -57,34 +40,6 @@ int find_seat(const char *string, const char c) {
         }
     }
     return -1;
-}
-
-void reserve_a_seat(char rows[ROW_C][SEAT_C]) {
-    bool continue_loop = true;
-
-    do {
-        char *first_name = get_name("Enter first name: ");
-        char *last_name = get_name("Enter last name: ");
-
-        print_rows(rows);
-
-        const int row_num = handle_row_num();
-        char *seat_str = handle_seat();
-
-        // converts seat letter to array index
-        const int seat_int = *seat_str - 'A';
-        if (rows[row_num-1][seat_int] != 'x') {
-            add_passenger(first_name, last_name, row_num, *seat_str);
-            continue_loop = false;
-        }
-        else {
-            printf("Seat already taken.\n");
-        }
-
-        free(first_name);
-        free(last_name);
-        free(seat_str);
-    } while (continue_loop);
 }
 
 char *handle_input(const int length, const char *text) {
