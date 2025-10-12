@@ -6,6 +6,7 @@
 #define INPUT_LENGTH 100
 #define BUFFER_SIZE 200
 #define LINE_LENGTH 100
+#define PASSENGER_SIZE ROW_C * (SEAT_C - 1)
 
 typedef struct passenger_ {
     char first_name[100];

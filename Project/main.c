@@ -164,7 +164,7 @@ void print_rows(char rows[ROW_C][SEAT_C]) {
 }
 
 void show_passengers() {
-    struct passenger_ passengers[156];
+    struct passenger_ passengers[PASSENGER_SIZE];
     int count = 0;
     char buffer[BUFFER_SIZE];
     FILE *file = open_file("seat_reservations.csv", "r");
