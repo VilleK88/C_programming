@@ -8,8 +8,8 @@
 #define LINE_LENGTH 100
 
 typedef struct passenger_ {
-    char first_name[32];
-    char last_name[32];
+    char first_name[100];
+    char last_name[100];
     int row_num;
     char row_seat[2];
 } passenger;
