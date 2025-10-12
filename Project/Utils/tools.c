@@ -6,7 +6,6 @@
 
 #include "tools.h"
 #include "../main.h"
-#include "file_handling.h"
 
 void remove_newline(char *user_input) {
     if (user_input[strlen(user_input) - 1] == '\n') {
