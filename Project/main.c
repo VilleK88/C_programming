@@ -185,7 +185,7 @@ void show_passengers() {
 
     qsort(passengers, count, sizeof(passenger), sort_by_first_name);
     qsort(passengers, count, sizeof(passenger), sort_by_last_name);
-    
+
     for (int i = 0; i < count; i++) {
         printf("%-32s %-32s %-7d %-7s\n", passengers[i].first_name, passengers[i].last_name,
             passengers[i].row_num, passengers[i].row_seat);
