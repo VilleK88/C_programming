@@ -1,12 +1,10 @@
 #include <stdio.h>
-#include <stdlib.h>
-#include <stdbool.h>
 
 #define MAX_LEN 32
 
 typedef struct student_{ char name[MAX_LEN]; int group; int id; } student;
 int move(student *source, int group, student *target, int size);
-void print_array(student *array, int size);
+void print_array(student *array);
 
 int main() {
     student source[] = {
@@ -27,27 +25,57 @@ int main() {
         {"Nick Cave",      5, 2015002},
         {"", 0, 0}
     };
-    int size = 15;
-    student target[15];
+    //int size = 15;
+    student target[11];
     target[0].id = 0;
+    int target_size = 11;
 
-    int moved_elements = move(source, 3, target, size);
+    printf("Initial array:\n");
+    print_array(source);
+    //printf("\n\n");
 
-    print_array(source, size - moved_elements);
-    printf("\nTarget array:\n");
-    print_array(target, moved_elements);
+    int moved_elements = move(source, 3, target, target_size);
+    printf("\n\nMoved %d elements\n\n", moved_elements);
+    print_array(source);
+    printf("\ntarget array:\n");
+    print_array(target);
+
+    moved_elements = move(source, 5, target, target_size);
+    printf("\n\nMoved %d elements\n\n", moved_elements);
+    print_array(source);
+    printf("\ntarget array:\n");
+    print_array(target);
+
+    moved_elements = move(source, 2, target, target_size);
+    printf("\n\nMoved %d elements\n\n", moved_elements);
+    print_array(source);
+    printf("\ntarget array:\n");
+    print_array(target);
+
+    moved_elements = move(source, 1, target, target_size);
+    printf("\n\nMoved %d elements\n\n", moved_elements);
+    print_array(source);
+    printf("\ntarget array:\n");
+    print_array(target);
+
+    moved_elements = move(source, 4, target, target_size);
+    printf("\n\nMoved %d elements\n\n", moved_elements);
+    print_array(source);
+    printf("\ntarget array:\n");
+    print_array(target);
 
     return 0;
 }
 
 int move(student *source, int group, student *target, int size) {
     int group_count = 0;
-    int index;
+    int index = 0;
     int target_index = 0;
 
     while (target_index < size && target[target_index].id != 0) {
         target_index++;
     }
+
     if (target_index >= size - 1)
         return 0;
 
@@ -57,7 +85,6 @@ int move(student *source, int group, student *target, int size) {
         source_len++;
         source_index++;
     }
-    int new_size = source_len;
 
     // count how many students are included in the group
     for (int i = 0; i < source_len; i++) {
@@ -66,47 +93,43 @@ int move(student *source, int group, student *target, int size) {
         }
     }
 
-    if (group_count > 0) {
-        int moved_items = 0;
+    int moved_items = 0;
 
-        do {
-
-            if (target_index >= size - 1)
+    do {
+        // find the student index and send the student to the target array
+        for (int i = 0; i < source_len; i++) {
+            if (source[i].group == group && target_index < size - 1) {
+                index = i;
+                target[target_index++] = source[i];
+                moved_items++;
                 break;
-
-            // find the student index and send the student to the target array
-            for (int i = 0; i < new_size; i++) {
-                if (source[i].group == group) {
-                    index = i;
-                    target[target_index++] = source[i];
-                    moved_items++;
-                    break;
-                }
             }
+        }
 
-            // move the elements to the left
-            while (source[index].id != 0) {
-                source[index] = source[index + 1];
-                index++;
-            }
+        // move the elements to the left
+        while (source[index].id != 0) {
+            source[index] = source[index + 1];
+            index++;
+        }
 
-            group_count--;
-            new_size--;
-        } while (group_count > 0 && target_index < size - 1);
+        group_count--;
+        source_len--;
+    } while (group_count > 0);
 
-        target[target_index].id = 0;
-        source[new_size].id = 0;
+    target[target_index].id = 0;
+    source[source_len].id = 0;
 
+    if (target_index <= size - 1)
         return moved_items;
-    }
+
     return 0;
 }
 
-void print_array(student *array, int size) {
+void print_array(student *array) {
     char *titles[] = {"Name", "Group", "ID"};
     printf("%-20s %-7s %s\n", titles[0], titles[1], titles[2]);
 
-    for (int i = 0; i < size; i++) {
+    for (int i = 0; array[i].id != 0; i++) {
         printf("%-20s %-7d %d\n", array[i].name, array[i].group, array[i].id);
     }
 }
