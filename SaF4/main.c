@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+#include <stdbool.h>
 
 #define DOT '.'
 #define DASH '-'
@@ -48,9 +51,37 @@ const MorseCode ITU_morse[] = {
 void print_morse(const char *str);
 
 int main() {
+    //const char *str = "I love C";
+    //const char *str = "odd \num83rs";
+    const char *str = "S#it happens";
+    print_morse(str);
 
+    return 0;
 }
 
 void print_morse(const char *str) {
+    const int len = (int)strlen(str);
 
+    for (int i = 0; i < len; i++) {
+        const char ch = toupper(str[i]);
+        bool value_found;
+
+        if (ch == ' ' || ch == '\n')
+            printf("\n\n");
+
+
+        for (int j = 0; j < 37; j++) {
+            if (ch == ITU_morse[j].symbol) {
+                printf("%s    ", ITU_morse[j].code);
+                value_found = true;
+                break;
+            }
+            value_found = false;
+        }
+
+        if (!value_found && ch != ' ' && ch != '\n') {
+            printf("-..-    ");
+            value_found = true;
+        }
+    }
 }
