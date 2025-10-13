@@ -99,16 +99,21 @@ int move(student *source, int group, student *target, int size) {
     int moved_items = 0;
 
     do {
+        int found = 0;
         // find the student index and send the student to the target array
         for (int i = 0; i < source_len; i++) {
             if (source[i].group == group && target_index < size - 1) {
                 index = i;
-                printf("student index: %d\n", index);
+                //printf("student index: %d\n", index);
                 target[target_index++] = source[i];
                 moved_items++;
+                found = 1;
                 break;
             }
         }
+
+        if (!found)
+            break;
 
         // move the elements to the left
         while (source[index].id != 0 && target_index <= size - 1) {
