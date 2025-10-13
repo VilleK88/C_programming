@@ -10,7 +10,7 @@ int main() {
     student source[] = {
         {"Ian McShane",    1, 2019001},
         {"John Woo",       3, 2019007},
-        {"Nick Name",      3, 2019019},
+        {"Nick Cave",      3, 2019019},
         {"Molly Westwood", 2, 2019021},
         {"Peter Thornton", 2, 2019031},
         {"Sammy Davis",    3, 2019671},
@@ -26,13 +26,12 @@ int main() {
         {"", 0, 0}
     };
     //int size = 15;
-    student target[11];
+    student target[12];
     target[0].id = 0;
-    int target_size = 11;
+    int target_size = 12;
 
     printf("Initial array:\n");
     print_array(source);
-    //printf("\n\n");
 
     int moved_elements = move(source, 3, target, target_size);
     printf("\n\nMoved %d elements\n\n", moved_elements);
@@ -107,14 +106,14 @@ int move(student *source, int group, student *target, int size) {
         }
 
         // move the elements to the left
-        while (source[index].id != 0) {
+        while (source[index].id != 0 && target_index < size - 1) {
             source[index] = source[index + 1];
             index++;
         }
 
         group_count--;
         source_len--;
-    } while (group_count > 0);
+    } while (group_count > 0 && target_index < size - 1);
 
     target[target_index].id = 0;
     source[source_len].id = 0;
