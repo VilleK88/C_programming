@@ -25,10 +25,10 @@ int main() {
         {"Nick Cave",      5, 2015002},
         {"", 0, 0}
     };
-    //int size = 15;
-    student target[13];
+
+    int target_size = 12;
+    student target[target_size];
     target[0].id = 0;
-    int target_size = 13;
 
     printf("Initial array:\n");
     print_array(source);
@@ -71,10 +71,13 @@ int move(student *source, int group, student *target, int size) {
     int index = 0;
     int target_index = 0;
 
+    // counts target array's current empty index
     while (target_index < size && target[target_index].id != 0) {
         target_index++;
     }
+    printf("Debug target_index: %d\n", target_index);
 
+    // counts source array's length
     int source_index = 0;
     int source_len = 0;
     while (source[source_index].id != 0) {
@@ -89,7 +92,7 @@ int move(student *source, int group, student *target, int size) {
         }
     }
 
-    if (group_count + target_index >= size - 1)
+    if (group_count + target_index > size - 1)
         return 0;
 
     int moved_items = 0;
