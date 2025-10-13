@@ -75,7 +75,6 @@ int move(student *source, int group, student *target, int size) {
     while (target_index < size && target[target_index].id != 0) {
         target_index++;
     }
-    printf("Debug target_index: %d\n", target_index);
 
     // counts source array's length
     int source_index = 0;
@@ -92,6 +91,10 @@ int move(student *source, int group, student *target, int size) {
         }
     }
 
+    //printf("Size - 1: %d\n", size - 1);
+    //printf("Target index: %d\n", target_index);
+    // if group count + current target index is larger than
+    // target array's size - 1 return 0
     if (group_count + target_index > size - 1)
         return 0;
 
@@ -100,7 +103,7 @@ int move(student *source, int group, student *target, int size) {
     do {
         // find the student index and send the student to the target array
         for (int i = 0; i < source_len; i++) {
-            if (source[i].group == group && target_index < size - 1) {
+            if (source[i].group == group && group_count + target_index < size - 1) {
                 index = i;
                 target[target_index++] = source[i];
                 moved_items++;
