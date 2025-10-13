@@ -26,7 +26,7 @@ int main() {
         {"", 0, 0}
     };
 
-    int target_size = 12;
+    int target_size = 11;
     student target[target_size];
     target[0].id = 0;
 
@@ -91,8 +91,6 @@ int move(student *source, int group, student *target, int size) {
         }
     }
 
-    //printf("Size - 1: %d\n", size - 1);
-    //printf("Target index: %d\n", target_index);
     // if group count + current target index is larger than
     // target array's size - 1 return 0
     if (group_count + target_index > size - 1)
@@ -103,8 +101,9 @@ int move(student *source, int group, student *target, int size) {
     do {
         // find the student index and send the student to the target array
         for (int i = 0; i < source_len; i++) {
-            if (source[i].group == group && group_count + target_index < size - 1) {
+            if (source[i].group == group && target_index < size - 1) {
                 index = i;
+                printf("student index: %d\n", index);
                 target[target_index++] = source[i];
                 moved_items++;
                 break;
@@ -112,14 +111,14 @@ int move(student *source, int group, student *target, int size) {
         }
 
         // move the elements to the left
-        while (source[index].id != 0 && target_index < size - 1) {
+        while (source[index].id != 0 && target_index <= size - 1) {
             source[index] = source[index + 1];
             index++;
         }
 
         group_count--;
         source_len--;
-    } while (group_count > 0 && target_index < size - 1);
+    } while (group_count > 0 && group_count + target_index <= size - 1);
 
     target[target_index].id = 0;
     source[source_len].id = 0;
