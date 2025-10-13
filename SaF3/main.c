@@ -26,9 +26,9 @@ int main() {
         {"", 0, 0}
     };
     //int size = 15;
-    student target[12];
+    student target[13];
     target[0].id = 0;
-    int target_size = 12;
+    int target_size = 13;
 
     printf("Initial array:\n");
     print_array(source);
@@ -75,9 +75,6 @@ int move(student *source, int group, student *target, int size) {
         target_index++;
     }
 
-    if (target_index >= size - 1)
-        return 0;
-
     int source_index = 0;
     int source_len = 0;
     while (source[source_index].id != 0) {
@@ -91,6 +88,9 @@ int move(student *source, int group, student *target, int size) {
             group_count++;
         }
     }
+
+    if (group_count + target_index >= size - 1)
+        return 0;
 
     int moved_items = 0;
 
