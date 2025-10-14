@@ -13,10 +13,16 @@ bool binary_parser(const char *str, unsigned int *pu);
 int digit_counter(unsigned int nr);
 
 int main() {
-    char *str = "  0b00000110";
-    unsigned int *pu = 0;
+    //char *str = "  0b00000110";
+    //unsigned int *pu = 0;
+    //binary_parser(str, pu);
 
-    binary_parser(str, pu);
+    char *str = "0b1001";
+    unsigned int val = 0;
+    if (binary_parser(str, &val)){
+        printf("Decimal: %u\nHex: %08X\nHex digits needed: %d", val, val, digit_counter(val));
+    }
+    else printf("Failed to parse binary\n");
 
     return 0;
 }
@@ -36,11 +42,9 @@ bool binary_parser(const char *str, unsigned int *pu) {
             char binary_code[len-1];
             binary_code[len-2] = '\0';
 
-            //printf("p len: %d\n", len);
             for (int i = 2; i < len; i++) {
-                if (isdigit(p[i])) {
+                if (p[i] == '0' || p[i] == '1') {
                     binary_code[i-2] = p[i];
-                    //printf("p: %c\n", p[i]);
                 }
             }
 
@@ -49,19 +53,20 @@ bool binary_parser(const char *str, unsigned int *pu) {
             const int bi_len = (int)strlen(binary_code);
             for (int i = bi_len-1; i >= 0; i--) {
                 const int bit = binary_code[i] - '0';
-                printf("%d\n", bit);
                 result += bit << potence;
-                //printf("Result during loop: %d\n", result);
                 potence += 1;
             }
 
-            printf("Result: %d\n", result);
+            *pu = result;
+            return true;
         }
+
+        return false;
     }
 
     return false;
 }
 
 int digit_counter(unsigned int nr) {
-    
+
 }
