@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <ctype.h>
-#include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
 // & = AND
@@ -13,12 +12,6 @@ bool binary_parser(const char *str, unsigned int *pu);
 int digit_counter(unsigned int nr);
 
 int main() {
-    /*char *str = "0b1001";
-    unsigned int val = 0;
-    if (binary_parser(str, &val)){
-        printf("Decimal: %u\nHex: %08X\nHex digits needed: %d", val, val, digit_counter(val));
-    }
-    else printf("Failed to parse binary\n");*/
     char *str = "0b101yogurt";
     unsigned int val = 0;
     if (binary_parser(str, &val)){
@@ -32,7 +25,6 @@ int main() {
 bool binary_parser(const char *str, unsigned int *pu) {
     if (str != NULL) {
         const char *p = str;
-
         while (*p && isspace(*p)) {
             p++;
         }
@@ -40,27 +32,25 @@ bool binary_parser(const char *str, unsigned int *pu) {
         const char *prefix = p + 0;
 
         if (strncmp(prefix, "0b", 2) == 0) {
-            const int len = (int)strlen(p);
-            char binary_code[len-1];
-            binary_code[len-2] = '\0';
+            p += 2;
 
-            for (int i = 2; i < len; i++) {
-                if (p[i] == '0' || p[i] == '1') {
-                    binary_code[i-2] = p[i];
+            const char *bits = p;
+            while (*bits == '0' || *bits == '1') {
+                bits++;
+            }
+
+            const int bits_len = (int)(bits - p);
+
+            if (bits_len > 0) {
+                unsigned int result = 0;
+                for (int i = 0; i < bits_len; i++) {
+                    const int bit = p[i] - '0';
+                    result = result << 1 | (unsigned)bit;
                 }
-            }
 
-            int result = 0;
-            int potence = 0;
-            const int bi_len = (int)strlen(binary_code);
-            for (int i = bi_len-1; i >= 0; i--) {
-                const int bit = binary_code[i] - '0';
-                result += bit << potence;
-                potence += 1;
+                *pu = result;
+                return true;
             }
-
-            *pu = result;
-            return true;
         }
 
         return false;
