@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_LEN 32
@@ -46,7 +47,7 @@ int main() {
     return 0;
 }
 
-/*void sort_students(student *students, int count, sort_order sb) {
+void sort_students(student *students, int count, sort_order sb) {
     int in_count = 0;
     if (count <= 0) {
         for (int i = 0; students[i].id != 0; i++) {
@@ -69,7 +70,7 @@ int main() {
         default:
             break;
     }
-}*/
+}
 
 int sort_by_group(const void *a, const void *b) {
     const student *sa = a;
@@ -100,98 +101,5 @@ void print_students(const student *students) {
     for (int i = 0; students[i].id != 0; i++) {
         student item = students[i];
         printf("%-15s %-15d %d\n", item.name, item.group, item.id);
-    }
-}
-
-void sort_students(student *students, int count, sort_order sb) {
-    if (count <= 0) {
-        count = 0;
-        while (students[count].id != 0) {
-            count++;
-        }
-
-        
-        for (int i = 0; i < count - 1; ++i) {
-            int min = i;
-            for (int j = i + 1; j < count; ++j) {
-                int take = 0;
-
-                switch (sb) {
-                    case byGroup:
-                        take = students[j].group < students[min].group;
-                        break;
-
-                    case byFirstName:
-                        take = strcmp(students[j].name, students[min].name) < 0;
-                        break;
-
-                    case byLastName: {
-                        const char *aj = strrchr(students[j].name, ' ');
-                        const char *am = strrchr(students[min].name, ' ');
-                        aj = aj ? aj + 1 : students[j].name;
-                        am = am ? am + 1 : students[min].name;
-                        take = strcmp(aj, am) < 0;
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-
-                if (take)
-                    min = j;
-            }
-
-            if (sb == byGroup) {
-                student key = students[min];
-                for (int k = min; k > i; --k)
-                    students[k] = students[k - 1];
-                students[i] = key;
-            } else {
-                student tmp = students[i];
-                students[i] = students[min];
-                students[min] = tmp;
-            }
-        }
-
-    }
-    else {
-        for (int i = 0; i < count - 1; ++i) {
-            int min = i;
-            for (int j = i + 1; j < count; ++j) {
-                int take = 0;
-
-                switch (sb) {
-                    case byGroup:
-                        take = students[j].group < students[min].group;
-                        break;
-
-                    case byFirstName:
-                        take = strcmp(students[j].name, students[min].name) < 0;
-                        break;
-
-                    case byLastName: {
-                        const char *aj = strrchr(students[j].name, ' ');
-                        const char *am = strrchr(students[min].name, ' ');
-                        aj = aj ? aj + 1 : students[j].name;
-                        am = am ? am + 1 : students[min].name;
-                        take = strcmp(aj, am) < 0;
-                        break;
-                    }
-
-                    default:
-                        break;
-                }
-
-                if (take)
-                    min = j;
-            }
-
-            if (min != i) {
-                student tmp = students[i];
-                students[i] = students[min];
-                students[min] = tmp;
-            }
-        }
     }
 }
