@@ -68,5 +68,11 @@ bool binary_parser(const char *str, unsigned int *pu) {
 }
 
 int digit_counter(unsigned int nr) {
+    int d = 0;
 
+    do {
+        d++; nr >>= 4;
+    } while (nr);
+
+    return d;
 }
