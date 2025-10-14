@@ -13,11 +13,13 @@ bool binary_parser(const char *str, unsigned int *pu);
 int digit_counter(unsigned int nr);
 
 int main() {
-    //char *str = "  0b00000110";
-    //unsigned int *pu = 0;
-    //binary_parser(str, pu);
-
-    char *str = "0b1001";
+    /*char *str = "0b1001";
+    unsigned int val = 0;
+    if (binary_parser(str, &val)){
+        printf("Decimal: %u\nHex: %08X\nHex digits needed: %d", val, val, digit_counter(val));
+    }
+    else printf("Failed to parse binary\n");*/
+    char *str = "0b101yogurt";
     unsigned int val = 0;
     if (binary_parser(str, &val)){
         printf("Decimal: %u\nHex: %08X\nHex digits needed: %d", val, val, digit_counter(val));
