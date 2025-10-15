@@ -33,7 +33,7 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
         if (c != 0) {
             count ++;
 
-            if (c != '\n') {
+            if (c != '\n' && c != '\r') {
                 if (isalpha(c) && c != ' ' && size <= max_len - 1) {
                     char *temp = realloc(new_str, (size + 2) * sizeof(char));
                     if (temp) {
