@@ -34,39 +34,41 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
         char c = get();
         count ++;
 
-        if (c != '\n') {
-            if (size <= max_len) {
-                if (isalpha(c) && c != ' ') {
-                    char *temp = realloc(new_str, (size + 2) * sizeof(char));
-                    if (temp) {
-                        new_str = temp;
-                        new_str[size++] = c;
-                        new_str[size] = '\0';
-                    }
-                    else {
-                        printf("Memory allocation failed.\n");
-                        exit(EXIT_FAILURE);
-                    }
+        if (c != '\n' && size <= max_len) {
+            if (isalpha(c) && c != ' ') {
+                char *temp = realloc(new_str, (size + 2) * sizeof(char));
+                if (temp) {
+                    new_str = temp;
+                    new_str[size++] = c;
+                    new_str[size] = '\0';
+                }
+                else {
+                    printf("Memory allocation failed.\n");
+                    exit(EXIT_FAILURE);
                 }
             }
-            else break;
         }
         else {
             if (new_str == NULL)
                 count = 0;
+            else {
+                strncpy(str, new_str, max_len);
+                str[max_len] = '\0';
+                free(new_str);
+            }
 
             break;
         }
     }
 
-    if (new_str) {
+    /*if (new_str) {
         strncpy(str, new_str, max_len);
         str[max_len] = '\0';
         free(new_str);
     }
     else {
         str[0] = '\0';
-    }
+    }*/
 
     return count;
 }
