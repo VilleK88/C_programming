@@ -26,27 +26,29 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
 
     for (int i = 0; i <= max_len; i++) {
         char c = get();
-        count ++;
+        if (c != 0) {
+            count ++;
 
-        if (c != '\n') {
-            if (isalpha(c) && c != ' ' && size <= max_len) {
-                char *temp = realloc(new_str, (size + 2) * sizeof(char));
-                if (temp) {
-                    new_str = temp;
-                    new_str[size++] = c;
-                    new_str[size] = '\0';
-                }
-                else {
-                    printf("Memory allocation failed.\n");
-                    exit(EXIT_FAILURE);
+            if (c != '\n') {
+                if (isalpha(c) && c != ' ' && size <= max_len) {
+                    char *temp = realloc(new_str, (size + 2) * sizeof(char));
+                    if (temp) {
+                        new_str = temp;
+                        new_str[size++] = c;
+                        new_str[size] = '\0';
+                    }
+                    else {
+                        printf("Memory allocation failed.\n");
+                        exit(EXIT_FAILURE);
+                    }
                 }
             }
-        }
-        else {
-            if (count == 1) {
-                count = 0;
+            else {
+                if (count == 1) {
+                    count = 0;
+                }
+                break;
             }
-            break;
         }
     }
 
