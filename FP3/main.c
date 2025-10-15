@@ -6,12 +6,11 @@
 #include <stdbool.h>
 
 int filter_alpha(char *str, int max_len, char (*get)(void));
-bool check_if_alpha(char c);
 char my_getchar(void);
 
 int main() {
-    char str[39] = {0};
-    int count = filter_alpha(str, 39, my_getchar);
+    char str[40] = {0};
+    int count = filter_alpha(str, 40, my_getchar);
 
     printf("Characters read: %d\n", count);
     printf("Stored string length: %lu\n", strlen(str));
@@ -32,11 +31,10 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     do {
         char c = get();
         if (c != 0) {
-            if (c != '\'' && c != ',')
-                count ++;
+            count ++;
 
             if (c != '\n') {
-                if (isalpha(c) && c != ' ' && size <= max_len) {
+                if (isalpha(c) && c != ' ' && size <= max_len - 1) {
                     char *temp = realloc(new_str, (size + 2) * sizeof(char));
                     if (temp) {
                         new_str = temp;
@@ -63,7 +61,7 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     } while (continue_loop);
 
     if (new_str) {
-        strncpy(str, new_str, max_len);
+        strncpy(str, new_str, max_len - 1);
         str[max_len] = '\0';
         free(new_str);
     }
@@ -72,16 +70,6 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     }
 
     return count;
-}
-
-bool check_if_alpha(const char c) {
-    const char non_alpha_chars[] = {'\''};
-    const int len = (int)strlen(non_alpha_chars);
-    for (int i = 0; i < len; i++) {
-        if (c == non_alpha_chars[i])
-            return false;
-    }
-    return true;
 }
 
 char my_getchar(void) {
