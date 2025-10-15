@@ -29,6 +29,8 @@ int main() {
 }
 
 int filter_alpha(char *str, int max_len, char (*get)(void)) {
+    if (max_len <= 1) { str[0] = '\0';return 0; }
+
     char *new_str = NULL;
     bool continue_loop = true;
     int size = 0;
@@ -40,17 +42,24 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
             count ++;
 
             if (c != '\n' && c != '\r') {
-                if (isalpha(c) && c != ' ' && size <= max_len - 1) {
+                if (isalpha((unsigned char)c) && c != ' ' && size < max_len - 1) {
                     char *temp = realloc(new_str, (size + 2) * sizeof(char));
                     if (temp) {
                         new_str = temp;
                         new_str[size++] = c;
                         new_str[size] = '\0';
+                        if (size == max_len - 1) {
+                            continue_loop = false;
+                        }
+
                     }
                     else {
                         printf("Memory allocation failed.\n");
                         exit(EXIT_FAILURE);
                     }
+                }
+                else if (size >= max_len - 1) {
+                    continue_loop = false;
                 }
             }
             else {
@@ -68,7 +77,7 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
 
     if (new_str) {
         strncpy(str, new_str, max_len - 1);
-        str[max_len] = '\0';
+        str[max_len - 1] = '\0';
         free(new_str);
     }
     else {
