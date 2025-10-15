@@ -31,12 +31,8 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
 
     do {
         char c = get();
-        //printf("c: %c, count: %d\n", c, count+1);
         if (c != 0) {
-            if (isalpha(c) || c == '\n') {
-                //printf("c: %c, count: %d\n", c, count);
-                count ++;
-            }
+            count ++;
 
             if (c != '\n') {
                 if (isalpha(c) && c != ' ' && size <= max_len) {
