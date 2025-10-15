@@ -5,12 +5,14 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-int filter_alpha(char *str, int max_len, void (*get)(char));
+int filter_alpha(char *str, int max_len, char (*get)(void));
 
-void my_getchar(char c);
+char my_getchar(void);
 
 int main() {
-    char *str = {"Testing"};
+    //char *str = {"Testing"};
+    //char *str = "Testing";
+    char str[8] = {0};
     int count = filter_alpha(str, 7, my_getchar);
 
     printf("Characters read: %d\n", count);
@@ -21,27 +23,45 @@ int main() {
 }
 
 // isalpha()
-int filter_alpha(char *str, int max_len, void (*get)(char)) {
-    char *new_str[max_len];
-    int len = (int) strlen(str);
-    //printf("len: %d\n", len);
+int filter_alpha(char *str, int max_len, char (*get)(void)) {
+    char *new_str = NULL;
+    int size = 0;
 
-    int index = 0;
     for (int i = 0; i < max_len; i++) {
-        //printf("%c", str[i]);
-        if (isalpha(str[i])) {
-            new_str[index] += str[i];
+        const char c = get();
+        if (c == 0 || c == '\n') break;
+
+        if (size < max_len) {
+            if (isalpha(c)) {
+                char *temp = realloc(new_str, (size + 2) * sizeof(char));
+                if (temp) {
+                    new_str = temp;
+                    new_str[size++] = c;
+                    //new_str[size] = '\0';
+                }
+                else {
+                    printf("Memory allocation failed.\n");
+                    exit(EXIT_FAILURE);
+                }
+            }
         }
+        else break;
+    }
+    //printf("\n\n");
+    if (new_str) {
+        strncpy(str, new_str, max_len + 1);
+        str[max_len + 1] = '\0';
+        free(new_str);
+    }
+    else {
+        str[0] = '\0';
     }
 
-    printf("%s\n", *new_str);
-
-    printf("\n\n");
-
-
-    return 0;
+    return size;
 }
 
-void my_getchar(char c) {
-
+char my_getchar(void) {
+    int c = getchar();
+    if (c == EOF) return 0;
+    return (char)c;
 }
