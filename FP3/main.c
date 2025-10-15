@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdbool.h>
 #include <stdint.h>
 
 int filter_alpha(char *str, int max_len, char (*get)(void));
@@ -10,8 +9,6 @@ int filter_alpha(char *str, int max_len, char (*get)(void));
 char my_getchar(void);
 
 int main() {
-    //char *str = {"Testing"};
-    //char *str = "Testing";
     char str[44] = {0};
     int count = filter_alpha(str, 43, my_getchar);
 
@@ -22,7 +19,6 @@ int main() {
     return 0;
 }
 
-// isalpha()
 int filter_alpha(char *str, int max_len, char (*get)(void)) {
     char *new_str = NULL;
     int size = 0;
@@ -48,27 +44,17 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
                 }
             }
         }
-        else {
-            if (new_str == NULL)
-                count = 0;
-            else {
-                strncpy(str, new_str, max_len);
-                str[max_len] = '\0';
-                free(new_str);
-            }
-
-            break;
-        }
+        else break;
     }
 
-    /*if (new_str) {
+    if (new_str) {
         strncpy(str, new_str, max_len);
         str[max_len] = '\0';
         free(new_str);
     }
     else {
         str[0] = '\0';
-    }*/
+    }
 
     return count;
 }
