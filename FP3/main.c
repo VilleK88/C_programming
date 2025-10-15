@@ -24,6 +24,7 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     int size = 0;
     int count = 0;
 
+    //char c;
     for (int i = 0; i <= max_len; i++) {
         char c = get();
         count ++;
@@ -42,7 +43,12 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
                 }
             }
         }
-        else break;
+        else {
+            if (count == 1) {
+                count = 0;
+            }
+            break;
+        }
     }
 
     if (new_str) {
@@ -52,7 +58,6 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     }
     else {
         str[0] = '\0';
-        //count = 0;
     }
 
     return count;
