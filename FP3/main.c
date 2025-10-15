@@ -55,6 +55,9 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
                 continue_loop = false;
             }
         }
+        else {
+            continue_loop = false;
+        }
 
     } while (continue_loop);
 
