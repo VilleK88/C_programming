@@ -9,7 +9,7 @@ int filter_alpha(char *str, int max_len, char (*get)(void));
 char my_getchar(void);
 
 int main() {
-    char str[44] = {0};
+    char str[43] = {0};
     int count = filter_alpha(str, 43, my_getchar);
 
     printf("Characters read: %d\n", count);
@@ -24,7 +24,6 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     int size = 0;
     int count = 0;
 
-    //char c;
     for (int i = 0; i <= max_len; i++) {
         char c = get();
         count ++;
