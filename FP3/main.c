@@ -3,31 +3,40 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 int filter_alpha(char *str, int max_len, char (*get)(void));
 
 char my_getchar(void);
 
 int main() {
-    char str[43] = {0};
-    int count = filter_alpha(str, 43, my_getchar);
+    char str[39] = {0};
+    int count = filter_alpha(str, 39, my_getchar);
 
     printf("Characters read: %d\n", count);
     printf("Stored string length: %lu\n", strlen(str));
     printf("Stored string contents:\n%s\n", str);
+
+    //char *test_str = "I'm too big for this testcase, I'm not going to fit in to the buffer. Sad.";
+    //printf("test_str len: %d\n", (int)strlen(test_str));
 
     return 0;
 }
 
 int filter_alpha(char *str, int max_len, char (*get)(void)) {
     char *new_str = NULL;
+    bool continue_loop = true;
     int size = 0;
     int count = 0;
 
-    for (int i = 0; i <= max_len; i++) {
+    do {
         char c = get();
+        //printf("c: %c, count: %d\n", c, count+1);
         if (c != 0) {
-            count ++;
+            if (isalpha(c) || c == '\n') {
+                //printf("c: %c, count: %d\n", c, count);
+                count ++;
+            }
 
             if (c != '\n') {
                 if (isalpha(c) && c != ' ' && size <= max_len) {
@@ -47,10 +56,11 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
                 if (count == 1) {
                     count = 0;
                 }
-                break;
+                continue_loop = false;
             }
         }
-    }
+
+    } while (continue_loop);
 
     if (new_str) {
         strncpy(str, new_str, max_len);
