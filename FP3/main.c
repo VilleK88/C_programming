@@ -12,8 +12,8 @@ char my_getchar(void);
 int main() {
     //char *str = {"Testing"};
     //char *str = "Testing";
-    char str[8] = {0};
-    int count = filter_alpha(str, 7, my_getchar);
+    char str[44] = {0};
+    int count = filter_alpha(str, 43, my_getchar);
 
     printf("Characters read: %d\n", count);
     printf("Stored string length: %lu\n", strlen(str));
@@ -26,38 +26,49 @@ int main() {
 int filter_alpha(char *str, int max_len, char (*get)(void)) {
     char *new_str = NULL;
     int size = 0;
+    int count = 0;
 
-    for (int i = 0; i < max_len; i++) {
-        const char c = get();
-        if (c == 0 || c == '\n') break;
+    if (max_len <= 0 || !str) return 0;
 
-        if (size < max_len) {
-            if (isalpha(c)) {
-                char *temp = realloc(new_str, (size + 2) * sizeof(char));
-                if (temp) {
-                    new_str = temp;
-                    new_str[size++] = c;
-                    //new_str[size] = '\0';
-                }
-                else {
-                    printf("Memory allocation failed.\n");
-                    exit(EXIT_FAILURE);
+    for (int i = 0; i <= max_len; i++) {
+        char c = get();
+        count ++;
+
+        if (c != '\n') {
+            if (size <= max_len) {
+                if (isalpha(c) && c != ' ') {
+                    char *temp = realloc(new_str, (size + 2) * sizeof(char));
+                    if (temp) {
+                        new_str = temp;
+                        new_str[size++] = c;
+                        new_str[size] = '\0';
+                    }
+                    else {
+                        printf("Memory allocation failed.\n");
+                        exit(EXIT_FAILURE);
+                    }
                 }
             }
+            else break;
         }
-        else break;
+        else {
+            if (new_str == NULL)
+                count = 0;
+
+            break;
+        }
     }
-    //printf("\n\n");
+
     if (new_str) {
-        strncpy(str, new_str, max_len + 1);
-        str[max_len + 1] = '\0';
+        strncpy(str, new_str, max_len);
+        str[max_len] = '\0';
         free(new_str);
     }
     else {
         str[0] = '\0';
     }
 
-    return size;
+    return count;
 }
 
 char my_getchar(void) {
