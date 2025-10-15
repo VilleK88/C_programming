@@ -6,7 +6,7 @@
 #include <stdbool.h>
 
 int filter_alpha(char *str, int max_len, char (*get)(void));
-
+bool check_if_alpha(char c);
 char my_getchar(void);
 
 int main() {
@@ -32,7 +32,8 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     do {
         char c = get();
         if (c != 0) {
-            count ++;
+            if (c != '\'' && c != ',')
+                count ++;
 
             if (c != '\n') {
                 if (isalpha(c) && c != ' ' && size <= max_len) {
@@ -71,6 +72,16 @@ int filter_alpha(char *str, int max_len, char (*get)(void)) {
     }
 
     return count;
+}
+
+bool check_if_alpha(const char c) {
+    const char non_alpha_chars[] = {'\''};
+    const int len = (int)strlen(non_alpha_chars);
+    for (int i = 0; i < len; i++) {
+        if (c == non_alpha_chars[i])
+            return false;
+    }
+    return true;
 }
 
 char my_getchar(void) {
