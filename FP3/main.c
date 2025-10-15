@@ -10,14 +10,20 @@ char my_getchar(void);
 
 int main() {
     char str[40] = {0};
-    int count = filter_alpha(str, 40, my_getchar);
+    //int count = filter_alpha(str, 40, my_getchar);
 
-    printf("Characters read: %d\n", count);
-    printf("Stored string length: %lu\n", strlen(str));
-    printf("Stored string contents:\n%s\n", str);
+    //printf("Characters read: %d\n", count);
+    //printf("Stored string length: %lu\n", strlen(str));
+    //printf("Stored string contents:\n%s\n", str);
 
-    //char *test_str = "I'm too big for this testcase, I'm not going to fit in to the buffer. Sad.";
-    //printf("test_str len: %d\n", (int)strlen(test_str));
+
+    int second_count = 0;
+
+    char s_str[50] = {0};
+    do {
+        second_count = filter_alpha(s_str, 50, my_getchar);
+        printf("%d:%lu:%s\n", second_count, strlen(str), str);
+    } while (second_count > 0);
 
     return 0;
 }
